@@ -3,599 +3,857 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <meta
       name="description"
-      content="A quick reference for common Git commands and workflows."
+      content="A workflow-first Git cheat sheet for creating repositories, cloning projects, branching, syncing with remotes, and recovering from mistakes."
     />
-
     <title>Git Cheat Sheet</title>
-
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-    <header class="page-header">
-      <nav class="nav container">
-        <a class="home-link" href="../">← All Cheat Sheets</a>
+    <header class="page-header" id="top">
+      <div class="nav-shell container">
+        <div class="nav-main">
+          <a class="brand-link" href="../index.html">Developer Cheat Sheets</a>
 
-        <a
-          class="repo-link"
-          href="https://github.com/gadm12/YOUR-REPOSITORY-NAME"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          GitHub Repo
-        </a>
-      </nav>
+          <button
+            class="nav-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="site-nav"
+            aria-label="Toggle site navigation"
+          >
+            Menu
+          </button>
+
+          <nav class="site-nav" id="site-nav" aria-label="Main">
+            <a class="is-active" href="./" aria-current="page">Git</a>
+            <a href="../docker/">Docker</a>
+            <a href="../dockerfile/">Dockerfile</a>
+            <a href="../linux/">Linux</a>
+            <a href="../html/">HTML</a>
+            <a href="../markdown/">Markdown</a>
+            <a href="../vim/">Vim</a>
+            <a href="../vscode/">VS Code</a>
+            <a href="../dependencies/">Dependencies</a>
+          </nav>
+        </div>
+
+        <div class="nav-tools">
+          <a class="home-link" href="../index.html">← All Cheat Sheets</a>
+
+          <form class="page-search" id="page-search" role="search">
+            <label class="sr-only" for="page-search-input">
+              Find a command or section on this page
+            </label>
+            <input
+              id="page-search-input"
+              type="search"
+              name="page-search"
+              placeholder="Find command or section"
+              autocomplete="off"
+            />
+            <button type="submit">Search</button>
+          </form>
+
+          <a
+            class="doc-link"
+            href="https://git-scm.com/doc"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Official Git Docs →
+          </a>
+        </div>
+
+        <p class="search-feedback" id="search-feedback" aria-live="polite"></p>
+      </div>
     </header>
 
-    <main class="container">
-      <section class="hero">
-        <p class="tag">Version Control</p>
-        <h1>Git Cheat Sheet</h1>
+    <main class="page-shell container">
+      <aside class="page-sidebar">
+        <section class="table-of-contents" aria-labelledby="on-this-page-title">
+          <p class="tag">Navigation</p>
+          <h2 id="on-this-page-title">On This Page</h2>
 
-        <p>
-          A quick reference for the Git commands I use most often while working
-          with repositories, branches, commits, and GitHub.
-        </p>
-      </section>
-
-      <section class="table-of-contents">
-        <h2>Table of Contents</h2>
-
-        <div class="contents-grid">
-          <a href="#quick-commands">Quick Commands</a>
-          <a href="#initialize">Initialize</a>
-          <a href="#status">Status</a>
-          <a href="#add">Add</a>
-          <a href="#commit">Commit</a>
-          <a href="#push">Push</a>
-          <a href="#pull">Pull</a>
-          <a href="#log">Log</a>
-          <a href="#branch">Branch</a>
-          <a href="#merge">Merge</a>
-          <a href="#restore">Restore / Undo</a>
-          <a href="#stash">Stash</a>
-          <a href="#diff">Diff</a>
-          <a href="#remote">Remote</a>
-          <a href="#clone">Clone</a>
-          <a href="#workflow">Workflow</a>
-        </div>
-      </section>
-
-      <section id="quick-commands" class="section">
-        <div class="section-heading">
-          <p class="tag">Most Used</p>
-          <h2>Quick Commands</h2>
-        </div>
-
-        <div class="quick-grid">
-          <article class="quick-card">
-            <h3>Initialize Git</h3>
-
-            <div class="command">
-              <code>git init</code>
-              <button class="copy-button" type="button">Copy</button>
+          <div class="toc-group">
+            <p class="toc-group-label">Workflows</p>
+            <div class="contents-list">
+              <a data-toc-link href="#start-new-repository">
+                Start a New Repository
+              </a>
+              <a data-toc-link href="#clone-start-repository">
+                Clone and Start
+              </a>
+              <a data-toc-link href="#feature-branch-workflow">
+                Feature Branch
+              </a>
+              <a data-toc-link href="#sync-local-remote">
+                Sync Local Work
+              </a>
+              <a data-toc-link href="#undo-recover-changes">
+                Undo and Recover
+              </a>
             </div>
+          </div>
 
-            <p>Start a Git repository inside the current folder.</p>
-          </article>
-
-          <article class="quick-card">
-            <h3>Check Status</h3>
-
-            <div class="command">
-              <code>git status</code>
-              <button class="copy-button" type="button">Copy</button>
+          <div class="toc-group">
+            <p class="toc-group-label">Reference</p>
+            <div class="contents-list">
+              <a data-toc-link href="#initialize">Initialize</a>
+              <a data-toc-link href="#status">Status</a>
+              <a data-toc-link href="#add">Add</a>
+              <a data-toc-link href="#commit">Commit</a>
+              <a data-toc-link href="#push">Push</a>
+              <a data-toc-link href="#pull">Pull</a>
+              <a data-toc-link href="#log">Log</a>
+              <a data-toc-link href="#branch">Branch</a>
+              <a data-toc-link href="#merge">Merge</a>
+              <a data-toc-link href="#restore">Restore / Undo</a>
+              <a data-toc-link href="#stash">Stash</a>
+              <a data-toc-link href="#diff">Diff</a>
+              <a data-toc-link href="#remote">Remote</a>
+              <a data-toc-link href="#clone">Clone</a>
+              <a data-toc-link href="#workflow">Workflow</a>
             </div>
+          </div>
+        </section>
+      </aside>
 
-            <p>See modified, staged, and untracked files.</p>
-          </article>
+      <div class="page-main">
+        <section class="hero">
+          <p class="tag">Version Control</p>
+          <h1>Git Cheat Sheet</h1>
+          <p class="hero-description">
+            The fastest reference for starting repositories, cloning projects,
+            working on feature branches, syncing with remotes, and recovering
+            when something goes wrong.
+          </p>
 
-          <article class="quick-card">
-            <h3>Stage Everything</h3>
+          <div class="hero-actions">
+            <a
+              class="doc-link"
+              href="https://git-scm.com/doc"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Official Git Docs →
+            </a>
+          </div>
+        </section>
 
-            <div class="command">
-              <code>git add .</code>
-              <button class="copy-button" type="button">Copy</button>
-            </div>
+        <div class="scroll-sentinel" id="scroll-sentinel" aria-hidden="true"></div>
 
-            <p>Add all current changes to the staging area.</p>
-          </article>
+        <section class="section workflow-section">
+          <div class="section-heading">
+            <p class="tag">Highest Priority</p>
+            <h2>Daily Git Workflows</h2>
+            <p>
+              These cards group the Git commands you usually need as one task:
+              start a repo, join an existing project, branch and merge feature
+              work, sync safely, and recover from mistakes.
+            </p>
+          </div>
 
-          <article class="quick-card">
-            <h3>Commit Changes</h3>
+          <div class="workflow-grid">
+            <article
+              id="start-new-repository"
+              class="workflow-card"
+              data-observe
+              data-search-target
+            >
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Setup</p>
+                  <h3>Start a New Repository</h3>
+                </div>
 
-            <div class="command">
-              <code>git commit -m "Describe changes"</code>
-              <button class="copy-button" type="button">Copy</button>
-            </div>
+                <span class="feature-badge">New Repo</span>
+              </div>
 
-            <p>Save staged changes with a meaningful message.</p>
-          </article>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin &lt;repository-url&gt;
+git push -u origin main</code></pre>
+              </div>
 
-          <article class="quick-card">
-            <h3>First Push</h3>
+              <p>
+                Use this when you are turning a local project folder into a new
+                Git repository and connecting it to a remote for the first time.
+              </p>
+            </article>
 
-            <div class="command">
-              <code>git push -u origin main</code>
-              <button class="copy-button" type="button">Copy</button>
-            </div>
+            <article
+              id="clone-start-repository"
+              class="workflow-card"
+              data-observe
+              data-search-target
+            >
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Existing Codebase</p>
+                  <h3>Clone and Start an Existing Repository</h3>
+                </div>
 
-            <p>Push main and connect it to the remote branch.</p>
-          </article>
+                <span class="feature-badge">Clone</span>
+              </div>
 
-          <article class="quick-card">
-            <h3>Regular Push</h3>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>git clone &lt;repository-url&gt;
+cd &lt;project-folder&gt;
+git status
+git pull
+git switch -c feature/example</code></pre>
+              </div>
 
-            <div class="command">
-              <code>git push</code>
-              <button class="copy-button" type="button">Copy</button>
-            </div>
+              <p>
+                Clone the project, verify your branch state, update your local
+                copy, and then create a feature branch before making changes.
+              </p>
+            </article>
 
-            <p>Upload committed changes to GitHub.</p>
-          </article>
+            <article
+              id="feature-branch-workflow"
+              class="workflow-card wide-card"
+              data-observe
+              data-search-target
+            >
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Feature Work</p>
+                  <h3>Create and Merge a Feature Branch</h3>
+                </div>
 
-          <article class="quick-card">
-            <h3>Pull Changes</h3>
+                <span class="feature-badge">Branch</span>
+              </div>
 
-            <div class="command">
-              <code>git pull</code>
-              <button class="copy-button" type="button">Copy</button>
-            </div>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>git checkout -b feature/example
+git add .
+git commit -m "Add feature"
+git push -u origin feature/example
+git checkout main
+git pull
+git merge feature/example
+git push</code></pre>
+              </div>
 
-            <p>Download and merge the latest remote changes.</p>
-          </article>
+              <p>
+                This is the full branch-to-merge sequence when you are handling
+                the merge locally rather than through a Pull Request flow.
+              </p>
+            </article>
 
-          <article class="quick-card">
-            <h3>Create Branch</h3>
+            <article
+              id="sync-local-remote"
+              class="workflow-card"
+              data-observe
+              data-search-target
+            >
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Daily Sync</p>
+                  <h3>Sync Local Work with Remote</h3>
+                </div>
 
-            <div class="command">
-              <code>git switch -c feature-name</code>
-              <button class="copy-button" type="button">Copy</button>
-            </div>
+                <span class="feature-badge">Remote</span>
+              </div>
 
-            <p>Create a new branch and switch to it.</p>
-          </article>
-        </div>
-      </section>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>git status
+git add .
+git commit -m "Describe changes"
+git pull --rebase
+git push</code></pre>
+              </div>
 
-      <section id="initialize" class="section command-section">
-        <h2>Initialize</h2>
+              <p>
+                Use this when you already have local commits and want to bring
+                in remote work first, then push your updated branch cleanly.
+              </p>
+            </article>
 
-        <p>Initialize a Git repository inside the current folder.</p>
+            <article
+              id="undo-recover-changes"
+              class="workflow-card"
+              data-observe
+              data-search-target
+            >
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Recovery</p>
+                  <h3>Undo and Recover Changes</h3>
+                </div>
 
-        <pre><code>git init</code></pre>
+                <span class="feature-badge">Fix</span>
+              </div>
 
-        <p>Check that Git was initialized successfully.</p>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>git status
+git restore --staged .
+git restore file.py
+git stash push -m "Save current work"
+git reset --soft HEAD~1
+git revert COMMIT_HASH</code></pre>
+              </div>
 
-        <pre><code>git status</code></pre>
-      </section>
+              <p>
+                This sequence covers the most common recovery moves: unstage,
+                discard one file, stash work temporarily, undo a local commit,
+                or safely reverse a pushed commit.
+              </p>
+            </article>
+          </div>
+        </section>
 
-      <section id="status" class="section command-section">
-        <h2>Status</h2>
+        <section
+          id="initialize"
+          class="section command-section"
+          data-observe
+          data-search-target
+        >
+          <h2>Initialize</h2>
 
-        <p>Check the current state of your repository.</p>
+          <p>Initialize a Git repository inside the current folder.</p>
 
-        <pre><code>git status</code></pre>
+          <pre><code>git init</code></pre>
 
-        <p>The status command shows:</p>
+          <p>Check that Git was initialized successfully.</p>
 
-        <ul>
-          <li>Modified files</li>
-          <li>Staged files</li>
-          <li>Untracked files</li>
-          <li>The current branch</li>
-          <li>Whether your branch is ahead or behind</li>
-        </ul>
+          <pre><code>git status</code></pre>
+        </section>
 
-        <p>Display a shorter version.</p>
+        <section
+          id="status"
+          class="section command-section"
+          data-observe
+          data-search-target
+        >
+          <h2>Status</h2>
 
-        <pre><code>git status --short</code></pre>
+          <p>Check the current state of your repository.</p>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Symbol</th>
-              <th>Meaning</th>
-            </tr>
-          </thead>
+          <pre><code>git status</code></pre>
 
-          <tbody>
-            <tr>
-              <td><code>M</code></td>
-              <td>Modified</td>
-            </tr>
-            <tr>
-              <td><code>A</code></td>
-              <td>Added</td>
-            </tr>
-            <tr>
-              <td><code>D</code></td>
-              <td>Deleted</td>
-            </tr>
-            <tr>
-              <td><code>??</code></td>
-              <td>Untracked</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
+          <p>The status command shows:</p>
 
-      <section id="add" class="section command-section">
-        <h2>Add</h2>
+          <ul>
+            <li>Modified files</li>
+            <li>Staged files</li>
+            <li>Untracked files</li>
+            <li>The current branch</li>
+            <li>Whether your branch is ahead or behind</li>
+          </ul>
 
-        <p>Stage one file.</p>
+          <p>Display a shorter version.</p>
 
-        <pre><code>git add file.py</code></pre>
+          <pre><code>git status --short</code></pre>
 
-        <p>Stage several files.</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Symbol</th>
+                <th>Meaning</th>
+              </tr>
+            </thead>
 
-        <pre><code>git add app.py README.md</code></pre>
+            <tbody>
+              <tr>
+                <td><code>M</code></td>
+                <td>Modified</td>
+              </tr>
+              <tr>
+                <td><code>A</code></td>
+                <td>Added</td>
+              </tr>
+              <tr>
+                <td><code>D</code></td>
+                <td>Deleted</td>
+              </tr>
+              <tr>
+                <td><code>??</code></td>
+                <td>Untracked</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
 
-        <p>Stage everything.</p>
+        <section
+          id="add"
+          class="section command-section"
+          data-observe
+          data-search-target
+        >
+          <h2>Add</h2>
 
-        <pre><code>git add .</code></pre>
+          <p>Stage one file.</p>
 
-        <p>Stage all changes, including deleted files.</p>
+          <pre><code>git add file.py</code></pre>
 
-        <pre><code>git add --all</code></pre>
-      </section>
+          <p>Stage several files.</p>
 
-      <section id="commit" class="section command-section">
-        <h2>Commit</h2>
+          <pre><code>git add app.py README.md</code></pre>
 
-        <p>Create a commit with a meaningful message.</p>
+          <p>Stage everything.</p>
 
-        <pre><code>git commit -m "Add Pokemon search feature"</code></pre>
+          <pre><code>git add .</code></pre>
 
-        <p>Commit tracked files without running <code>git add</code> first.</p>
+          <p>Stage all changes, including deleted files.</p>
 
-        <pre><code>git commit -am "Fix navigation bug"</code></pre>
+          <pre><code>git add --all</code></pre>
+        </section>
 
-        <aside class="note">
-          <strong>Note:</strong> <code>git commit -am</code> does not include
-          new, untracked files.
-        </aside>
+        <section
+          id="commit"
+          class="section command-section"
+          data-observe
+          data-search-target
+        >
+          <h2>Commit</h2>
 
-        <p>Change the most recent commit message.</p>
+          <p>Create a commit with a meaningful message.</p>
 
-        <pre><code>git commit --amend -m "New commit message"</code></pre>
+          <pre><code>git commit -m "Add Pokemon search feature"</code></pre>
 
-        <p>Add a forgotten file to the most recent commit.</p>
+          <p>Commit tracked files without running <code>git add</code> first.</p>
 
-        <pre><code>git add forgotten-file.py
+          <pre><code>git commit -am "Fix navigation bug"</code></pre>
+
+          <aside class="note">
+            <strong>Note:</strong> <code>git commit -am</code> does not include
+            new, untracked files.
+          </aside>
+
+          <p>Change the most recent commit message.</p>
+
+          <pre><code>git commit --amend -m "New commit message"</code></pre>
+
+          <p>Add a forgotten file to the most recent commit.</p>
+
+          <pre><code>git add forgotten-file.py
 git commit --amend --no-edit</code></pre>
-      </section>
+        </section>
 
-      <section id="push" class="section command-section">
-        <h2>Push</h2>
+        <section
+          id="push"
+          class="section command-section"
+          data-observe
+          data-search-target
+        >
+          <h2>Push</h2>
 
-        <p>Push committed changes.</p>
+          <p>Push committed changes.</p>
 
-        <pre><code>git push</code></pre>
+          <pre><code>git push</code></pre>
 
-        <p>Push a branch for the first time.</p>
+          <p>Push a branch for the first time.</p>
 
-        <pre><code>git push -u origin main</code></pre>
+          <pre><code>git push -u origin main</code></pre>
 
-        <p>Push a new feature branch.</p>
+          <p>Push a new feature branch.</p>
 
-        <pre><code>git push -u origin feature-name</code></pre>
+          <pre><code>git push -u origin feature-name</code></pre>
 
-        <p>Force push more safely.</p>
+          <p>Force push more safely.</p>
 
-        <pre><code>git push --force-with-lease</code></pre>
+          <pre><code>git push --force-with-lease</code></pre>
 
-        <aside class="warning">
-          Avoid force pushing unless you understand how it can overwrite remote
-          work.
-        </aside>
-      </section>
+          <aside class="warning">
+            Avoid force pushing unless you understand how it can overwrite
+            remote work.
+          </aside>
+        </section>
 
-      <section id="pull" class="section command-section">
-        <h2>Pull</h2>
+        <section
+          id="pull"
+          class="section command-section"
+          data-observe
+          data-search-target
+        >
+          <h2>Pull</h2>
 
-        <p>Download and merge remote changes.</p>
+          <p>Download and merge remote changes.</p>
 
-        <pre><code>git pull</code></pre>
+          <pre><code>git pull</code></pre>
 
-        <p>Pull from a specific branch.</p>
+          <p>Pull from a specific branch.</p>
 
-        <pre><code>git pull origin main</code></pre>
+          <pre><code>git pull origin main</code></pre>
 
-        <p>Download remote changes without merging.</p>
+          <p>Download remote changes without merging.</p>
 
-        <pre><code>git fetch</code></pre>
+          <pre><code>git fetch</code></pre>
 
-        <p>Pull using rebase.</p>
+          <p>Pull using rebase.</p>
 
-        <pre><code>git pull --rebase</code></pre>
-      </section>
+          <pre><code>git pull --rebase</code></pre>
+        </section>
 
-      <section id="log" class="section command-section">
-        <h2>Log</h2>
+        <section
+          id="log"
+          class="section command-section"
+          data-observe
+          data-search-target
+        >
+          <h2>Log</h2>
 
-        <p>View the full commit history.</p>
+          <p>View the full commit history.</p>
 
-        <pre><code>git log</code></pre>
+          <pre><code>git log</code></pre>
 
-        <p>Press <kbd>q</kbd> to exit the log.</p>
+          <p>Press <kbd>q</kbd> to exit the log.</p>
 
-        <p>View a compact history.</p>
+          <p>View a compact history.</p>
 
-        <pre><code>git log --oneline</code></pre>
+          <pre><code>git log --oneline</code></pre>
 
-        <p>Display commits as a branch graph.</p>
+          <p>Display commits as a branch graph.</p>
 
-        <pre><code>git log --oneline --graph --all</code></pre>
+          <pre><code>git log --oneline --graph --all</code></pre>
 
-        <p>View the five most recent commits.</p>
+          <p>View the five most recent commits.</p>
 
-        <pre><code>git log -5</code></pre>
+          <pre><code>git log -5</code></pre>
 
-        <p>View commits for one file.</p>
+          <p>View commits for one file.</p>
 
-        <pre><code>git log -- file.py</code></pre>
-      </section>
+          <pre><code>git log -- file.py</code></pre>
+        </section>
 
-      <section id="branch" class="section command-section">
-        <h2>Branch</h2>
+        <section
+          id="branch"
+          class="section command-section"
+          data-observe
+          data-search-target
+        >
+          <h2>Branch</h2>
 
-        <p>List local branches.</p>
+          <p>List local branches.</p>
 
-        <pre><code>git branch</code></pre>
+          <pre><code>git branch</code></pre>
 
-        <p>List local and remote branches.</p>
+          <p>List local and remote branches.</p>
 
-        <pre><code>git branch --all</code></pre>
+          <pre><code>git branch --all</code></pre>
 
-        <p>Create a branch.</p>
+          <p>Create a branch.</p>
 
-        <pre><code>git branch feature-name</code></pre>
+          <pre><code>git branch feature-name</code></pre>
 
-        <p>Create a branch and switch to it.</p>
+          <p>Create a branch and switch to it.</p>
 
-        <pre><code>git switch -c feature-name</code></pre>
+          <pre><code>git switch -c feature-name</code></pre>
 
-        <p>Switch branches.</p>
+          <p>Switch branches.</p>
 
-        <pre><code>git switch main</code></pre>
+          <pre><code>git switch main</code></pre>
 
-        <p>Delete a merged branch.</p>
+          <p>Delete a merged branch.</p>
 
-        <pre><code>git branch -d feature-name</code></pre>
+          <pre><code>git branch -d feature-name</code></pre>
 
-        <p>Force-delete an unmerged branch.</p>
+          <p>Force-delete an unmerged branch.</p>
 
-        <pre><code>git branch -D feature-name</code></pre>
-      </section>
+          <pre><code>git branch -D feature-name</code></pre>
+        </section>
 
-      <section id="merge" class="section command-section">
-        <h2>Merge</h2>
+        <section
+          id="merge"
+          class="section command-section"
+          data-observe
+          data-search-target
+        >
+          <h2>Merge</h2>
 
-        <p>
-          Switch to the branch that should receive the changes, then merge the
-          feature branch.
-        </p>
+          <p>
+            Switch to the branch that should receive the changes, then merge the
+            feature branch.
+          </p>
 
-        <pre><code>git switch main
+          <pre><code>git switch main
 git merge feature-name</code></pre>
 
-        <p>A common merge workflow:</p>
+          <p>A common merge workflow:</p>
 
-        <pre><code>git switch main
+          <pre><code>git switch main
 git pull
 git merge feature-name
 git push</code></pre>
 
-        <h3>Merge Conflicts</h3>
+          <h3>Merge Conflicts</h3>
 
-        <p>Git marks conflicting code like this:</p>
+          <p>Git marks conflicting code like this:</p>
 
-        <pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+          <pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 Code from the current branch
 =======
 Code from the incoming branch
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; feature-name</code></pre>
 
-        <p>
-          Resolve the conflict, remove the markers, and then stage and commit
-          the corrected files.
-        </p>
+          <p>
+            Resolve the conflict, remove the markers, and then stage and commit
+            the corrected files.
+          </p>
 
-        <pre><code>git add .
+          <pre><code>git add .
 git commit -m "Resolve merge conflict"</code></pre>
-      </section>
+        </section>
 
-      <section id="restore" class="section command-section">
-        <h2>Restore / Undo</h2>
+        <section
+          id="restore"
+          class="section command-section"
+          data-observe
+          data-search-target
+        >
+          <h2>Restore / Undo</h2>
 
-        <p>Unstage one file while keeping its changes.</p>
+          <p>Unstage one file while keeping its changes.</p>
 
-        <pre><code>git restore --staged file.py</code></pre>
+          <pre><code>git restore --staged file.py</code></pre>
 
-        <p>Unstage everything.</p>
+          <p>Unstage everything.</p>
 
-        <pre><code>git restore --staged .</code></pre>
+          <pre><code>git restore --staged .</code></pre>
 
-        <p>Discard uncommitted changes in one file.</p>
+          <p>Discard uncommitted changes in one file.</p>
 
-        <pre><code>git restore file.py</code></pre>
+          <pre><code>git restore file.py</code></pre>
 
-        <aside class="warning">
-          This permanently removes the file's uncommitted changes.
-        </aside>
+          <aside class="warning">
+            This permanently removes the file's uncommitted changes.
+          </aside>
 
-        <p>Undo the most recent commit but keep the changes staged.</p>
+          <p>Undo the most recent commit but keep the changes staged.</p>
 
-        <pre><code>git reset --soft HEAD~1</code></pre>
+          <pre><code>git reset --soft HEAD~1</code></pre>
 
-        <p>Undo the most recent commit and unstage the changes.</p>
+          <p>Undo the most recent commit and unstage the changes.</p>
 
-        <pre><code>git reset HEAD~1</code></pre>
+          <pre><code>git reset HEAD~1</code></pre>
 
-        <p>Safely reverse a commit that was already pushed.</p>
+          <p>Safely reverse a commit that was already pushed.</p>
 
-        <pre><code>git revert COMMIT_HASH</code></pre>
+          <pre><code>git revert COMMIT_HASH</code></pre>
 
-        <p>Preview untracked files that Git can remove.</p>
+          <p>Preview untracked files that Git can remove.</p>
 
-        <pre><code>git clean -n</code></pre>
+          <pre><code>git clean -n</code></pre>
 
-        <p>Remove untracked files.</p>
+          <p>Remove untracked files.</p>
 
-        <pre><code>git clean -f</code></pre>
-      </section>
+          <pre><code>git clean -f</code></pre>
+        </section>
 
-      <section id="stash" class="section command-section">
-        <h2>Stash</h2>
+        <section
+          id="stash"
+          class="section command-section"
+          data-observe
+          data-search-target
+        >
+          <h2>Stash</h2>
 
-        <p>Temporarily save unfinished tracked changes.</p>
+          <p>Temporarily save unfinished tracked changes.</p>
 
-        <pre><code>git stash</code></pre>
+          <pre><code>git stash</code></pre>
 
-        <p>Save a stash with a description.</p>
+          <p>Save a stash with a description.</p>
 
-        <pre><code>git stash push -m "Work in progress"</code></pre>
+          <pre><code>git stash push -m "Work in progress"</code></pre>
 
-        <p>Include untracked files.</p>
+          <p>Include untracked files.</p>
 
-        <pre><code>git stash -u</code></pre>
+          <pre><code>git stash -u</code></pre>
 
-        <p>List stashes.</p>
+          <p>List stashes.</p>
 
-        <pre><code>git stash list</code></pre>
+          <pre><code>git stash list</code></pre>
 
-        <p>Restore the newest stash and remove it from the stash list.</p>
+          <p>Restore the newest stash and remove it from the stash list.</p>
 
-        <pre><code>git stash pop</code></pre>
+          <pre><code>git stash pop</code></pre>
 
-        <p>Restore the newest stash without removing it.</p>
+          <p>Restore the newest stash without removing it.</p>
 
-        <pre><code>git stash apply</code></pre>
-      </section>
+          <pre><code>git stash apply</code></pre>
+        </section>
 
-      <section id="diff" class="section command-section">
-        <h2>Diff</h2>
+        <section
+          id="diff"
+          class="section command-section"
+          data-observe
+          data-search-target
+        >
+          <h2>Diff</h2>
 
-        <p>View unstaged changes.</p>
+          <p>View unstaged changes.</p>
 
-        <pre><code>git diff</code></pre>
+          <pre><code>git diff</code></pre>
 
-        <p>View staged changes.</p>
+          <p>View staged changes.</p>
 
-        <pre><code>git diff --cached</code></pre>
+          <pre><code>git diff --cached</code></pre>
 
-        <p>Compare two branches.</p>
+          <p>Compare two branches.</p>
 
-        <pre><code>git diff main..feature-name</code></pre>
+          <pre><code>git diff main..feature-name</code></pre>
 
-        <p>View changes for one file.</p>
+          <p>View changes for one file.</p>
 
-        <pre><code>git diff file.py</code></pre>
+          <pre><code>git diff file.py</code></pre>
 
-        <p>Show changes from the most recent commit.</p>
+          <p>Show changes from the most recent commit.</p>
 
-        <pre><code>git show</code></pre>
-      </section>
+          <pre><code>git show</code></pre>
+        </section>
 
-      <section id="remote" class="section command-section">
-        <h2>Remote</h2>
+        <section
+          id="remote"
+          class="section command-section"
+          data-observe
+          data-search-target
+        >
+          <h2>Remote</h2>
 
-        <p>View remote repositories.</p>
+          <p>View remote repositories.</p>
 
-        <pre><code>git remote -v</code></pre>
+          <pre><code>git remote -v</code></pre>
 
-        <p>Add a remote repository.</p>
+          <p>Add a remote repository.</p>
 
-        <pre><code>git remote add origin REPOSITORY_URL</code></pre>
+          <pre><code>git remote add origin REPOSITORY_URL</code></pre>
 
-        <p>View information about the origin remote.</p>
+          <p>View information about the origin remote.</p>
 
-        <pre><code>git remote show origin</code></pre>
+          <pre><code>git remote show origin</code></pre>
 
-        <p>Change the remote URL.</p>
+          <p>Change the remote URL.</p>
 
-        <pre><code>git remote set-url origin NEW_REPOSITORY_URL</code></pre>
+          <pre><code>git remote set-url origin NEW_REPOSITORY_URL</code></pre>
 
-        <p>Remove a remote.</p>
+          <p>Remove a remote.</p>
 
-        <pre><code>git remote remove origin</code></pre>
-      </section>
+          <pre><code>git remote remove origin</code></pre>
+        </section>
 
-      <section id="clone" class="section command-section">
-        <h2>Clone</h2>
+        <section
+          id="clone"
+          class="section command-section"
+          data-observe
+          data-search-target
+        >
+          <h2>Clone</h2>
 
-        <p>Copy a GitHub repository to your computer.</p>
+          <p>Copy a GitHub repository to your computer.</p>
 
-        <pre><code>git clone REPOSITORY_URL</code></pre>
+          <pre><code>git clone REPOSITORY_URL</code></pre>
 
-        <p>Clone into a custom folder name.</p>
+          <p>Clone into a custom folder name.</p>
 
-        <pre><code>git clone REPOSITORY_URL custom-folder</code></pre>
+          <pre><code>git clone REPOSITORY_URL custom-folder</code></pre>
 
-        <p>Clone one specific branch.</p>
+          <p>Clone one specific branch.</p>
 
-        <pre><code>git clone --branch branch-name REPOSITORY_URL</code></pre>
-      </section>
+          <pre><code>git clone --branch branch-name REPOSITORY_URL</code></pre>
+        </section>
 
-      <section id="workflow" class="section command-section">
-        <h2>Typical Workflow</h2>
+        <section
+          id="workflow"
+          class="section command-section"
+          data-observe
+          data-search-target
+        >
+          <h2>Typical Workflow</h2>
 
-        <h3>Working on Main</h3>
+          <h3>Working on Main</h3>
 
-        <div class="workflow">
-          <span>git status</span>
-          <strong>↓</strong>
-          <span>git add .</span>
-          <strong>↓</strong>
-          <span>git commit</span>
-          <strong>↓</strong>
-          <span>git pull</span>
-          <strong>↓</strong>
-          <span>git push</span>
-        </div>
+          <div class="workflow">
+            <span>git status</span>
+            <strong>↓</strong>
+            <span>git add .</span>
+            <strong>↓</strong>
+            <span>git commit</span>
+            <strong>↓</strong>
+            <span>git pull</span>
+            <strong>↓</strong>
+            <span>git push</span>
+          </div>
 
-        <pre><code>git status
+          <pre><code>git status
 git add .
 git commit -m "Describe your changes"
 git pull
 git push</code></pre>
 
-        <h3>Feature Branch Workflow</h3>
+          <h3>Feature Branch Workflow</h3>
 
-        <pre><code>git switch main
+          <pre><code>git switch main
 git pull
 git switch -c feature-name
 git add .
 git commit -m "Add new feature"
 git push -u origin feature-name</code></pre>
 
-        <h3>After the Pull Request Is Merged</h3>
+          <h3>After the Pull Request Is Merged</h3>
 
-        <pre><code>git switch main
+          <pre><code>git switch main
 git pull
 git branch -d feature-name</code></pre>
-      </section>
+        </section>
+      </div>
     </main>
 
-    <footer>
+    <footer class="site-footer">
       <p>
         <a href="../">Return to all cheat sheets</a>
       </p>
     </footer>
 
+    <button
+      class="back-to-top"
+      id="back-to-top"
+      type="button"
+      aria-label="Back to top"
+      title="Back to top"
+    >
+      ↑ Top
+    </button>
+
     <script>
       const copyButtons = document.querySelectorAll(".copy-button");
+      const navToggle = document.querySelector(".nav-toggle");
+      const siteNav = document.querySelector(".site-nav");
+      const tocLinks = [...document.querySelectorAll("[data-toc-link]")];
+      const observedTargets = tocLinks
+        .map((link) => document.querySelector(link.getAttribute("href")))
+        .filter(Boolean);
+      const visibleTargets = new Set();
+      const scrollSentinel = document.getElementById("scroll-sentinel");
+      const backToTopButton = document.getElementById("back-to-top");
+      const searchForm = document.getElementById("page-search");
+      const searchInput = document.getElementById("page-search-input");
+      const searchFeedback = document.getElementById("search-feedback");
+      const searchTargets = [
+        ...document.querySelectorAll("[data-search-target]"),
+      ];
+      const getSearchLabel = (target) =>
+        target.querySelector("h2, h3")?.innerText.trim() ?? target.id;
 
       copyButtons.forEach((button) => {
         button.addEventListener("click", async () => {
-          const command = button.previousElementSibling.innerText;
+          const codeBlock = button.nextElementSibling;
+          const code = codeBlock.innerText;
 
           try {
-            await navigator.clipboard.writeText(command);
+            await navigator.clipboard.writeText(code);
             button.innerText = "Copied!";
 
             setTimeout(() => {
@@ -605,6 +863,121 @@ git branch -d feature-name</code></pre>
             button.innerText = "Failed";
           }
         });
+      });
+
+      if (navToggle && siteNav) {
+        navToggle.addEventListener("click", () => {
+          const isOpen = siteNav.classList.toggle("is-open");
+          navToggle.setAttribute("aria-expanded", String(isOpen));
+        });
+
+        siteNav.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", () => {
+            siteNav.classList.remove("is-open");
+            navToggle.setAttribute("aria-expanded", "false");
+          });
+        });
+      }
+
+      const setActiveTocLink = (id) => {
+        tocLinks.forEach((link) => {
+          const isActive = link.getAttribute("href") === `#${id}`;
+          link.classList.toggle("is-active", isActive);
+
+          if (isActive) {
+            link.setAttribute("aria-current", "true");
+          } else {
+            link.removeAttribute("aria-current");
+          }
+        });
+      };
+
+      const updateCurrentSection = () => {
+        const current = [...visibleTargets]
+          .map((id) => document.getElementById(id))
+          .filter(Boolean)
+          .sort((a, b) => {
+            const aTop = Math.abs(a.getBoundingClientRect().top);
+            const bTop = Math.abs(b.getBoundingClientRect().top);
+            return aTop - bTop;
+          })[0];
+
+        if (current) {
+          setActiveTocLink(current.id);
+        }
+      };
+
+      if (observedTargets.length) {
+        const sectionObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                visibleTargets.add(entry.target.id);
+              } else {
+                visibleTargets.delete(entry.target.id);
+              }
+            });
+
+            updateCurrentSection();
+          },
+          {
+            rootMargin: "-18% 0px -55% 0px",
+            threshold: [0.1, 0.25, 0.5],
+          },
+        );
+
+        observedTargets.forEach((target) => sectionObserver.observe(target));
+        setActiveTocLink(observedTargets[0].id);
+      }
+
+      if (scrollSentinel && backToTopButton) {
+        const sentinelObserver = new IntersectionObserver(
+          ([entry]) => {
+            backToTopButton.classList.toggle("is-visible", !entry.isIntersecting);
+          },
+          {
+            threshold: 0,
+          },
+        );
+
+        sentinelObserver.observe(scrollSentinel);
+      }
+
+      if (backToTopButton) {
+        backToTopButton.addEventListener("click", () => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
+
+      searchForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const query = searchInput.value.trim().toLowerCase();
+
+        if (!query) {
+          searchFeedback.textContent = "Enter a command or section name to search.";
+          return;
+        }
+
+        const exactHeadingMatch = searchTargets.find(
+          (target) => getSearchLabel(target).toLowerCase() === query,
+        );
+        const partialHeadingMatch = searchTargets.find((target) =>
+          getSearchLabel(target).toLowerCase().includes(query),
+        );
+        const textMatch = searchTargets.find((target) =>
+          target.innerText.toLowerCase().includes(query),
+        );
+        const match = exactHeadingMatch ?? partialHeadingMatch ?? textMatch;
+
+        if (!match) {
+          searchFeedback.textContent = `No match found for "${searchInput.value.trim()}".`;
+          return;
+        }
+
+        match.scrollIntoView({ behavior: "smooth", block: "start" });
+        setActiveTocLink(match.id);
+        searchFeedback.textContent = `Jumped to "${getSearchLabel(match)}".`;
       });
     </script>
   </body>
