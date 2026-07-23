@@ -99,6 +99,13 @@ a {
   transform: translateY(-2px);
 }
 
+.button:focus-visible,
+.card:focus-visible,
+.mini-link:focus-visible {
+  outline: 2px solid rgba(96, 165, 250, 0.9);
+  outline-offset: 3px;
+}
+
 .button-primary {
   color: #ffffff;
   background-color: #2563eb;
@@ -197,6 +204,69 @@ a {
   z-index: 1;
 }
 
+.card-group {
+  min-height: 220px;
+}
+
+.card-group:hover {
+  transform: none;
+}
+
+.link-cluster {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: auto;
+}
+
+.mini-link {
+  display: block;
+  padding: 0.85rem 0.9rem;
+  border: 1px solid #334155;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  background: rgba(15, 23, 42, 0.7);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.mini-link:hover {
+  transform: translateY(-3px);
+  border-color: #60a5fa;
+  background: rgba(15, 23, 42, 0.9);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+}
+
+.mini-link span,
+.mini-link small {
+  display: block;
+}
+
+.mini-link span {
+  margin-bottom: 0.2rem;
+  color: #f8fafc;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.mini-link small {
+  color: #aebaca;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.accent-blue .mini-link:hover,
+.accent-blue .mini-link:focus-visible {
+  border-color: #60a5fa;
+}
+
+.accent-cyan .mini-link:hover,
+.accent-cyan .mini-link:focus-visible {
+  border-color: #67e8f9;
+}
+
 .card-icon {
   margin-bottom: 0.5rem;
   font-size: 1.5rem;
@@ -287,5 +357,9 @@ footer {
 
   .card {
     min-height: 160px;
+  }
+
+  .card-group {
+    min-height: 0;
   }
 }

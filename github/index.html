@@ -1,1037 +1,1034 @@
 <!doctype html>
-
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-
-```
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
-/>
-
-<meta
-  name="description"
-  content="A quick reference for GitHub Actions workflows, triggers, jobs, steps, Python testing, Node testing, and continuous integration."
-/>
-
-<title>GitHub Actions Cheat Sheet</title>
-
-<link rel="stylesheet" href="style.css" />
-```
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A workflow-first GitHub Actions cheat sheet for creating workflows, running tests on push and pull requests, using secrets, and troubleshooting failed runs."
+    />
+    <title>GitHub Actions Cheat Sheet</title>
+    <link rel="stylesheet" href="../assets/css/base.css" />
+    <link rel="stylesheet" href="../assets/css/layout.css" />
+    <link rel="stylesheet" href="../assets/css/components.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-    <header class="page-header">
-      <nav class="nav container">
-        <a class="home-link" href="../">
-          ← All Cheat Sheets
-        </a>
+    <header class="page-header" id="top">
+      <div class="nav-shell container">
+        <div class="nav-main">
+          <a class="brand-link" href="../index.html">Developer Cheat Sheets</a>
 
-```
-    <a class="next-link" href="../github/">
-      GitHub Cheat Sheet →
-    </a>
-  </nav>
-</header>
+          <button
+            class="nav-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="site-nav"
+            aria-label="Toggle site navigation"
+          >
+            Menu
+          </button>
 
-<main class="container">
-  <section class="hero">
-    <p class="tag">Continuous Integration</p>
-
-    <h1>GitHub Actions Cheat Sheet</h1>
-
-    <p>
-      A quick reference for creating workflows, running tests after a push,
-      understanding jobs and steps, and reading workflow results on GitHub.
-    </p>
-  </section>
-
-  <section class="table-of-contents">
-    <h2>Table of Contents</h2>
-
-    <div class="contents-grid">
-      <a href="#daily-actions">Daily Actions</a>
-      <a href="#what-is-actions">What Is GitHub Actions?</a>
-      <a href="#workflow-location">Workflow Location</a>
-      <a href="#workflow-structure">Workflow Structure</a>
-      <a href="#triggers">Triggers</a>
-      <a href="#jobs">Jobs</a>
-      <a href="#steps">Steps</a>
-      <a href="#common-actions">Common Actions</a>
-      <a href="#python-example">Python Example</a>
-      <a href="#node-example">Node Example</a>
-      <a href="#github-pages">Useful GitHub Pages</a>
-      <a href="#workflow">Typical Workflow</a>
-      <a href="#lessons">Things I Learned</a>
-    </div>
-  </section>
-
-  <section id="daily-actions" class="section">
-    <div class="section-heading">
-      <p class="tag">Most Important</p>
-
-      <h2>Daily GitHub Actions</h2>
-
-      <p>
-        Each card groups the workflow concepts that are commonly used
-        together.
-      </p>
-    </div>
-
-    <div class="daily-grid">
-      <article class="daily-card">
-        <div class="card-heading">
-          <div>
-            <p class="card-label">Workflow File</p>
-            <h3>Basic Structure</h3>
-          </div>
-
-          <span class="feature-badge">YAML</span>
+          <nav class="site-nav" id="site-nav" aria-label="Main">
+            <a href="../git/">Git</a>
+            <a href="../pull-request/">Pull Requests</a>
+            <a class="is-active" href="./" aria-current="page">
+              GitHub Actions
+            </a>
+            <a href="../docker/">Docker</a>
+            <a href="../dockerfile/">Dockerfile</a>
+            <a href="../linux/">Linux</a>
+            <a href="../html/">HTML</a>
+            <a href="../markdown/">Markdown</a>
+            <a href="../vim/">Vim</a>
+            <a href="../vscode/">VS Code</a>
+            <a href="../dependencies/">Dependencies</a>
+          </nav>
         </div>
 
-        <div class="syntax-table">
-          <div>
-            <code>name:</code>
-            <span>Name shown in GitHub</span>
-          </div>
+        <div class="nav-tools">
+          <a class="home-link" href="../index.html">← All Cheat Sheets</a>
 
-          <div>
-            <code>on:</code>
-            <span>Event that starts the workflow</span>
-          </div>
+          <form class="page-search" id="page-search" role="search">
+            <label class="sr-only" for="page-search-input">
+              Find a command or section on this page
+            </label>
+            <input
+              id="page-search-input"
+              type="search"
+              name="page-search"
+              placeholder="Find command or section"
+              autocomplete="off"
+            />
+            <button type="submit">Search</button>
+          </form>
 
-          <div>
-            <code>jobs:</code>
-            <span>Groups of work to perform</span>
-          </div>
-
-          <div>
-            <code>steps:</code>
-            <span>Individual tasks inside a job</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="daily-card">
-        <div class="card-heading">
-          <div>
-            <p class="card-label">Events</p>
-            <h3>Common Triggers</h3>
-          </div>
-
-          <span class="feature-badge">Start</span>
+          <a
+            class="doc-link"
+            href="https://docs.github.com/en/actions"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub Actions Docs →
+          </a>
         </div>
 
-        <div class="syntax-table">
-          <div>
-            <code>push:</code>
-            <span>Run after code is pushed</span>
-          </div>
-
-          <div>
-            <code>pull_request:</code>
-            <span>Run for pull requests</span>
-          </div>
-
-          <div>
-            <code>workflow_dispatch:</code>
-            <span>Allow manual runs</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="daily-card">
-        <div class="card-heading">
-          <div>
-            <p class="card-label">Job Setup</p>
-            <h3>Jobs and Steps</h3>
-          </div>
-
-          <span class="feature-badge">Runner</span>
-        </div>
-
-        <div class="syntax-table">
-          <div>
-            <code>runs-on:</code>
-            <span>Select the runner system</span>
-          </div>
-
-          <div>
-            <code>uses:</code>
-            <span>Run an existing action</span>
-          </div>
-
-          <div>
-            <code>run:</code>
-            <span>Execute a shell command</span>
-          </div>
-
-          <div>
-            <code>with:</code>
-            <span>Pass options to an action</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="daily-card">
-        <div class="card-heading">
-          <div>
-            <p class="card-label">Common Actions</p>
-            <h3>Project Setup</h3>
-          </div>
-
-          <span class="feature-badge">Setup</span>
-        </div>
-
-        <div class="syntax-table">
-          <div>
-            <code>actions/checkout@v4</code>
-            <span>Download repository code</span>
-          </div>
-
-          <div>
-            <code>actions/setup-python@v5</code>
-            <span>Install Python</span>
-          </div>
-
-          <div>
-            <code>actions/setup-node@v4</code>
-            <span>Install Node.js</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="daily-card wide-card">
-        <div class="card-heading">
-          <div>
-            <p class="card-label">Development Cycle</p>
-            <h3>Push to Test Results</h3>
-          </div>
-
-          <span class="feature-badge">CI</span>
-        </div>
-
-        <div class="workflow-row">
-          <span>Write code</span>
-          <strong>→</strong>
-          <span>Commit</span>
-          <strong>→</strong>
-          <span>Push</span>
-          <strong>→</strong>
-          <span>Actions runs</span>
-          <strong>→</strong>
-          <span>Review result</span>
-        </div>
-
-        <div class="status-grid">
-          <div class="success-status">
-            <strong>✓ Passed</strong>
-            <span>Tests completed successfully</span>
-          </div>
-
-          <div class="failed-status">
-            <strong>✕ Failed</strong>
-            <span>Open the logs and fix the error</span>
-          </div>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <section id="what-is-actions" class="section">
-    <div class="section-heading">
-      <p class="tag">Automation</p>
-      <h2>What Is GitHub Actions?</h2>
-    </div>
-
-    <p>
-      GitHub Actions automatically performs tasks whenever a configured
-      event happens in your repository.
-    </p>
-
-    <div class="purpose-grid">
-      <article>
-        <span class="purpose-icon">✓</span>
-        <h3>Run Tests</h3>
-        <p>
-          Automatically run pytest, npm tests, or another test suite.
-        </p>
-      </article>
-
-      <article>
-        <span class="purpose-icon">F</span>
-        <h3>Check Formatting</h3>
-        <p>
-          Verify that code follows the project's formatting rules.
-        </p>
-      </article>
-
-      <article>
-        <span class="purpose-icon">L</span>
-        <h3>Run Linters</h3>
-        <p>
-          Check code for errors, warnings, and style problems.
-        </p>
-      </article>
-
-      <article>
-        <span class="purpose-icon">B</span>
-        <h3>Build Projects</h3>
-        <p>
-          Compile or prepare an application for production.
-        </p>
-      </article>
-
-      <article>
-        <span class="purpose-icon">D</span>
-        <h3>Deploy Applications</h3>
-        <p>
-          Publish an application after tests and builds succeed.
-        </p>
-      </article>
-    </div>
-
-    <aside class="note">
-      GitHub Actions is commonly used for continuous integration, often
-      shortened to <strong>CI</strong>.
-    </aside>
-  </section>
-
-  <section id="workflow-location" class="section">
-    <div class="section-heading">
-      <p class="tag">File Location</p>
-      <h2>Workflow Location</h2>
-    </div>
-
-    <div class="location-layout">
-      <article class="folder-card">
-        <div class="folder-tree">
-          <div>
-            <span class="folder-icon">📁</span>
-            <strong>.github</strong>
-          </div>
-
-          <div class="nested-folder">
-            <span class="folder-icon">📁</span>
-            <strong>workflows</strong>
-          </div>
-
-          <div class="nested-file">
-            <span class="file-icon">YML</span>
-            <strong>tests.yml</strong>
-          </div>
-        </div>
-      </article>
-
-      <article class="info-card">
-        <h3>Required Path</h3>
-
-        <pre><code>.github/
-```
-
-└── workflows/
-└── tests.yml</code></pre>
-
-```
-        <p>
-          GitHub only recognizes workflow files placed inside
-          <code>.github/workflows/</code>.
-        </p>
-      </article>
-    </div>
-
-    <aside class="warning">
-      Placing <code>tests.yml</code> in the project root will not create a
-      GitHub Actions workflow.
-    </aside>
-  </section>
-
-  <section id="workflow-structure" class="section">
-    <div class="section-heading">
-      <p class="tag">Main Sections</p>
-      <h2>Workflow Structure</h2>
-    </div>
-
-    <div class="example-layout">
-      <article class="code-card">
-        <h3>Basic YAML</h3>
-
-        <pre><code>name: Test Project
-```
-
-on:
-push:
-
-jobs:
-test:
-runs-on: ubuntu-latest
-
-```
-steps:
-  - uses: actions/checkout@v4
-  - run: pytest</code></pre>
-      </article>
-
-      <article class="explanation-card">
-        <h3>How It Is Organized</h3>
-
-        <div class="structure-list">
-          <div>
-            <code>name</code>
-            <p>The workflow name displayed in the Actions tab.</p>
-          </div>
-
-          <div>
-            <code>on</code>
-            <p>The repository event that starts the workflow.</p>
-          </div>
-
-          <div>
-            <code>jobs</code>
-            <p>One or more groups of related tasks.</p>
-          </div>
-
-          <div>
-            <code>steps</code>
-            <p>The actions and shell commands performed by a job.</p>
-          </div>
-        </div>
-      </article>
-    </div>
-
-    <aside class="note">
-      YAML uses indentation to define structure. Use spaces consistently and
-      avoid tabs.
-    </aside>
-  </section>
-
-  <section id="triggers" class="section">
-    <div class="section-heading">
-      <p class="tag">Workflow Events</p>
-      <h2>Triggers</h2>
-    </div>
-
-    <div class="group-grid">
-      <article class="info-card">
-        <h3>Run on Push</h3>
-
-        <pre><code>on:
-```
-
-push:</code></pre>
-
-```
-        <p>
-          Starts the workflow whenever commits are pushed.
-        </p>
-      </article>
-
-      <article class="info-card">
-        <h3>Run on Pull Request</h3>
-
-        <pre><code>on:
-```
-
-pull_request:</code></pre>
-
-```
-        <p>
-          Starts the workflow when a pull request is opened or updated.
-        </p>
-      </article>
-
-      <article class="info-card">
-        <h3>Run on Both</h3>
-
-        <pre><code>on:
-```
-
-push:
-pull_request:</code></pre>
-
-```
-        <p>
-          Runs for pushed commits and pull requests.
-        </p>
-      </article>
-
-      <article class="info-card">
-        <h3>Run Manually</h3>
-
-        <pre><code>on:
-```
-
-workflow_dispatch:</code></pre>
-
-```
-        <p>
-          Adds a button in the Actions tab for manually starting the
-          workflow.
-        </p>
-      </article>
-    </div>
-
-    <h3>Only Run on Main</h3>
-
-    <pre><code>on:
-```
-
-push:
-branches:
-- main</code></pre>
-
-```
-    <h3>Run on Multiple Branches</h3>
-
-    <pre><code>on:
-```
-
-push:
-branches:
-- main
-- development</code></pre> </section>
-
-```
-  <section id="jobs" class="section">
-    <div class="section-heading">
-      <p class="tag">Groups of Work</p>
-      <h2>Jobs</h2>
-    </div>
-
-    <div class="example-layout">
-      <article class="code-card">
-        <h3>Job Example</h3>
-
-        <pre><code>jobs:
-```
-
-test:
-runs-on: ubuntu-latest</code></pre> </article>
-
-```
-      <article class="explanation-card">
-        <h3>What It Means</h3>
-
-        <div class="structure-list">
-          <div>
-            <code>jobs:</code>
-            <p>Starts the jobs section.</p>
-          </div>
-
-          <div>
-            <code>test:</code>
-            <p>The custom name of this job.</p>
-          </div>
-
-          <div>
-            <code>runs-on:</code>
-            <p>Selects the machine that runs the job.</p>
-          </div>
-
-          <div>
-            <code>ubuntu-latest</code>
-            <p>Uses a GitHub-hosted Ubuntu runner.</p>
-          </div>
-        </div>
-      </article>
-    </div>
-
-    <h3>Multiple Jobs</h3>
-
-    <pre><code>jobs:
-```
-
-test:
-runs-on: ubuntu-latest
-steps:
-- run: pytest
-
-lint:
-runs-on: ubuntu-latest
-steps:
-- run: pylint src</code></pre>
-
-```
-    <aside class="note">
-      Jobs normally run independently. A workflow can test, lint, build,
-      and deploy using separate jobs.
-    </aside>
-  </section>
-
-  <section id="steps" class="section">
-    <div class="section-heading">
-      <p class="tag">Individual Tasks</p>
-      <h2>Steps</h2>
-    </div>
-
-    <div class="group-grid">
-      <article class="info-card">
-        <h3>Use an Existing Action</h3>
-
-        <pre><code>steps:
-```
-
-* uses: actions/checkout@v4</code></pre>
-
-  ```
-      <p>
-        The <code>uses</code> keyword runs a reusable action.
-      </p>
-    </article>
-
-    <article class="info-card">
-      <h3>Run a Shell Command</h3>
-
-      <pre><code>steps:
-  ```
-
-* run: pytest</code></pre>
-
-  ```
-      <p>
-        The <code>run</code> keyword executes a command on the runner.
-      </p>
-    </article>
-
-    <article class="info-card wide-card">
-      <h3>Name Your Steps</h3>
-
-      <pre><code>steps:
-  ```
-
-* name: Download repository
-  uses: actions/checkout@v4
-
-* name: Run tests
-  run: pytest</code></pre>
-
-  ```
-      <p>
-        Descriptive step names make workflow logs easier to understand.
-      </p>
-    </article>
-  </div>
-  ```
-
-    </section>
-
-    <section id="common-actions" class="section">
-      <div class="section-heading">
-        <p class="tag">Reusable Actions</p>
-        <h2>Common Actions</h2>
+        <p class="search-feedback" id="search-feedback" aria-live="polite"></p>
       </div>
+    </header>
 
-  ```
-  <div class="action-grid">
-    <article>
-      <p class="card-label">Repository</p>
-      <h3>Checkout Code</h3>
+    <main class="page-shell container">
+      <aside class="page-sidebar">
+        <section class="table-of-contents" aria-labelledby="on-this-page-title">
+          <p class="tag">Navigation</p>
+          <h2 id="on-this-page-title">On This Page</h2>
 
-      <pre><code>- uses: actions/checkout@v4</code></pre>
+          <div class="toc-group">
+            <p class="toc-group-label">Workflows</p>
+            <div class="contents-list">
+              <a data-toc-link href="#create-workflow">Create a Workflow</a>
+              <a data-toc-link href="#run-tests-push">Run Tests on Push</a>
+              <a data-toc-link href="#run-tests-pr">Run Tests for Pull Requests</a>
+              <a data-toc-link href="#use-secrets-env">Secrets and Environment</a>
+              <a data-toc-link href="#troubleshoot-failed-workflow">Troubleshoot Failures</a>
+            </div>
+          </div>
 
-      <p>
-        Downloads your repository code onto the workflow runner.
-      </p>
-    </article>
+          <div class="toc-group">
+            <p class="toc-group-label">Reference</p>
+            <div class="contents-list">
+              <a data-toc-link href="#what-is-actions">What Is GitHub Actions?</a>
+              <a data-toc-link href="#workflow-location">Workflow Location</a>
+              <a data-toc-link href="#workflow-structure">Workflow Structure</a>
+              <a data-toc-link href="#triggers">Triggers</a>
+              <a data-toc-link href="#jobs">Jobs</a>
+              <a data-toc-link href="#steps">Steps</a>
+              <a data-toc-link href="#common-actions">Common Actions</a>
+              <a data-toc-link href="#python-example">Python Example</a>
+              <a data-toc-link href="#node-example">Node Example</a>
+              <a data-toc-link href="#github-pages">Useful GitHub Pages</a>
+              <a data-toc-link href="#workflow">Typical Workflow</a>
+              <a data-toc-link href="#lessons">Things I Learned</a>
+            </div>
+          </div>
+        </section>
+      </aside>
 
-    <article>
-      <p class="card-label">Python</p>
-      <h3>Setup Python</h3>
+      <div class="page-main">
+        <section class="hero">
+          <p class="tag">Continuous Integration</p>
+          <h1>GitHub Actions Cheat Sheet</h1>
+          <p class="hero-description">
+            A workflow-first reference for creating workflow files, running
+            tests on push and Pull Requests, wiring secrets safely, and
+            diagnosing failed Actions runs without getting lost in the logs.
+          </p>
 
-      <pre><code>- uses: actions/setup-python@v5
-  ```
+          <div class="hero-actions">
+            <a
+              class="doc-link"
+              href="https://docs.github.com/en/actions"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub Actions Docs →
+            </a>
+          </div>
+        </section>
 
-with:
-python-version: "3.13"</code></pre>
+        <div class="scroll-sentinel" id="scroll-sentinel" aria-hidden="true"></div>
 
-```
-        <p>
-          Installs the selected Python version.
-        </p>
-      </article>
+        <section class="section workflow-section">
+          <div class="section-heading">
+            <p class="tag">Highest Priority</p>
+            <h2>Daily GitHub Actions Workflows</h2>
+            <p>
+              These cards group the real CI tasks developers usually do
+              together: create the workflow file, run tests after pushes and
+              Pull Requests, inject secrets safely, and read failures quickly.
+            </p>
+          </div>
 
-      <article>
-        <p class="card-label">Node.js</p>
-        <h3>Setup Node</h3>
+          <div class="workflow-grid">
+            <article
+              id="create-workflow"
+              class="workflow-card"
+              data-observe
+              data-search-target
+            >
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Setup</p>
+                  <h3>Create a Workflow</h3>
+                </div>
 
-        <pre><code>- uses: actions/setup-node@v4
-```
+                <span class="feature-badge">YAML</span>
+              </div>
 
-with:
-node-version: 22</code></pre>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>mkdir -p .github/workflows
+touch .github/workflows/tests.yml
 
-```
-        <p>
-          Installs the selected Node.js version.
-        </p>
-      </article>
-    </div>
-
-    <aside class="note">
-      The checkout step normally comes first because later steps need access
-      to your repository files.
-    </aside>
-  </section>
-
-  <section id="python-example" class="section">
-    <div class="section-heading">
-      <p class="tag">Pytest</p>
-      <h2>Python Example</h2>
-    </div>
-
-    <div class="code-container">
-      <button class="copy-button" type="button">
-        Copy
-      </button>
-
-      <pre><code>name: Python Tests
-```
-
+name: Test Project
 on:
-push:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4</code></pre>
+              </div>
+
+              <p>
+                Start by creating the required folder path, add a workflow
+                file, then define the minimum structure so GitHub recognizes
+                it and you can run it manually while building it out.
+              </p>
+            </article>
+
+            <article
+              id="run-tests-push"
+              class="workflow-card"
+              data-observe
+              data-search-target
+            >
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Continuous Integration</p>
+                  <h3>Run Tests on Push</h3>
+                </div>
+
+                <span class="feature-badge">Push</span>
+              </div>
+
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>on:
+  push:
 
 jobs:
-test:
-runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npm test</code></pre>
+              </div>
 
-```
-steps:
-  - name: Checkout repository
-    uses: actions/checkout@v4
+              <p>
+                This is the normal push-based CI sequence: start on every push,
+                check out the code, prepare the runtime, install dependencies,
+                and run the test command automatically.
+              </p>
+            </article>
 
-  - name: Setup Python
-    uses: actions/setup-python@v5
-    with:
-      python-version: "3.13"
+            <article
+              id="run-tests-pr"
+              class="workflow-card wide-card"
+              data-observe
+              data-search-target
+            >
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Review Gates</p>
+                  <h3>Run Tests for Pull Requests</h3>
+                </div>
 
-  - name: Install dependencies
-    run: pip install -r requirements.txt
+                <span class="feature-badge">PR Checks</span>
+              </div>
 
-  - name: Run pytest
-    run: pytest</code></pre>
-    </div>
-
-    <div class="process-grid">
-      <article>
-        <span>1</span>
-        <h3>Checkout</h3>
-        <p>Download the repository code.</p>
-      </article>
-
-      <article>
-        <span>2</span>
-        <h3>Setup Python</h3>
-        <p>Install the requested Python version.</p>
-      </article>
-
-      <article>
-        <span>3</span>
-        <h3>Install</h3>
-        <p>Install packages from requirements.txt.</p>
-      </article>
-
-      <article>
-        <span>4</span>
-        <h3>Test</h3>
-        <p>Run the pytest test suite.</p>
-      </article>
-    </div>
-
-    <aside class="warning">
-      The workflow fails if <code>requirements.txt</code> does not exist or
-      if pytest is not installed.
-    </aside>
-  </section>
-
-  <section id="node-example" class="section">
-    <div class="section-heading">
-      <p class="tag">npm Tests</p>
-      <h2>Node Example</h2>
-    </div>
-
-    <div class="code-container">
-      <button class="copy-button" type="button">
-        Copy
-      </button>
-
-      <pre><code>name: Node Tests
-```
-
-on:
-push:
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>on:
+  pull_request:
+    branches:
+      - main
 
 jobs:
-test:
-runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install -r requirements.txt
+      - run: pytest</code></pre>
+              </div>
 
-```
+              <p>
+                Use this when you want GitHub to validate a branch before it
+                merges into <code>main</code>. The workflow runs whenever the
+                Pull Request is opened or updated.
+              </p>
+            </article>
+
+            <article
+              id="use-secrets-env"
+              class="workflow-card"
+              data-observe
+              data-search-target
+            >
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Configuration</p>
+                  <h3>Use Secrets and Environment Variables</h3>
+                </div>
+
+                <span class="feature-badge">Secrets</span>
+              </div>
+
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>env:
+  NODE_ENV: test
+
 steps:
-  - name: Checkout repository
+  - name: Use API key
+    run: npm run test:api
+    env:
+      API_KEY: ${{ secrets.API_KEY }}</code></pre>
+              </div>
+
+              <p>
+                Keep sensitive values in GitHub Secrets, define non-sensitive
+                shared values with <code>env</code>, and pass secrets only to
+                the steps that actually need them.
+              </p>
+            </article>
+
+            <article
+              id="troubleshoot-failed-workflow"
+              class="workflow-card"
+              data-observe
+              data-search-target
+            >
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Debugging</p>
+                  <h3>Troubleshoot a Failed Workflow</h3>
+                </div>
+
+                <span class="feature-badge">Logs</span>
+              </div>
+
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>GitHub:
+1. Open the Actions tab
+2. Select the failed workflow run
+3. Open the failed job
+4. Expand the failed step
+5. Read the log output
+6. Fix the workflow or project code
+7. Push again or re-run the job</code></pre>
+              </div>
+
+              <p>
+                Start with the failed step, not the whole file. Most workflow
+                problems are a missing dependency, wrong file path, bad secret,
+                or command that also fails locally.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section
+          id="what-is-actions"
+          class="section"
+          data-observe
+          data-search-target
+        >
+          <div class="section-heading">
+            <p class="tag">Automation</p>
+            <h2>What Is GitHub Actions?</h2>
+          </div>
+
+          <p>
+            GitHub Actions automatically performs tasks whenever a configured
+            event happens in your repository.
+          </p>
+
+          <div class="purpose-grid">
+            <article>
+              <span class="purpose-icon">✓</span>
+              <h3>Run Tests</h3>
+              <p>Automatically run pytest, npm tests, or another test suite.</p>
+            </article>
+
+            <article>
+              <span class="purpose-icon">F</span>
+              <h3>Check Formatting</h3>
+              <p>Verify that code follows the project's formatting rules.</p>
+            </article>
+
+            <article>
+              <span class="purpose-icon">L</span>
+              <h3>Run Linters</h3>
+              <p>Check code for errors, warnings, and style problems.</p>
+            </article>
+
+            <article>
+              <span class="purpose-icon">B</span>
+              <h3>Build Projects</h3>
+              <p>Compile or prepare an application for production.</p>
+            </article>
+
+            <article>
+              <span class="purpose-icon">D</span>
+              <h3>Deploy Applications</h3>
+              <p>Publish an application after tests and builds succeed.</p>
+            </article>
+          </div>
+
+          <aside class="note">
+            GitHub Actions is commonly used for continuous integration, often
+            shortened to <strong>CI</strong>.
+          </aside>
+        </section>
+
+        <section
+          id="workflow-location"
+          class="section"
+          data-observe
+          data-search-target
+        >
+          <div class="section-heading">
+            <p class="tag">File Location</p>
+            <h2>Workflow Location</h2>
+          </div>
+
+          <div class="location-layout">
+            <article class="folder-card">
+              <div class="folder-tree">
+                <div>
+                  <span class="folder-icon">📁</span>
+                  <strong>.github</strong>
+                </div>
+
+                <div class="nested-folder">
+                  <span class="folder-icon">📁</span>
+                  <strong>workflows</strong>
+                </div>
+
+                <div class="nested-file">
+                  <span class="file-icon">YML</span>
+                  <strong>tests.yml</strong>
+                </div>
+              </div>
+            </article>
+
+            <article class="info-card">
+              <h3>Required Path</h3>
+              <pre><code>.github/
+└── workflows/
+    └── tests.yml</code></pre>
+              <p>
+                GitHub only recognizes workflow files placed inside
+                <code>.github/workflows/</code>.
+              </p>
+            </article>
+          </div>
+
+          <aside class="warning">
+            Placing <code>tests.yml</code> in the project root will not create
+            a GitHub Actions workflow.
+          </aside>
+        </section>
+
+        <section
+          id="workflow-structure"
+          class="section"
+          data-observe
+          data-search-target
+        >
+          <div class="section-heading">
+            <p class="tag">Main Sections</p>
+            <h2>Workflow Structure</h2>
+          </div>
+
+          <div class="example-layout">
+            <article class="code-card">
+              <h3>Basic YAML</h3>
+              <pre><code>name: Test Project
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pytest</code></pre>
+            </article>
+
+            <article class="explanation-card">
+              <h3>How It Is Organized</h3>
+
+              <div class="structure-list">
+                <div>
+                  <code>name</code>
+                  <p>The workflow name displayed in the Actions tab.</p>
+                </div>
+
+                <div>
+                  <code>on</code>
+                  <p>The repository event that starts the workflow.</p>
+                </div>
+
+                <div>
+                  <code>jobs</code>
+                  <p>One or more groups of related tasks.</p>
+                </div>
+
+                <div>
+                  <code>steps</code>
+                  <p>The actions and shell commands performed by a job.</p>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <aside class="note">
+            YAML uses indentation to define structure. Use spaces consistently
+            and avoid tabs.
+          </aside>
+        </section>
+
+        <section id="triggers" class="section" data-observe data-search-target>
+          <div class="section-heading">
+            <p class="tag">Workflow Events</p>
+            <h2>Triggers</h2>
+          </div>
+
+          <div class="group-grid">
+            <article class="info-card">
+              <h3>Run on Push</h3>
+              <pre><code>on:
+  push:</code></pre>
+              <p>Starts the workflow whenever commits are pushed.</p>
+            </article>
+
+            <article class="info-card">
+              <h3>Run on Pull Request</h3>
+              <pre><code>on:
+  pull_request:</code></pre>
+              <p>Starts the workflow when a pull request is opened or updated.</p>
+            </article>
+
+            <article class="info-card">
+              <h3>Run on Both</h3>
+              <pre><code>on:
+  push:
+  pull_request:</code></pre>
+              <p>Runs for pushed commits and pull requests.</p>
+            </article>
+
+            <article class="info-card">
+              <h3>Run Manually</h3>
+              <pre><code>on:
+  workflow_dispatch:</code></pre>
+              <p>
+                Adds a button in the Actions tab for manually starting the
+                workflow.
+              </p>
+            </article>
+          </div>
+
+          <h3>Only Run on Main</h3>
+          <pre><code>on:
+  push:
+    branches:
+      - main</code></pre>
+
+          <h3>Run on Multiple Branches</h3>
+          <pre><code>on:
+  push:
+    branches:
+      - main
+      - development</code></pre>
+        </section>
+
+        <section id="jobs" class="section" data-observe data-search-target>
+          <div class="section-heading">
+            <p class="tag">Groups of Work</p>
+            <h2>Jobs</h2>
+          </div>
+
+          <div class="example-layout">
+            <article class="code-card">
+              <h3>Job Example</h3>
+              <pre><code>jobs:
+  test:
+    runs-on: ubuntu-latest</code></pre>
+            </article>
+
+            <article class="explanation-card">
+              <h3>What It Means</h3>
+
+              <div class="structure-list">
+                <div>
+                  <code>jobs:</code>
+                  <p>Starts the jobs section.</p>
+                </div>
+
+                <div>
+                  <code>test:</code>
+                  <p>The custom name of this job.</p>
+                </div>
+
+                <div>
+                  <code>runs-on:</code>
+                  <p>Selects the machine that runs the job.</p>
+                </div>
+
+                <div>
+                  <code>ubuntu-latest</code>
+                  <p>Uses a GitHub-hosted Ubuntu runner.</p>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <h3>Multiple Jobs</h3>
+          <pre><code>jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: pytest
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - run: pylint src</code></pre>
+
+          <aside class="note">
+            Jobs normally run independently. A workflow can test, lint, build,
+            and deploy using separate jobs.
+          </aside>
+        </section>
+
+        <section id="steps" class="section" data-observe data-search-target>
+          <div class="section-heading">
+            <p class="tag">Individual Tasks</p>
+            <h2>Steps</h2>
+          </div>
+
+          <div class="group-grid">
+            <article class="info-card">
+              <h3>Use an Existing Action</h3>
+              <pre><code>steps:
+  - uses: actions/checkout@v4</code></pre>
+              <p>The <code>uses</code> keyword runs a reusable action.</p>
+            </article>
+
+            <article class="info-card">
+              <h3>Run a Shell Command</h3>
+              <pre><code>steps:
+  - run: pytest</code></pre>
+              <p>The <code>run</code> keyword executes a command on the runner.</p>
+            </article>
+
+            <article class="info-card wide-card">
+              <h3>Name Your Steps</h3>
+              <pre><code>steps:
+  - name: Download repository
     uses: actions/checkout@v4
-
-  - name: Setup Node
-    uses: actions/setup-node@v4
-    with:
-      node-version: 22
-
-  - name: Install dependencies
-    run: npm install
 
   - name: Run tests
-    run: npm test</code></pre>
-    </div>
+    run: pytest</code></pre>
+              <p>
+                Descriptive step names make workflow logs easier to understand.
+              </p>
+            </article>
+          </div>
+        </section>
 
-    <div class="process-grid">
-      <article>
-        <span>1</span>
-        <h3>Checkout</h3>
-        <p>Download the repository files.</p>
-      </article>
+        <section
+          id="common-actions"
+          class="section"
+          data-observe
+          data-search-target
+        >
+          <div class="section-heading">
+            <p class="tag">Reusable Actions</p>
+            <h2>Common Actions</h2>
+          </div>
 
-      <article>
-        <span>2</span>
-        <h3>Setup Node</h3>
-        <p>Install the selected Node.js version.</p>
-      </article>
+          <div class="action-grid">
+            <article>
+              <p class="card-label">Repository</p>
+              <h3>Checkout Code</h3>
+              <pre><code>- uses: actions/checkout@v4</code></pre>
+              <p>Downloads your repository code onto the workflow runner.</p>
+            </article>
 
-      <article>
-        <span>3</span>
-        <h3>Install</h3>
-        <p>Install packages from package.json.</p>
-      </article>
+            <article>
+              <p class="card-label">Python</p>
+              <h3>Setup Python</h3>
+              <pre><code>- uses: actions/setup-python@v5
+  with:
+    python-version: "3.13"</code></pre>
+              <p>Installs the selected Python version.</p>
+            </article>
 
-      <article>
-        <span>4</span>
-        <h3>Test</h3>
-        <p>Run the npm test script.</p>
-      </article>
-    </div>
-  </section>
+            <article>
+              <p class="card-label">Node.js</p>
+              <h3>Setup Node</h3>
+              <pre><code>- uses: actions/setup-node@v4
+  with:
+    node-version: 22</code></pre>
+              <p>Installs the selected Node.js version.</p>
+            </article>
+          </div>
 
-  <section id="github-pages" class="section">
-    <div class="section-heading">
-      <p class="tag">Repository Navigation</p>
-      <h2>Useful GitHub Pages</h2>
-    </div>
+          <aside class="note">
+            The checkout step normally comes first because later steps need
+            access to your repository files.
+          </aside>
+        </section>
 
-    <div class="tab-grid">
-      <article>
-        <span class="tab-name">Code</span>
-        <h3>Repository Files</h3>
-        <p>
-          Browse source code, branches, commits, and workflow files.
-        </p>
-      </article>
+        <section
+          id="python-example"
+          class="section"
+          data-observe
+          data-search-target
+        >
+          <div class="section-heading">
+            <p class="tag">Pytest</p>
+            <h2>Python Example</h2>
+          </div>
 
-      <article>
-        <span class="tab-name">Actions</span>
-        <h3>Workflow History</h3>
-        <p>
-          View workflow runs, status, individual jobs, steps, and logs.
-        </p>
-      </article>
+          <div class="code-container">
+            <button class="copy-button" type="button">Copy</button>
+            <pre><code>name: Python Tests
 
-      <article>
-        <span class="tab-name">Issues</span>
-        <h3>Track Problems</h3>
-        <p>
-          Record bugs, tasks, questions, and planned improvements.
-        </p>
-      </article>
+on:
+  push:
 
-      <article>
-        <span class="tab-name">Pull Requests</span>
-        <h3>Review Changes</h3>
-        <p>
-          Review proposed changes and see whether checks have passed.
-        </p>
-      </article>
-    </div>
-  </section>
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  <section id="workflow" class="section">
-    <div class="section-heading">
-      <p class="tag">Development Cycle</p>
-      <h2>Typical Workflow</h2>
-    </div>
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
 
-    <div class="workflow-column">
-      <article>
-        <span>1</span>
-        <div>
-          <h3>Write Code</h3>
-          <p>Make changes and run tests locally.</p>
-        </div>
-      </article>
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-      <strong>↓</strong>
+      - name: Run pytest
+        run: pytest</code></pre>
+          </div>
 
-      <article>
-        <span>2</span>
-        <div>
-          <h3>Check Git</h3>
-          <code>git status</code>
-        </div>
-      </article>
+          <div class="process-grid">
+            <article>
+              <span>1</span>
+              <h3>Checkout</h3>
+              <p>Download the repository code.</p>
+            </article>
 
-      <strong>↓</strong>
+            <article>
+              <span>2</span>
+              <h3>Setup Python</h3>
+              <p>Install the requested Python version.</p>
+            </article>
 
-      <article>
-        <span>3</span>
-        <div>
-          <h3>Stage Changes</h3>
-          <code>git add .</code>
-        </div>
-      </article>
+            <article>
+              <span>3</span>
+              <h3>Install</h3>
+              <p>Install packages from requirements.txt.</p>
+            </article>
 
-      <strong>↓</strong>
+            <article>
+              <span>4</span>
+              <h3>Test</h3>
+              <p>Run the pytest test suite.</p>
+            </article>
+          </div>
 
-      <article>
-        <span>4</span>
-        <div>
-          <h3>Create a Commit</h3>
-          <code>git commit -m "Meaningful message"</code>
-        </div>
-      </article>
+          <aside class="warning">
+            The workflow fails if <code>requirements.txt</code> does not exist
+            or if pytest is not installed.
+          </aside>
+        </section>
 
-      <strong>↓</strong>
+        <section
+          id="node-example"
+          class="section"
+          data-observe
+          data-search-target
+        >
+          <div class="section-heading">
+            <p class="tag">npm Tests</p>
+            <h2>Node Example</h2>
+          </div>
 
-      <article>
-        <span>5</span>
-        <div>
-          <h3>Push to GitHub</h3>
-          <code>git push</code>
-        </div>
-      </article>
+          <div class="code-container">
+            <button class="copy-button" type="button">Copy</button>
+            <pre><code>name: Node Tests
 
-      <strong>↓</strong>
+on:
+  push:
 
-      <article>
-        <span>6</span>
-        <div>
-          <h3>GitHub Actions Starts</h3>
-          <p>The configured workflow runs automatically.</p>
-        </div>
-      </article>
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      <strong>↓</strong>
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
-      <div class="result-choice">
-        <article class="passed-card">
-          <strong>✓ Green</strong>
-          <p>The workflow passed.</p>
-        </article>
+      - name: Install dependencies
+        run: npm install
 
-        <article class="failed-card">
-          <strong>✕ Red</strong>
-          <p>Open the failed step and read the logs.</p>
-        </article>
+      - name: Run tests
+        run: npm test</code></pre>
+          </div>
+
+          <div class="process-grid">
+            <article>
+              <span>1</span>
+              <h3>Checkout</h3>
+              <p>Download the repository files.</p>
+            </article>
+
+            <article>
+              <span>2</span>
+              <h3>Setup Node</h3>
+              <p>Install the selected Node.js version.</p>
+            </article>
+
+            <article>
+              <span>3</span>
+              <h3>Install</h3>
+              <p>Install packages from package.json.</p>
+            </article>
+
+            <article>
+              <span>4</span>
+              <h3>Test</h3>
+              <p>Run the npm test script.</p>
+            </article>
+          </div>
+        </section>
+
+        <section
+          id="github-pages"
+          class="section"
+          data-observe
+          data-search-target
+        >
+          <div class="section-heading">
+            <p class="tag">Repository Navigation</p>
+            <h2>Useful GitHub Pages</h2>
+          </div>
+
+          <div class="tab-grid">
+            <article>
+              <span class="tab-name">Code</span>
+              <h3>Repository Files</h3>
+              <p>Browse source code, branches, commits, and workflow files.</p>
+            </article>
+
+            <article>
+              <span class="tab-name">Actions</span>
+              <h3>Workflow History</h3>
+              <p>View workflow runs, status, individual jobs, steps, and logs.</p>
+            </article>
+
+            <article>
+              <span class="tab-name">Issues</span>
+              <h3>Track Problems</h3>
+              <p>Record bugs, tasks, questions, and planned improvements.</p>
+            </article>
+
+            <article>
+              <span class="tab-name">Pull Requests</span>
+              <h3>Review Changes</h3>
+              <p>Review proposed changes and see whether checks have passed.</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="workflow" class="section" data-observe data-search-target>
+          <div class="section-heading">
+            <p class="tag">Development Cycle</p>
+            <h2>Typical Workflow</h2>
+          </div>
+
+          <div class="workflow-column">
+            <article>
+              <span>1</span>
+              <div>
+                <h3>Write Code</h3>
+                <p>Make changes and run tests locally.</p>
+              </div>
+            </article>
+
+            <strong>↓</strong>
+
+            <article>
+              <span>2</span>
+              <div>
+                <h3>Check Git</h3>
+                <code>git status</code>
+              </div>
+            </article>
+
+            <strong>↓</strong>
+
+            <article>
+              <span>3</span>
+              <div>
+                <h3>Stage Changes</h3>
+                <code>git add .</code>
+              </div>
+            </article>
+
+            <strong>↓</strong>
+
+            <article>
+              <span>4</span>
+              <div>
+                <h3>Create a Commit</h3>
+                <code>git commit -m "Meaningful message"</code>
+              </div>
+            </article>
+
+            <strong>↓</strong>
+
+            <article>
+              <span>5</span>
+              <div>
+                <h3>Push to GitHub</h3>
+                <code>git push</code>
+              </div>
+            </article>
+
+            <strong>↓</strong>
+
+            <article>
+              <span>6</span>
+              <div>
+                <h3>GitHub Actions Starts</h3>
+                <p>The configured workflow runs automatically.</p>
+              </div>
+            </article>
+
+            <strong>↓</strong>
+
+            <div class="result-choice">
+              <article class="passed-card">
+                <strong>✓ Green</strong>
+                <p>The workflow passed.</p>
+              </article>
+
+              <article class="failed-card">
+                <strong>✕ Red</strong>
+                <p>Open the failed step and read the logs.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="lessons" class="section" data-observe data-search-target>
+          <div class="section-heading">
+            <p class="tag">Summary</p>
+            <h2>Things I Learned</h2>
+          </div>
+
+          <div class="lesson-grid">
+            <article>
+              <span>01</span>
+              <p>
+                Workflow files use YAML and normally end in <code>.yml</code>
+                or <code>.yaml</code>.
+              </p>
+            </article>
+
+            <article>
+              <span>02</span>
+              <p>
+                Workflow files live inside <code>.github/workflows/</code>.
+              </p>
+            </article>
+
+            <article>
+              <span>03</span>
+              <p>
+                A workflow commonly contains <code>name</code>, <code>on</code>,
+                <code>jobs</code>, and <code>steps</code>.
+              </p>
+            </article>
+
+            <article>
+              <span>04</span>
+              <p>
+                The <code>uses</code> keyword runs an existing reusable action.
+              </p>
+            </article>
+
+            <article>
+              <span>05</span>
+              <p>The <code>run</code> keyword executes a shell command.</p>
+            </article>
+
+            <article>
+              <span>06</span>
+              <p>
+                A push can automatically start a workflow when the
+                <code>push</code> trigger is configured.
+              </p>
+            </article>
+
+            <article>
+              <span>07</span>
+              <p>
+                Failed workflow logs show which job and step caused the
+                problem.
+              </p>
+            </article>
+
+            <article>
+              <span>08</span>
+              <p>
+                A green check means the configured jobs completed successfully.
+              </p>
+            </article>
+          </div>
+        </section>
       </div>
-    </div>
-  </section>
+    </main>
 
-  <section id="lessons" class="section">
-    <div class="section-heading">
-      <p class="tag">Summary</p>
-      <h2>Things I Learned</h2>
-    </div>
+    <footer class="site-footer">
+      <p><a href="../index.html">Return to all cheat sheets</a></p>
+    </footer>
 
-    <div class="lesson-grid">
-      <article>
-        <span>01</span>
-        <p>
-          Workflow files use YAML and normally end in
-          <code>.yml</code> or <code>.yaml</code>.
-        </p>
-      </article>
+    <button
+      class="back-to-top"
+      id="back-to-top"
+      type="button"
+      aria-label="Back to top"
+      title="Back to top"
+    >
+      ↑ Top
+    </button>
 
-      <article>
-        <span>02</span>
-        <p>
-          Workflow files live inside
-          <code>.github/workflows/</code>.
-        </p>
-      </article>
-
-      <article>
-        <span>03</span>
-        <p>
-          A workflow commonly contains
-          <code>name</code>, <code>on</code>, <code>jobs</code>, and
-          <code>steps</code>.
-        </p>
-      </article>
-
-      <article>
-        <span>04</span>
-        <p>
-          The <code>uses</code> keyword runs an existing reusable action.
-        </p>
-      </article>
-
-      <article>
-        <span>05</span>
-        <p>
-          The <code>run</code> keyword executes a shell command.
-        </p>
-      </article>
-
-      <article>
-        <span>06</span>
-        <p>
-          A push can automatically start a workflow when the
-          <code>push</code> trigger is configured.
-        </p>
-      </article>
-
-      <article>
-        <span>07</span>
-        <p>
-          Failed workflow logs show which job and step caused the problem.
-        </p>
-      </article>
-
-      <article>
-        <span>08</span>
-        <p>
-          A green check means the configured jobs completed successfully.
-        </p>
-      </article>
-    </div>
-  </section>
-</main>
-
-<footer class="site-footer">
-  <p>
-    <a href="../">Return to all cheat sheets</a>
-  </p>
-</footer>
-
-<script>
-  const copyButtons = document.querySelectorAll(".copy-button");
-
-  copyButtons.forEach((button) => {
-    button.addEventListener("click", async () => {
-      const codeBlock = button.nextElementSibling;
-      const code = codeBlock.innerText;
-
-      try {
-        await navigator.clipboard.writeText(code);
-
-        button.innerText = "Copied!";
-
-        setTimeout(() => {
-          button.innerText = "Copy";
-        }, 1500);
-      } catch (error) {
-        button.innerText = "Failed";
-      }
-    });
-  });
-</script>
-```
-
+    <script src="../assets/js/site.js" defer></script>
   </body>
 </html>

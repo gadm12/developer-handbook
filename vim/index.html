@@ -1,1016 +1,729 @@
 <!doctype html>
-
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-
-```
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
-/>
-
-<meta
-  name="description"
-  content="A quick reference for common Vim motions, editing commands, search, replace, visual mode, and VS Code Vim shortcuts."
-/>
-
-<title>Vim Cheat Sheet</title>
-
-<link rel="stylesheet" href="style.css" />
-```
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A workflow-first Vim cheat sheet for navigation, editing, yanking, replacing text, handling files, and using Vim inside VS Code."
+    />
+    <title>Vim Cheat Sheet</title>
+    <link rel="stylesheet" href="../assets/css/base.css" />
+    <link rel="stylesheet" href="../assets/css/layout.css" />
+    <link rel="stylesheet" href="../assets/css/components.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-    <header class="page-header">
-      <nav class="nav container">
-        <a class="home-link" href="../">
-          ← All Cheat Sheets
-        </a>
+    <header class="page-header" id="top">
+      <div class="nav-shell container">
+        <div class="nav-main">
+          <a class="brand-link" href="../index.html">Developer Cheat Sheets</a>
 
-```
-    <a class="next-link" href="../vscode/">
-      VS Code Cheat Sheet →
-    </a>
-  </nav>
-</header>
+          <button
+            class="nav-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="site-nav"
+            aria-label="Toggle site navigation"
+          >
+            Menu
+          </button>
 
-<main class="container">
-  <section class="hero">
-    <p class="tag">Keyboard Editing</p>
-
-    <h1>Vim Cheat Sheet</h1>
-
-    <p>
-      A quick reference for navigating, editing, selecting, copying,
-      searching, replacing, and working with Vim inside VS Code.
-    </p>
-  </section>
-
-  <section class="table-of-contents">
-    <h2>Table of Contents</h2>
-
-    <div class="contents-grid">
-      <a href="#daily-commands">Daily Commands</a>
-      <a href="#modes">Modes</a>
-      <a href="#movement">Movement</a>
-      <a href="#editing">Editing</a>
-      <a href="#copy-paste">Copy and Paste</a>
-      <a href="#undo-redo">Undo and Redo</a>
-      <a href="#visual-mode">Visual Mode</a>
-      <a href="#searching">Searching</a>
-      <a href="#replace">Replace</a>
-      <a href="#files">Files</a>
-      <a href="#vscode-vim">VS Code Vim</a>
-      <a href="#favorites">Favorite Commands</a>
-    </div>
-  </section>
-
-  <section id="daily-commands" class="section">
-    <div class="section-heading">
-      <p class="tag">Most Used</p>
-
-      <h2>Daily Vim Commands</h2>
-
-      <p>
-        Each card groups commands that are commonly used together.
-      </p>
-    </div>
-
-    <div class="daily-grid">
-      <article class="daily-card">
-        <div class="card-heading">
-          <div>
-            <p class="card-label">Navigate</p>
-            <h3>Movement</h3>
-          </div>
-
-          <span class="command-badge">Normal Mode</span>
+          <nav class="site-nav" id="site-nav" aria-label="Main">
+            <a href="../git/">Git</a>
+            <a href="../pull-request/">Pull Requests</a>
+            <a href="../github/">GitHub Actions</a>
+            <a href="../docker/">Docker</a>
+            <a href="../dockerfile/">Dockerfile</a>
+            <a href="../linux/">Linux</a>
+            <a href="../html/">HTML</a>
+            <a href="../markdown/">Markdown</a>
+            <a class="is-active" href="./" aria-current="page">Vim</a>
+            <a href="../vscode/">VS Code</a>
+            <a href="../dependencies/">Dependencies</a>
+          </nav>
         </div>
 
-        <div class="command-table">
-          <div>
-            <code>gg</code>
-            <span>Beginning of file</span>
-          </div>
+        <div class="nav-tools">
+          <a class="home-link" href="../index.html">← All Cheat Sheets</a>
 
-          <div>
-            <code>G</code>
-            <span>End of file</span>
-          </div>
+          <form class="page-search" id="page-search" role="search">
+            <label class="sr-only" for="page-search-input">
+              Find a command or section on this page
+            </label>
+            <input
+              id="page-search-input"
+              type="search"
+              name="page-search"
+              placeholder="Find command or section"
+              autocomplete="off"
+            />
+            <button type="submit">Search</button>
+          </form>
 
-          <div>
-            <code>w</code>
-            <span>Next word</span>
-          </div>
-
-          <div>
-            <code>b</code>
-            <span>Previous word</span>
-          </div>
-
-          <div>
-            <code>^</code>
-            <span>First non-space character</span>
-          </div>
-
-          <div>
-            <code>$</code>
-            <span>End of line</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="daily-card">
-        <div class="card-heading">
-          <div>
-            <p class="card-label">Modify Text</p>
-            <h3>Editing</h3>
-          </div>
-
-          <span class="command-badge">Edit</span>
+          <a
+            class="doc-link"
+            href="https://www.vim.org/docs.php"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Vim Docs →
+          </a>
         </div>
 
-        <div class="command-table">
-          <div>
-            <code>ciw</code>
-            <span>Change inside word</span>
-          </div>
-
-          <div>
-            <code>diw</code>
-            <span>Delete inside word</span>
-          </div>
-
-          <div>
-            <code>dd</code>
-            <span>Delete current line</span>
-          </div>
-
-          <div>
-            <code>d$</code>
-            <span>Delete to end of line</span>
-          </div>
-
-          <div>
-            <code>o</code>
-            <span>New line below</span>
-          </div>
-
-          <div>
-            <code>O</code>
-            <span>New line above</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="daily-card">
-        <div class="card-heading">
-          <div>
-            <p class="card-label">Clipboard</p>
-            <h3>Copy and Paste</h3>
-          </div>
-
-          <span class="command-badge">Yank</span>
-        </div>
-
-        <div class="command-table">
-          <div>
-            <code>yy</code>
-            <span>Copy current line</span>
-          </div>
-
-          <div>
-            <code>yiw</code>
-            <span>Copy inside word</span>
-          </div>
-
-          <div>
-            <code>yap</code>
-            <span>Copy paragraph</span>
-          </div>
-
-          <div>
-            <code>p</code>
-            <span>Paste after cursor</span>
-          </div>
-
-          <div>
-            <code>P</code>
-            <span>Paste before cursor</span>
-          </div>
-
-          <div>
-            <code>"0p</code>
-            <span>Paste last yank</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="daily-card">
-        <div class="card-heading">
-          <div>
-            <p class="card-label">Find Text</p>
-            <h3>Search and Replace</h3>
-          </div>
-
-          <span class="command-badge">Search</span>
-        </div>
-
-        <div class="command-table">
-          <div>
-            <code>/word</code>
-            <span>Search forward</span>
-          </div>
-
-          <div>
-            <code>n</code>
-            <span>Next result</span>
-          </div>
-
-          <div>
-            <code>N</code>
-            <span>Previous result</span>
-          </div>
-
-          <div>
-            <code>:noh</code>
-            <span>Clear highlights</span>
-          </div>
-
-          <div>
-            <code>:%s/old/new/g</code>
-            <span>Replace all</span>
-          </div>
-
-          <div>
-            <code>:%s/old/new/gc</code>
-            <span>Replace with confirmation</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="daily-card wide-card">
-        <div class="card-heading">
-          <div>
-            <p class="card-label">VS Code Vim</p>
-            <h3>Editor Shortcuts</h3>
-          </div>
-
-          <span class="command-badge">VS Code</span>
-        </div>
-
-        <div class="command-table shortcut-command-table">
-          <div>
-            <code>Ctrl+P</code>
-            <span>Quick Open</span>
-          </div>
-
-          <div>
-            <code>Ctrl+Shift+P</code>
-            <span>Command Palette</span>
-          </div>
-
-          <div>
-            <code>Ctrl+Shift+E</code>
-            <span>Explorer</span>
-          </div>
-
-          <div>
-            <code>Ctrl+`</code>
-            <span>Toggle terminal</span>
-          </div>
-
-          <div>
-            <code>&lt;Space&gt; f</code>
-            <span>Open file</span>
-          </div>
-
-          <div>
-            <code>&lt;Space&gt; s</code>
-            <span>Save file</span>
-          </div>
-
-          <div>
-            <code>&lt;Space&gt; e</code>
-            <span>Open Explorer</span>
-          </div>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <section id="modes" class="section">
-    <div class="section-heading">
-      <p class="tag">Vim States</p>
-      <h2>Modes</h2>
-    </div>
-
-    <div class="mode-grid">
-      <article>
-        <kbd>Esc</kbd>
-
-        <h3>Normal Mode</h3>
-
-        <p>
-          Navigate the file and run editing commands.
-        </p>
-      </article>
-
-      <article>
-        <kbd>i</kbd>
-
-        <h3>Insert Mode</h3>
-
-        <p>
-          Type regular text into the file.
-        </p>
-      </article>
-
-      <article>
-        <kbd>v</kbd>
-
-        <h3>Visual Mode</h3>
-
-        <p>
-          Select characters and text regions.
-        </p>
-      </article>
-
-      <article>
-        <kbd>V</kbd>
-
-        <h3>Visual Line Mode</h3>
-
-        <p>
-          Select full lines.
-        </p>
-      </article>
-
-      <article>
-        <kbd>Ctrl+v</kbd>
-
-        <h3>Visual Block Mode</h3>
-
-        <p>
-          Select rectangular columns of text.
-        </p>
-      </article>
-    </div>
-
-    <aside class="note">
-      When a command behaves unexpectedly, press <code>Esc</code> to return
-      to Normal mode.
-    </aside>
-  </section>
-
-  <section id="movement" class="section">
-    <div class="section-heading">
-      <p class="tag">Navigate the File</p>
-      <h2>Movement</h2>
-    </div>
-
-    <div class="group-grid">
-      <article class="command-group">
-        <h3>File Movement</h3>
-
-        <div class="command-table">
-          <div>
-            <code>gg</code>
-            <span>Beginning of file</span>
-          </div>
-
-          <div>
-            <code>G</code>
-            <span>End of file</span>
-          </div>
-
-          <div>
-            <code>25G</code>
-            <span>Go to line 25</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="command-group">
-        <h3>Line Movement</h3>
-
-        <div class="command-table">
-          <div>
-            <code>0</code>
-            <span>Beginning of line</span>
-          </div>
-
-          <div>
-            <code>^</code>
-            <span>First non-space character</span>
-          </div>
-
-          <div>
-            <code>$</code>
-            <span>End of line</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="command-group">
-        <h3>Word Movement</h3>
-
-        <div class="command-table">
-          <div>
-            <code>w</code>
-            <span>Beginning of next word</span>
-          </div>
-
-          <div>
-            <code>b</code>
-            <span>Beginning of previous word</span>
-          </div>
-
-          <div>
-            <code>e</code>
-            <span>End of word</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="command-group">
-        <h3>Vertical Movement</h3>
-
-        <div class="command-table">
-          <div>
-            <code>j</code>
-            <span>Move down</span>
-          </div>
-
-          <div>
-            <code>k</code>
-            <span>Move up</span>
-          </div>
-
-          <div>
-            <code>10j</code>
-            <span>Move down 10 lines</span>
-          </div>
-
-          <div>
-            <code>5k</code>
-            <span>Move up 5 lines</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="command-group wide-card">
-        <h3>Page Movement</h3>
-
-        <div class="command-table two-column-commands">
-          <div>
-            <code>Ctrl+d</code>
-            <span>Move half a page down</span>
-          </div>
-
-          <div>
-            <code>Ctrl+u</code>
-            <span>Move half a page up</span>
-          </div>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <section id="editing" class="section">
-    <div class="section-heading">
-      <p class="tag">Modify Text</p>
-      <h2>Editing</h2>
-    </div>
-
-    <div class="group-grid">
-      <article class="command-group">
-        <h3>Enter Insert Mode</h3>
-
-        <div class="command-table">
-          <div>
-            <code>i</code>
-            <span>Insert before cursor</span>
-          </div>
-
-          <div>
-            <code>I</code>
-            <span>Insert at beginning of line</span>
-          </div>
-
-          <div>
-            <code>a</code>
-            <span>Append after cursor</span>
-          </div>
-
-          <div>
-            <code>A</code>
-            <span>Append at end of line</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="command-group">
-        <h3>Create New Lines</h3>
-
-        <div class="command-table">
-          <div>
-            <code>o</code>
-            <span>New line below</span>
-          </div>
-
-          <div>
-            <code>O</code>
-            <span>New line above</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="command-group">
-        <h3>Delete</h3>
-
-        <div class="command-table">
-          <div>
-            <code>x</code>
-            <span>Delete character</span>
-          </div>
-
-          <div>
-            <code>dd</code>
-            <span>Delete line</span>
-          </div>
-
-          <div>
-            <code>dw</code>
-            <span>Delete word forward</span>
-          </div>
-
-          <div>
-            <code>d$</code>
-            <span>Delete to end of line</span>
-          </div>
-
-          <div>
-            <code>diw</code>
-            <span>Delete inside word</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="command-group">
-        <h3>Change</h3>
-
-        <div class="command-table">
-          <div>
-            <code>ciw</code>
-            <span>Change inside word</span>
-          </div>
-
-          <div>
-            <code>ci(</code>
-            <span>Change inside parentheses</span>
-          </div>
-
-          <div>
-            <code>ci"</code>
-            <span>Change inside quotes</span>
-          </div>
-
-          <div>
-            <code>cc</code>
-            <span>Change current line</span>
-          </div>
-        </div>
-      </article>
-    </div>
-
-    <aside class="note">
-      A change command deletes the selected text and immediately places you
-      in Insert mode.
-    </aside>
-  </section>
-
-  <section id="copy-paste" class="section">
-    <div class="section-heading">
-      <p class="tag">Yank and Put</p>
-      <h2>Copy and Paste</h2>
-    </div>
-
-    <div class="two-card-grid">
-      <article class="command-group">
-        <h3>Copy</h3>
-
-        <div class="command-table">
-          <div>
-            <code>yy</code>
-            <span>Copy current line</span>
-          </div>
-
-          <div>
-            <code>yiw</code>
-            <span>Copy inside word</span>
-          </div>
-
-          <div>
-            <code>yw</code>
-            <span>Copy to next word</span>
-          </div>
-
-          <div>
-            <code>y$</code>
-            <span>Copy to end of line</span>
-          </div>
-
-          <div>
-            <code>yap</code>
-            <span>Copy paragraph</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="command-group">
-        <h3>Paste</h3>
-
-        <div class="command-table">
-          <div>
-            <code>p</code>
-            <span>Paste after cursor or line</span>
-          </div>
-
-          <div>
-            <code>P</code>
-            <span>Paste before cursor or line</span>
-          </div>
-
-          <div>
-            <code>"0p</code>
-            <span>Paste your last yank</span>
-          </div>
-        </div>
-      </article>
-    </div>
-
-    <aside class="note">
-      Vim calls copying <strong>yanking</strong>. Deleting text also replaces
-      the default paste register, so <code>"0p</code> is useful when you
-      want your previous yank.
-    </aside>
-  </section>
-
-  <section id="undo-redo" class="section">
-    <div class="section-heading">
-      <p class="tag">Reverse Changes</p>
-      <h2>Undo and Redo</h2>
-    </div>
-
-    <div class="two-card-grid">
-      <article class="shortcut-card">
-        <kbd>u</kbd>
-
-        <h3>Undo</h3>
-
-        <p>
-          Reverse the most recent change.
-        </p>
-      </article>
-
-      <article class="shortcut-card">
-        <kbd>Ctrl+r</kbd>
-
-        <h3>Redo</h3>
-
-        <p>
-          Restore a change that was undone.
-        </p>
-      </article>
-    </div>
-  </section>
-
-  <section id="visual-mode" class="section">
-    <div class="section-heading">
-      <p class="tag">Select Text</p>
-      <h2>Visual Mode</h2>
-    </div>
-
-    <div class="group-grid">
-      <article class="command-group">
-        <h3>Selection Modes</h3>
-
-        <div class="command-table">
-          <div>
-            <code>v</code>
-            <span>Character selection</span>
-          </div>
-
-          <div>
-            <code>V</code>
-            <span>Full-line selection</span>
-          </div>
-
-          <div>
-            <code>Ctrl+v</code>
-            <span>Block or column selection</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="command-group">
-        <h3>Edit a Selection</h3>
-
-        <div class="command-table">
-          <div>
-            <code>y</code>
-            <span>Copy selection</span>
-          </div>
-
-          <div>
-            <code>d</code>
-            <span>Delete selection</span>
-          </div>
-
-          <div>
-            <code>c</code>
-            <span>Change selection</span>
-          </div>
-
-          <div>
-            <code>&gt;</code>
-            <span>Indent selection</span>
-          </div>
-
-          <div>
-            <code>&lt;</code>
-            <span>Remove indentation</span>
-          </div>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <section id="searching" class="section">
-    <div class="section-heading">
-      <p class="tag">Find Text</p>
-      <h2>Searching</h2>
-    </div>
-
-    <article class="command-group">
-      <div class="command-table two-column-commands">
-        <div>
-          <code>/pokemon</code>
-          <span>Search forward for “pokemon”</span>
-        </div>
-
-        <div>
-          <code>?pokemon</code>
-          <span>Search backward for “pokemon”</span>
-        </div>
-
-        <div>
-          <code>n</code>
-          <span>Next match in search direction</span>
-        </div>
-
-        <div>
-          <code>N</code>
-          <span>Previous match</span>
-        </div>
-
-        <div>
-          <code>:noh</code>
-          <span>Clear search highlighting</span>
-        </div>
+        <p class="search-feedback" id="search-feedback" aria-live="polite"></p>
       </div>
-    </article>
-  </section>
+    </header>
 
-  <section id="replace" class="section">
-    <div class="section-heading">
-      <p class="tag">Substitute Text</p>
-      <h2>Replace</h2>
-    </div>
+    <main class="page-shell container">
+      <aside class="page-sidebar">
+        <section class="table-of-contents" aria-labelledby="on-this-page-title">
+          <p class="tag">Navigation</p>
+          <h2 id="on-this-page-title">On This Page</h2>
 
-    <div class="group-grid">
-      <article class="command-group">
-        <h3>Small Replacements</h3>
-
-        <div class="command-table">
-          <div>
-            <code>r</code>
-            <span>Replace one character</span>
+          <div class="toc-group">
+            <p class="toc-group-label">Workflows</p>
+            <div class="contents-list">
+              <a data-toc-link href="#navigate-edit">Navigate and Edit</a>
+              <a data-toc-link href="#copy-delete-paste">Copy, Delete, and Paste</a>
+              <a data-toc-link href="#search-replace-workflow">Search and Replace</a>
+              <a data-toc-link href="#work-multiple-files">Work with Multiple Files</a>
+              <a data-toc-link href="#use-vim-inside-vscode">Use Vim Inside VS Code</a>
+            </div>
           </div>
 
-          <div>
-            <code>ciw</code>
-            <span>Replace the current word</span>
+          <div class="toc-group">
+            <p class="toc-group-label">Reference</p>
+            <div class="contents-list">
+              <a data-toc-link href="#modes">Modes</a>
+              <a data-toc-link href="#movement">Movement</a>
+              <a data-toc-link href="#editing">Editing</a>
+              <a data-toc-link href="#copy-paste">Copy and Paste</a>
+              <a data-toc-link href="#undo-redo">Undo and Redo</a>
+              <a data-toc-link href="#visual-mode">Visual Mode</a>
+              <a data-toc-link href="#searching">Searching</a>
+              <a data-toc-link href="#replace">Replace</a>
+              <a data-toc-link href="#files">Files</a>
+              <a data-toc-link href="#vscode-vim">VS Code Vim</a>
+              <a data-toc-link href="#favorites">Favorite Commands</a>
+            </div>
+          </div>
+        </section>
+      </aside>
+
+      <div class="page-main">
+        <section class="hero">
+          <p class="tag">Keyboard Editing</p>
+          <h1>Vim Cheat Sheet</h1>
+          <p class="hero-description">
+            A workflow-first reference for navigating, editing, selecting,
+            searching, replacing, saving files, and using Vim motions inside
+            VS Code without breaking your flow.
+          </p>
+
+          <div class="hero-actions">
+            <a
+              class="doc-link"
+              href="https://www.vim.org/docs.php"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Vim Docs →
+            </a>
+          </div>
+        </section>
+
+        <div class="scroll-sentinel" id="scroll-sentinel" aria-hidden="true"></div>
+
+        <section class="section workflow-section">
+          <div class="section-heading">
+            <p class="tag">Highest Priority</p>
+            <h2>Daily Vim Workflows</h2>
+            <p>
+              These cards group the Vim motions and commands developers usually
+              use together: move precisely, edit quickly, search safely, manage
+              files, and stay productive inside VS Code.
+            </p>
           </div>
 
-          <div>
-            <code>ci"</code>
-            <span>Replace text inside quotes</span>
+          <div class="workflow-grid">
+            <article
+              id="navigate-edit"
+              class="workflow-card"
+              data-observe
+              data-search-target
+            >
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Core Editing</p>
+                  <h3>Navigate and Edit</h3>
+                </div>
+
+                <span class="feature-badge">Normal Mode</span>
+              </div>
+
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>Esc
+gg
+/target
+n
+ciw
+Esc
+:w</code></pre>
+              </div>
+
+              <p>
+                Return to Normal mode, jump into the file, search for the next
+                match, change the word under the cursor, and save without
+                leaving the keyboard.
+              </p>
+            </article>
+
+            <article
+              id="copy-delete-paste"
+              class="workflow-card"
+              data-observe
+              data-search-target
+            >
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Text Moves</p>
+                  <h3>Copy, Delete, and Paste</h3>
+                </div>
+
+                <span class="feature-badge">Yank</span>
+              </div>
+
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>yy
+p
+V
+j
+d
+"0p</code></pre>
+              </div>
+
+              <p>
+                Copy a line, paste it nearby, expand to a visual selection,
+                delete the selection, and restore your most recent yank instead
+                of the deleted text.
+              </p>
+            </article>
+
+            <article
+              id="search-replace-workflow"
+              class="workflow-card wide-card"
+              data-observe
+              data-search-target
+            >
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Refactor</p>
+                  <h3>Search and Replace</h3>
+                </div>
+
+                <span class="feature-badge">Substitute</span>
+              </div>
+
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>/oldName
+n
+ciwnewName
+Esc
+:%s/oldName/newName/gc
+:noh</code></pre>
+              </div>
+
+              <p>
+                Find the target text, update the current match quickly, then
+                run a file-wide confirmed replacement and clear highlights when
+                you finish.
+              </p>
+            </article>
+
+            <article
+              id="work-multiple-files"
+              class="workflow-card"
+              data-observe
+              data-search-target
+            >
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Files</p>
+                  <h3>Work with Multiple Files</h3>
+                </div>
+
+                <span class="feature-badge">Buffers</span>
+              </div>
+
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>:e app.py
+:vsplit utils.py
+:ls
+:bn
+:w
+:q</code></pre>
+              </div>
+
+              <p>
+                Open another file, split the view, inspect your buffers, move
+                to the next one, save your work, and quit cleanly.
+              </p>
+            </article>
+
+            <article
+              id="use-vim-inside-vscode"
+              class="workflow-card"
+              data-observe
+              data-search-target
+            >
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Editor Workflow</p>
+                  <h3>Use Vim Inside VS Code</h3>
+                </div>
+
+                <span class="feature-badge">VSCodeVim</span>
+              </div>
+
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>Ctrl+P
+&lt;Space&gt;f
+/component
+n
+ciw
+Esc
+&lt;Space&gt;s
+Ctrl+`</code></pre>
+              </div>
+
+              <p>
+                Use Quick Open or your leader mapping to jump to a file, search
+                and edit with Vim motions, save from Normal mode, and drop into
+                the integrated terminal without reaching for the mouse.
+              </p>
+            </article>
           </div>
-        </div>
-      </article>
+        </section>
 
-      <article class="command-group">
-        <h3>File-Wide Replace</h3>
-
-        <div class="command-table">
-          <div>
-            <code>:%s/old/new/g</code>
-            <span>Replace every match</span>
+        <section id="modes" class="section" data-observe data-search-target>
+          <div class="section-heading">
+            <p class="tag">Vim States</p>
+            <h2>Modes</h2>
           </div>
 
-          <div>
-            <code>:%s/old/new/gc</code>
-            <span>Confirm each replacement</span>
+          <div class="mode-grid">
+            <article>
+              <kbd>Esc</kbd>
+              <h3>Normal Mode</h3>
+              <p>Navigate the file and run editing commands.</p>
+            </article>
+
+            <article>
+              <kbd>i</kbd>
+              <h3>Insert Mode</h3>
+              <p>Type regular text into the file.</p>
+            </article>
+
+            <article>
+              <kbd>v</kbd>
+              <h3>Visual Mode</h3>
+              <p>Select characters and text regions.</p>
+            </article>
+
+            <article>
+              <kbd>V</kbd>
+              <h3>Visual Line Mode</h3>
+              <p>Select full lines.</p>
+            </article>
+
+            <article>
+              <kbd>Ctrl+v</kbd>
+              <h3>Visual Block Mode</h3>
+              <p>Select rectangular columns of text.</p>
+            </article>
           </div>
 
-          <div>
-            <code>:s/old/new/g</code>
-            <span>Replace matches on current line</span>
+          <aside class="note">
+            When a command behaves unexpectedly, press <code>Esc</code> to
+            return to Normal mode.
+          </aside>
+        </section>
+
+        <section id="movement" class="section" data-observe data-search-target>
+          <div class="section-heading">
+            <p class="tag">Navigate the File</p>
+            <h2>Movement</h2>
           </div>
-        </div>
-      </article>
-    </div>
 
-    <aside class="warning">
-      Use the <code>c</code> confirmation flag when you are not certain that
-      every match should be replaced.
-    </aside>
-  </section>
+          <div class="group-grid">
+            <article class="command-group">
+              <h3>File Movement</h3>
+              <div class="command-table">
+                <div><code>gg</code><span>Beginning of file</span></div>
+                <div><code>G</code><span>End of file</span></div>
+                <div><code>25G</code><span>Go to line 25</span></div>
+              </div>
+            </article>
 
-  <section id="files" class="section">
-    <div class="section-heading">
-      <p class="tag">Save and Exit</p>
-      <h2>Files</h2>
-    </div>
+            <article class="command-group">
+              <h3>Line Movement</h3>
+              <div class="command-table">
+                <div><code>0</code><span>Beginning of line</span></div>
+                <div><code>^</code><span>First non-space character</span></div>
+                <div><code>$</code><span>End of line</span></div>
+              </div>
+            </article>
 
-    <article class="command-group">
-      <div class="command-table two-column-commands">
-        <div>
-          <code>:w</code>
-          <span>Save file</span>
-        </div>
+            <article class="command-group">
+              <h3>Word Movement</h3>
+              <div class="command-table">
+                <div><code>w</code><span>Beginning of next word</span></div>
+                <div><code>b</code><span>Beginning of previous word</span></div>
+                <div><code>e</code><span>End of word</span></div>
+              </div>
+            </article>
 
-        <div>
-          <code>:q</code>
-          <span>Quit</span>
-        </div>
+            <article class="command-group">
+              <h3>Vertical Movement</h3>
+              <div class="command-table">
+                <div><code>j</code><span>Move down</span></div>
+                <div><code>k</code><span>Move up</span></div>
+                <div><code>10j</code><span>Move down 10 lines</span></div>
+                <div><code>5k</code><span>Move up 5 lines</span></div>
+              </div>
+            </article>
 
-        <div>
-          <code>:wq</code>
-          <span>Save and quit</span>
-        </div>
+            <article class="command-group wide-card">
+              <h3>Page Movement</h3>
+              <div class="command-table two-column-commands">
+                <div><code>Ctrl+d</code><span>Move half a page down</span></div>
+                <div><code>Ctrl+u</code><span>Move half a page up</span></div>
+              </div>
+            </article>
+          </div>
+        </section>
 
-        <div>
-          <code>:x</code>
-          <span>Save if changed, then quit</span>
-        </div>
+        <section id="editing" class="section" data-observe data-search-target>
+          <div class="section-heading">
+            <p class="tag">Modify Text</p>
+            <h2>Editing</h2>
+          </div>
 
-        <div>
-          <code>:q!</code>
-          <span>Quit without saving</span>
-        </div>
+          <div class="group-grid">
+            <article class="command-group">
+              <h3>Enter Insert Mode</h3>
+              <div class="command-table">
+                <div><code>i</code><span>Insert before cursor</span></div>
+                <div><code>I</code><span>Insert at beginning of line</span></div>
+                <div><code>a</code><span>Append after cursor</span></div>
+                <div><code>A</code><span>Append at end of line</span></div>
+              </div>
+            </article>
+
+            <article class="command-group">
+              <h3>Create New Lines</h3>
+              <div class="command-table">
+                <div><code>o</code><span>New line below</span></div>
+                <div><code>O</code><span>New line above</span></div>
+              </div>
+            </article>
+
+            <article class="command-group">
+              <h3>Delete</h3>
+              <div class="command-table">
+                <div><code>x</code><span>Delete character</span></div>
+                <div><code>dd</code><span>Delete line</span></div>
+                <div><code>dw</code><span>Delete word forward</span></div>
+                <div><code>d$</code><span>Delete to end of line</span></div>
+                <div><code>diw</code><span>Delete inside word</span></div>
+              </div>
+            </article>
+
+            <article class="command-group">
+              <h3>Change</h3>
+              <div class="command-table">
+                <div><code>ciw</code><span>Change inside word</span></div>
+                <div><code>ci(</code><span>Change inside parentheses</span></div>
+                <div><code>ci"</code><span>Change inside quotes</span></div>
+                <div><code>cc</code><span>Change current line</span></div>
+              </div>
+            </article>
+          </div>
+
+          <aside class="note">
+            A change command deletes the selected text and immediately places
+            you in Insert mode.
+          </aside>
+        </section>
+
+        <section id="copy-paste" class="section" data-observe data-search-target>
+          <div class="section-heading">
+            <p class="tag">Yank and Put</p>
+            <h2>Copy and Paste</h2>
+          </div>
+
+          <div class="two-card-grid">
+            <article class="command-group">
+              <h3>Copy</h3>
+              <div class="command-table">
+                <div><code>yy</code><span>Copy current line</span></div>
+                <div><code>yiw</code><span>Copy inside word</span></div>
+                <div><code>yw</code><span>Copy to next word</span></div>
+                <div><code>y$</code><span>Copy to end of line</span></div>
+                <div><code>yap</code><span>Copy paragraph</span></div>
+              </div>
+            </article>
+
+            <article class="command-group">
+              <h3>Paste</h3>
+              <div class="command-table">
+                <div><code>p</code><span>Paste after cursor or line</span></div>
+                <div><code>P</code><span>Paste before cursor or line</span></div>
+                <div><code>"0p</code><span>Paste your last yank</span></div>
+              </div>
+            </article>
+          </div>
+
+          <aside class="note">
+            Vim calls copying <strong>yanking</strong>. Deleting text also
+            replaces the default paste register, so <code>"0p</code> is useful
+            when you want your previous yank.
+          </aside>
+        </section>
+
+        <section id="undo-redo" class="section" data-observe data-search-target>
+          <div class="section-heading">
+            <p class="tag">Reverse Changes</p>
+            <h2>Undo and Redo</h2>
+          </div>
+
+          <div class="two-card-grid">
+            <article class="shortcut-card">
+              <kbd>u</kbd>
+              <h3>Undo</h3>
+              <p>Reverse the most recent change.</p>
+            </article>
+
+            <article class="shortcut-card">
+              <kbd>Ctrl+r</kbd>
+              <h3>Redo</h3>
+              <p>Restore a change that was undone.</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="visual-mode" class="section" data-observe data-search-target>
+          <div class="section-heading">
+            <p class="tag">Select Text</p>
+            <h2>Visual Mode</h2>
+          </div>
+
+          <div class="group-grid">
+            <article class="command-group">
+              <h3>Selection Modes</h3>
+              <div class="command-table">
+                <div><code>v</code><span>Character selection</span></div>
+                <div><code>V</code><span>Full-line selection</span></div>
+                <div><code>Ctrl+v</code><span>Block or column selection</span></div>
+              </div>
+            </article>
+
+            <article class="command-group">
+              <h3>Edit a Selection</h3>
+              <div class="command-table">
+                <div><code>y</code><span>Copy selection</span></div>
+                <div><code>d</code><span>Delete selection</span></div>
+                <div><code>c</code><span>Change selection</span></div>
+                <div><code>&gt;</code><span>Indent selection</span></div>
+                <div><code>&lt;</code><span>Remove indentation</span></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="searching" class="section" data-observe data-search-target>
+          <div class="section-heading">
+            <p class="tag">Find Text</p>
+            <h2>Searching</h2>
+          </div>
+
+          <article class="command-group">
+            <div class="command-table two-column-commands">
+              <div><code>/pokemon</code><span>Search forward for "pokemon"</span></div>
+              <div><code>?pokemon</code><span>Search backward for "pokemon"</span></div>
+              <div><code>n</code><span>Next match in search direction</span></div>
+              <div><code>N</code><span>Previous match</span></div>
+              <div><code>:noh</code><span>Clear search highlighting</span></div>
+            </div>
+          </article>
+        </section>
+
+        <section id="replace" class="section" data-observe data-search-target>
+          <div class="section-heading">
+            <p class="tag">Substitute Text</p>
+            <h2>Replace</h2>
+          </div>
+
+          <div class="group-grid">
+            <article class="command-group">
+              <h3>Small Replacements</h3>
+              <div class="command-table">
+                <div><code>r</code><span>Replace one character</span></div>
+                <div><code>ciw</code><span>Replace the current word</span></div>
+                <div><code>ci"</code><span>Replace text inside quotes</span></div>
+              </div>
+            </article>
+
+            <article class="command-group">
+              <h3>File-Wide Replace</h3>
+              <div class="command-table">
+                <div><code>:%s/old/new/g</code><span>Replace every match</span></div>
+                <div><code>:%s/old/new/gc</code><span>Confirm each replacement</span></div>
+                <div><code>:s/old/new/g</code><span>Replace matches on current line</span></div>
+              </div>
+            </article>
+          </div>
+
+          <aside class="warning">
+            Use the <code>c</code> confirmation flag when you are not certain
+            that every match should be replaced.
+          </aside>
+        </section>
+
+        <section id="files" class="section" data-observe data-search-target>
+          <div class="section-heading">
+            <p class="tag">Save and Exit</p>
+            <h2>Files</h2>
+          </div>
+
+          <article class="command-group">
+            <div class="command-table two-column-commands">
+              <div><code>:w</code><span>Save file</span></div>
+              <div><code>:q</code><span>Quit</span></div>
+              <div><code>:wq</code><span>Save and quit</span></div>
+              <div><code>:x</code><span>Save if changed, then quit</span></div>
+              <div><code>:q!</code><span>Quit without saving</span></div>
+            </div>
+          </article>
+        </section>
+
+        <section id="vscode-vim" class="section" data-observe data-search-target>
+          <div class="section-heading">
+            <p class="tag">Extension Workflow</p>
+            <h2>VS Code Vim</h2>
+          </div>
+
+          <div class="two-card-grid">
+            <article class="command-group">
+              <h3>VS Code Shortcuts</h3>
+              <div class="command-table">
+                <div><code>Ctrl+Shift+P</code><span>Open Command Palette</span></div>
+                <div><code>Ctrl+P</code><span>Quick Open</span></div>
+                <div><code>Ctrl+Shift+E</code><span>Open Explorer</span></div>
+                <div><code>Ctrl+`</code><span>Toggle terminal</span></div>
+              </div>
+            </article>
+
+            <article class="command-group">
+              <h3>Leader Shortcuts</h3>
+              <div class="command-table">
+                <div><code>&lt;Space&gt; f</code><span>Open a file</span></div>
+                <div><code>&lt;Space&gt; s</code><span>Save current file</span></div>
+                <div><code>&lt;Space&gt; e</code><span>Open Explorer</span></div>
+              </div>
+            </article>
+          </div>
+
+          <aside class="note">
+            Your leader key is <code>Space</code>, so leader shortcuts begin by
+            pressing the spacebar in Normal mode.
+          </aside>
+        </section>
+
+        <section id="favorites" class="section" data-observe data-search-target>
+          <div class="section-heading">
+            <p class="tag">Personal Reference</p>
+            <h2>My Favorite Commands</h2>
+          </div>
+
+          <div class="favorite-grid">
+            <article>
+              <h3>Movement</h3>
+              <div class="favorite-commands">
+                <code>gg</code>
+                <code>G</code>
+                <code>w</code>
+                <code>b</code>
+                <code>$</code>
+                <code>^</code>
+              </div>
+            </article>
+
+            <article>
+              <h3>Editing</h3>
+              <div class="favorite-commands">
+                <code>ciw</code>
+                <code>diw</code>
+                <code>dd</code>
+                <code>o</code>
+                <code>O</code>
+              </div>
+            </article>
+
+            <article>
+              <h3>Copy and Paste</h3>
+              <div class="favorite-commands">
+                <code>yy</code>
+                <code>yiw</code>
+                <code>p</code>
+                <code>P</code>
+                <code>"0p</code>
+              </div>
+            </article>
+
+            <article>
+              <h3>Undo and Redo</h3>
+              <div class="favorite-commands">
+                <code>u</code>
+                <code>Ctrl+r</code>
+              </div>
+            </article>
+
+            <article>
+              <h3>Search</h3>
+              <div class="favorite-commands">
+                <code>/</code>
+                <code>n</code>
+                <code>N</code>
+                <code>:noh</code>
+              </div>
+            </article>
+          </div>
+        </section>
       </div>
-    </article>
-  </section>
+    </main>
 
-  <section id="vscode-vim" class="section">
-    <div class="section-heading">
-      <p class="tag">Extension Workflow</p>
-      <h2>VS Code Vim</h2>
-    </div>
+    <footer class="site-footer">
+      <p><a href="../index.html">Return to all cheat sheets</a></p>
+    </footer>
 
-    <div class="two-card-grid">
-      <article class="command-group">
-        <h3>VS Code Shortcuts</h3>
+    <button
+      class="back-to-top"
+      id="back-to-top"
+      type="button"
+      aria-label="Back to top"
+      title="Back to top"
+    >
+      ↑ Top
+    </button>
 
-        <div class="command-table">
-          <div>
-            <code>Ctrl+Shift+P</code>
-            <span>Open Command Palette</span>
-          </div>
-
-          <div>
-            <code>Ctrl+P</code>
-            <span>Quick Open</span>
-          </div>
-
-          <div>
-            <code>Ctrl+Shift+E</code>
-            <span>Open Explorer</span>
-          </div>
-
-          <div>
-            <code>Ctrl+`</code>
-            <span>Toggle terminal</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="command-group">
-        <h3>Leader Shortcuts</h3>
-
-        <div class="command-table">
-          <div>
-            <code>&lt;Space&gt; f</code>
-            <span>Open a file</span>
-          </div>
-
-          <div>
-            <code>&lt;Space&gt; s</code>
-            <span>Save current file</span>
-          </div>
-
-          <div>
-            <code>&lt;Space&gt; e</code>
-            <span>Open Explorer</span>
-          </div>
-        </div>
-      </article>
-    </div>
-
-    <aside class="note">
-      Your leader key is <code>Space</code>, so leader shortcuts begin by
-      pressing the spacebar in Normal mode.
-    </aside>
-  </section>
-
-  <section id="favorites" class="section">
-    <div class="section-heading">
-      <p class="tag">Personal Reference</p>
-      <h2>My Favorite Commands</h2>
-    </div>
-
-    <div class="favorite-grid">
-      <article>
-        <h3>Movement</h3>
-
-        <div class="favorite-commands">
-          <code>gg</code>
-          <code>G</code>
-          <code>w</code>
-          <code>b</code>
-          <code>$</code>
-          <code>^</code>
-        </div>
-      </article>
-
-      <article>
-        <h3>Editing</h3>
-
-        <div class="favorite-commands">
-          <code>ciw</code>
-          <code>diw</code>
-          <code>dd</code>
-          <code>o</code>
-          <code>O</code>
-        </div>
-      </article>
-
-      <article>
-        <h3>Copy and Paste</h3>
-
-        <div class="favorite-commands">
-          <code>yy</code>
-          <code>yiw</code>
-          <code>p</code>
-          <code>P</code>
-          <code>"0p</code>
-        </div>
-      </article>
-
-      <article>
-        <h3>Undo and Redo</h3>
-
-        <div class="favorite-commands">
-          <code>u</code>
-          <code>Ctrl+r</code>
-        </div>
-      </article>
-
-      <article>
-        <h3>Search</h3>
-
-        <div class="favorite-commands">
-          <code>/</code>
-          <code>n</code>
-          <code>N</code>
-          <code>:noh</code>
-        </div>
-      </article>
-    </div>
-  </section>
-</main>
-
-<footer class="site-footer">
-  <p>
-    <a href="../">Return to all cheat sheets</a>
-  </p>
-</footer>
-```
-
+    <script src="../assets/js/site.js" defer></script>
   </body>
 </html>

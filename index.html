@@ -27,13 +27,8 @@
         </p>
 
         <div class="buttons">
-          <a
-            class="button button-primary"
-            href="https://github.com/gadm12/YOUR-REPOSITORY-NAME"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            View GitHub Repo
+          <a class="button button-primary" href="./git/">
+            Start with Git
           </a>
 
           <a class="button button-secondary" href="#cheatsheets">
@@ -53,62 +48,49 @@
         </div>
 
         <div class="grid">
-          <a class="card" href="git/git-cheatsheet.md">
+          <section class="card card-group accent-blue" aria-labelledby="git-group-title">
             <div class="card-icon">🌿</div>
-            <h3>Git</h3>
+            <h3 id="git-group-title">Git &amp; Collaboration</h3>
             <p>
-              Common Git commands for repositories, commits, branches, merging,
-              restoring files, and working with remotes.
+              Core version-control and review workflows for repositories,
+              branches, automation, and Pull Requests.
             </p>
-            <span class="topics">Commits • Branches • Remotes</span>
-            <span class="card-link">Open Cheat Sheet →</span>
-          </a>
+            <div class="link-cluster" aria-label="Git and collaboration cheat sheets">
+              <a class="mini-link" href="./git/">
+                <span>Git</span>
+                <small>Commits • Branches • Remotes</small>
+              </a>
+              <a class="mini-link" href="./github/">
+                <span>GitHub Actions</span>
+                <small>CI • Workflows • Automation</small>
+              </a>
+              <a class="mini-link" href="./pull-request/">
+                <span>Pull Requests</span>
+                <small>Branches • Reviews • Merging</small>
+              </a>
+            </div>
+          </section>
 
-          <a class="card" href="github/pull-request.md">
-            <div class="card-icon">🔀</div>
-            <h3>GitHub Pull Requests</h3>
-            <p>
-              A guide for creating branches, opening pull requests, reviewing
-              changes, and merging code.
-            </p>
-            <span class="topics">Branches • Reviews • Merging</span>
-            <span class="card-link">Open Cheat Sheet →</span>
-          </a>
-
-          <a class="card" href="github/github-action.md">
-            <div class="card-icon">⚙️</div>
-            <h3>GitHub Actions</h3>
-            <p>
-              An introduction to workflows, automated tests, triggers, jobs,
-              steps, and continuous integration.
-            </p>
-            <span class="topics">CI • Workflows • Automation</span>
-            <span class="card-link">Open Cheat Sheet →</span>
-          </a>
-
-          <a class="card" href="docker/docker-cheatsheet.md">
+          <section class="card card-group accent-cyan" aria-labelledby="docker-group-title">
             <div class="card-icon">🐳</div>
-            <h3>Docker</h3>
+            <h3 id="docker-group-title">Docker</h3>
             <p>
-              Essential commands for building images, running containers,
-              viewing logs, managing volumes, and cleaning resources.
+              Container workflows for building images, running services, and
+              writing Dockerfiles for application environments.
             </p>
-            <span class="topics">Images • Containers • Volumes</span>
-            <span class="card-link">Open Cheat Sheet →</span>
-          </a>
+            <div class="link-cluster" aria-label="Docker cheat sheets">
+              <a class="mini-link" href="./docker/">
+                <span>Docker</span>
+                <small>Images • Containers • Volumes</small>
+              </a>
+              <a class="mini-link" href="./dockerfile/">
+                <span>Dockerfile</span>
+                <small>FROM • COPY • RUN • CMD</small>
+              </a>
+            </div>
+          </section>
 
-          <a class="card" href="docker/dockerfile-cheatsheet.md">
-            <div class="card-icon">📦</div>
-            <h3>Dockerfile</h3>
-            <p>
-              Common Dockerfile instructions for creating reusable development
-              and production images.
-            </p>
-            <span class="topics">FROM • COPY • RUN • CMD</span>
-            <span class="card-link">Open Cheat Sheet →</span>
-          </a>
-
-          <a class="card" href="linux/linux-cheatsheet.md">
+          <a class="card" href="./linux/">
             <div class="card-icon">🐧</div>
             <h3>Linux</h3>
             <p>
@@ -119,7 +101,7 @@
             <span class="card-link">Open Cheat Sheet →</span>
           </a>
 
-          <a class="card" href="html/html-cheatsheet.md">
+          <a class="card" href="./html/">
             <div class="card-icon">🌐</div>
             <h3>HTML</h3>
             <p>
@@ -130,7 +112,7 @@
             <span class="card-link">Open Cheat Sheet →</span>
           </a>
 
-          <a class="card" href="markdown/markdown-cheatsheet.md">
+          <a class="card" href="./markdown/">
             <div class="card-icon">📝</div>
             <h3>Markdown</h3>
             <p>
@@ -141,7 +123,7 @@
             <span class="card-link">Open Cheat Sheet →</span>
           </a>
 
-          <a class="card" href="vim/vim-cheatsheet.md">
+          <a class="card" href="./vim/">
             <div class="card-icon">⌨️</div>
             <h3>Vim</h3>
             <p>
@@ -152,7 +134,7 @@
             <span class="card-link">Open Cheat Sheet →</span>
           </a>
 
-          <a class="card" href="vscode/vscode-cheatsheet.md">
+          <a class="card" href="./vscode/">
             <div class="card-icon">💻</div>
             <h3>VS Code</h3>
             <p>
@@ -163,14 +145,14 @@
             <span class="card-link">Open Cheat Sheet →</span>
           </a>
 
-          <a class="card" href="fix_ESlint_issues.MD">
+          <a class="card" href="./dependencies/">
             <div class="card-icon">🔧</div>
-            <h3>Fixing ESLint Issues</h3>
+            <h3>Dependencies</h3>
             <p>
-              Notes for identifying and resolving common ESLint configuration,
-              formatting, and dependency problems.
+              Install, inspect, update, remove, and troubleshoot project
+              dependencies in JavaScript and React workflows.
             </p>
-            <span class="topics">ESLint • Formatting • Debugging</span>
+            <span class="topics">npm • Scripts • Troubleshooting</span>
             <span class="card-link">Open Cheat Sheet →</span>
           </a>
         </div>
