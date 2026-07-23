@@ -15,64 +15,7 @@
   </head>
 
   <body>
-    <header class="page-header" id="top">
-      <div class="nav-shell container">
-        <div class="nav-main">
-          <a class="brand-link" href="../index.html">Developer Cheat Sheets</a>
-
-          <button
-            class="nav-toggle"
-            type="button"
-            aria-expanded="false"
-            aria-controls="site-nav"
-            aria-label="Toggle site navigation"
-          >
-            Menu
-          </button>
-
-          <nav class="site-nav" id="site-nav" aria-label="Main">
-            <a class="is-active" href="./" aria-current="page">Git</a>
-            <a href="../docker/">Docker</a>
-            <a href="../dockerfile/">Dockerfile</a>
-            <a href="../linux/">Linux</a>
-            <a href="../html/">HTML</a>
-            <a href="../markdown/">Markdown</a>
-            <a href="../vim/">Vim</a>
-            <a href="../vscode/">VS Code</a>
-            <a href="../dependencies/">Dependencies</a>
-          </nav>
-        </div>
-
-        <div class="nav-tools">
-          <a class="home-link" href="../index.html">← All Cheat Sheets</a>
-
-          <form class="page-search" id="page-search" role="search">
-            <label class="sr-only" for="page-search-input">
-              Find a command or section on this page
-            </label>
-            <input
-              id="page-search-input"
-              type="search"
-              name="page-search"
-              placeholder="Find command or section"
-              autocomplete="off"
-            />
-            <button type="submit">Search</button>
-          </form>
-
-          <a
-            class="doc-link"
-            href="https://git-scm.com/doc"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Official Git Docs →
-          </a>
-        </div>
-
-        <p class="search-feedback" id="search-feedback" aria-live="polite"></p>
-      </div>
-    </header>
+    <header class="page-header" id="top" data-shared-nav></header>
 
     <main class="page-shell container">
       <aside class="page-sidebar">
@@ -830,6 +773,7 @@ git branch -d feature-name</code></pre>
       ↑ Top
     </button>
 
+    <script src="../assets/js/navigation.js" defer></script>
     <script src="../assets/js/site.js" defer></script>
   </body>
 </html>

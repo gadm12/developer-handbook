@@ -15,64 +15,7 @@
   </head>
 
   <body>
-    <header class="page-header" id="top">
-      <div class="nav-shell container">
-        <div class="nav-main">
-          <a class="brand-link" href="../index.html">Developer Cheat Sheets</a>
-
-          <button
-            class="nav-toggle"
-            type="button"
-            aria-expanded="false"
-            aria-controls="site-nav"
-            aria-label="Toggle site navigation"
-          >
-            Menu
-          </button>
-
-          <nav class="site-nav" id="site-nav" aria-label="Main">
-            <a href="../git/">Git</a>
-            <a href="../docker/">Docker</a>
-            <a href="../dockerfile/">Dockerfile</a>
-            <a href="../linux/">Linux</a>
-            <a href="../html/">HTML</a>
-            <a href="../markdown/">Markdown</a>
-            <a href="../vim/">Vim</a>
-            <a href="../vscode/">VS Code</a>
-            <a class="is-active" href="./" aria-current="page">Dependencies</a>
-          </nav>
-        </div>
-
-        <div class="nav-tools">
-          <a class="home-link" href="../index.html">← All Cheat Sheets</a>
-
-          <form class="page-search" id="page-search" role="search">
-            <label class="sr-only" for="page-search-input">
-              Find a command or section on this page
-            </label>
-            <input
-              id="page-search-input"
-              type="search"
-              name="page-search"
-              placeholder="Find command or section"
-              autocomplete="off"
-            />
-            <button type="submit">Search</button>
-          </form>
-
-          <a
-            class="doc-link"
-            href="https://docs.npmjs.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Official npm Docs →
-          </a>
-        </div>
-
-        <p class="search-feedback" id="search-feedback" aria-live="polite"></p>
-      </div>
-    </header>
+    <header class="page-header" id="top" data-shared-nav></header>
 
     <main class="page-shell container">
       <aside class="page-sidebar">
@@ -149,7 +92,11 @@
           </div>
         </section>
 
-        <div class="scroll-sentinel" id="scroll-sentinel" aria-hidden="true"></div>
+        <div
+          class="scroll-sentinel"
+          id="scroll-sentinel"
+          aria-hidden="true"
+        ></div>
 
         <section id="daily-use" class="section workflow-section">
           <div class="section-heading">
@@ -180,7 +127,7 @@
 
               <div class="code-container">
                 <button class="copy-button" type="button">Copy</button>
-                <pre><code>npm create vite@latest my-app
+                <pre><code>npm create vite@latest client
 
 Select a framework:
 React
@@ -188,7 +135,7 @@ React
 Select a variant:
 JavaScript
 
-cd my-app
+cd client
 npm install
 npm run dev</code></pre>
               </div>
@@ -489,7 +436,12 @@ npm run build</code></pre>
           </div>
         </section>
 
-        <section id="npm-basics" class="section" data-observe data-search-target>
+        <section
+          id="npm-basics"
+          class="section"
+          data-observe
+          data-search-target
+        >
           <div class="section-heading">
             <p class="tag">Package Manager</p>
             <h2>npm Basics</h2>
@@ -589,8 +541,8 @@ npm run build</code></pre>
               <p class="card-label">Development Tools</p>
               <h3>devDependencies</h3>
               <p>
-                Packages used while developing, testing, formatting, or
-                building the project.
+                Packages used while developing, testing, formatting, or building
+                the project.
               </p>
 
               <div class="example-list">
@@ -886,7 +838,9 @@ npm run build</code></pre>
 
               <div>
                 <h3>package.json</h3>
-                <p>Lists project information, scripts, and dependency ranges.</p>
+                <p>
+                  Lists project information, scripts, and dependency ranges.
+                </p>
               </div>
             </article>
 
@@ -1055,9 +1009,9 @@ console.log(apiUrl);</code></pre>
           </div>
 
           <aside class="warning">
-            Variables exposed to frontend code are visible to users. Never
-            place passwords, private keys, or secret API credentials in a
-            frontend environment variable.
+            Variables exposed to frontend code are visible to users. Never place
+            passwords, private keys, or secret API credentials in a frontend
+            environment variable.
           </aside>
 
           <h3>Ignore Local Environment Files</h3>
@@ -1267,8 +1221,8 @@ kill -9 PID</code></pre>
               <div>
                 <h3>Update Configuration</h3>
                 <p>
-                  Add the required ESLint plugin, script, import, or
-                  environment variable.
+                  Add the required ESLint plugin, script, import, or environment
+                  variable.
                 </p>
               </div>
             </article>
@@ -1332,6 +1286,7 @@ kill -9 PID</code></pre>
       ↑ Top
     </button>
 
+    <script src="../assets/js/navigation.js" defer></script>
     <script src="../assets/js/site.js" defer></script>
   </body>
 </html>

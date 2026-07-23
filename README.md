@@ -1,5 +1,7 @@
 Developer Handbook
 
+[Developer Handbook Link](https://gadm12.github.io/developer-handbook/)
+
 A documentation website built to serve as a quick-reference guide while learning software development.
 
 Features
