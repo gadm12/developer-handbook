@@ -1,0 +1,1324 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+```
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/>
+
+<meta
+  name="description"
+  content="A quick reference for creating branches, opening GitHub Pull Requests, reviewing code, merging changes, and resolving conflicts."
+/>
+
+<title>GitHub Pull Requests Cheat Sheet</title>
+
+<link rel="stylesheet" href="style.css" />
+```
+
+  </head>
+
+  <body>
+    <header class="page-header">
+      <nav class="nav container">
+        <a class="home-link" href="../">
+          ← All Cheat Sheets
+        </a>
+
+```
+    <a class="next-link" href="../github-actions/">
+      GitHub Actions →
+    </a>
+  </nav>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <p class="tag">Collaboration Workflow</p>
+
+    <h1>GitHub Pull Requests</h1>
+
+    <p>
+      A quick reference for creating branches, opening Pull Requests,
+      reviewing code, responding to feedback, merging changes, and cleaning
+      up branches.
+    </p>
+  </section>
+
+  <section class="table-of-contents">
+    <h2>Table of Contents</h2>
+
+    <div class="contents-grid">
+      <a href="#daily-pr">Daily PR Commands</a>
+      <a href="#what-is-pr">What Is a Pull Request?</a>
+      <a href="#typical-workflow">Typical Workflow</a>
+      <a href="#creating-branch">Creating a Branch</a>
+      <a href="#making-changes">Making Changes</a>
+      <a href="#opening-pr">Opening a PR</a>
+      <a href="#reviewing-pr">Reviewing a PR</a>
+      <a href="#updating-pr">Updating a PR</a>
+      <a href="#merging">Merging</a>
+      <a href="#conflicts">Resolving Conflicts</a>
+      <a href="#useful-commands">Useful Commands</a>
+      <a href="#workflow-example">Workflow Example</a>
+      <a href="#common-terms">Common Terms</a>
+      <a href="#checklist">PR Checklist</a>
+    </div>
+  </section>
+
+  <section id="daily-pr" class="section">
+    <div class="section-heading">
+      <p class="tag">Most Used</p>
+
+      <h2>Daily Pull Request Commands</h2>
+
+      <p>
+        Each card contains several related commands used during one part of
+        the Pull Request workflow.
+      </p>
+    </div>
+
+    <div class="daily-grid">
+      <article class="daily-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">Start Work</p>
+            <h3>Branch Setup</h3>
+          </div>
+
+          <span class="feature-badge">Branch</span>
+        </div>
+
+        <div class="command-table">
+          <div>
+            <code>git checkout main</code>
+            <span>Switch to the main branch</span>
+          </div>
+
+          <div>
+            <code>git pull</code>
+            <span>Download the latest changes</span>
+          </div>
+
+          <div>
+            <code>git checkout -b feature/name</code>
+            <span>Create and switch to a branch</span>
+          </div>
+
+          <div>
+            <code>git branch</code>
+            <span>See local branches</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="daily-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">Save Work</p>
+            <h3>Commit and Push</h3>
+          </div>
+
+          <span class="feature-badge">Git</span>
+        </div>
+
+        <div class="command-table">
+          <div>
+            <code>git status</code>
+            <span>See changed files</span>
+          </div>
+
+          <div>
+            <code>git add .</code>
+            <span>Stage all changes</span>
+          </div>
+
+          <div>
+            <code>git commit -m "message"</code>
+            <span>Create a commit</span>
+          </div>
+
+          <div>
+            <code>git push -u origin branch</code>
+            <span>Push a new branch</span>
+          </div>
+
+          <div>
+            <code>git push</code>
+            <span>Push later commits</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="daily-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">Code Review</p>
+            <h3>Review and Update</h3>
+          </div>
+
+          <span class="feature-badge">Review</span>
+        </div>
+
+        <div class="command-table">
+          <div>
+            <code>Comment</code>
+            <span>Leave feedback without approval</span>
+          </div>
+
+          <div>
+            <code>Approve</code>
+            <span>Accept the proposed changes</span>
+          </div>
+
+          <div>
+            <code>Request changes</code>
+            <span>Require updates before merging</span>
+          </div>
+
+          <div>
+            <code>git add .</code>
+            <span>Stage review fixes</span>
+          </div>
+
+          <div>
+            <code>git commit</code>
+            <span>Commit review fixes</span>
+          </div>
+
+          <div>
+            <code>git push</code>
+            <span>Update the Pull Request</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="daily-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">Finish Work</p>
+            <h3>Merge and Cleanup</h3>
+          </div>
+
+          <span class="feature-badge">Merge</span>
+        </div>
+
+        <div class="command-table">
+          <div>
+            <code>Merge Pull Request</code>
+            <span>Merge on GitHub</span>
+          </div>
+
+          <div>
+            <code>git checkout main</code>
+            <span>Return to main locally</span>
+          </div>
+
+          <div>
+            <code>git pull</code>
+            <span>Download the merged changes</span>
+          </div>
+
+          <div>
+            <code>git branch -d branch</code>
+            <span>Delete the local branch</span>
+          </div>
+
+          <div>
+            <code>git push origin --delete branch</code>
+            <span>Delete the remote branch</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="daily-card wide-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">Merge Conflicts</p>
+            <h3>Update a Branch with Main</h3>
+          </div>
+
+          <span class="feature-badge">Conflict</span>
+        </div>
+
+        <div class="command-table two-column-table">
+          <div>
+            <code>git checkout feature/login</code>
+            <span>Switch to your feature branch</span>
+          </div>
+
+          <div>
+            <code>git merge main</code>
+            <span>Merge main into your branch</span>
+          </div>
+
+          <div>
+            <code>git add .</code>
+            <span>Stage resolved files</span>
+          </div>
+
+          <div>
+            <code>git commit</code>
+            <span>Complete the conflict resolution</span>
+          </div>
+
+          <div>
+            <code>git push</code>
+            <span>Update the Pull Request</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="what-is-pr" class="section">
+    <div class="section-heading">
+      <p class="tag">Collaboration</p>
+      <h2>What Is a Pull Request?</h2>
+    </div>
+
+    <p>
+      A Pull Request, commonly called a PR, is a request to merge the
+      changes from one branch into another branch.
+    </p>
+
+    <div class="branch-diagram">
+      <div class="branch-node feature-node">
+        <span>Compare Branch</span>
+        <strong>feature/login</strong>
+      </div>
+
+      <div class="diagram-arrow">
+        <span>↓</span>
+        <strong>Pull Request</strong>
+        <span>↓</span>
+      </div>
+
+      <div class="branch-node main-node">
+        <span>Base Branch</span>
+        <strong>main</strong>
+      </div>
+    </div>
+
+    <div class="purpose-grid">
+      <article>
+        <span class="purpose-number">01</span>
+        <h3>Review Code</h3>
+        <p>
+          Other developers can inspect the changes before they enter main.
+        </p>
+      </article>
+
+      <article>
+        <span class="purpose-number">02</span>
+        <h3>Leave Comments</h3>
+        <p>
+          Reviewers can ask questions or suggest improvements.
+        </p>
+      </article>
+
+      <article>
+        <span class="purpose-number">03</span>
+        <h3>Request Changes</h3>
+        <p>
+          A reviewer can require corrections before approval.
+        </p>
+      </article>
+
+      <article>
+        <span class="purpose-number">04</span>
+        <h3>Approve Work</h3>
+        <p>
+          A reviewer can confirm that the changes are ready.
+        </p>
+      </article>
+
+      <article>
+        <span class="purpose-number">05</span>
+        <h3>Merge Safely</h3>
+        <p>
+          Approved work can be combined with the base branch.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section id="typical-workflow" class="section">
+    <div class="section-heading">
+      <p class="tag">From Branch to Main</p>
+      <h2>Typical Workflow</h2>
+    </div>
+
+    <div class="workflow-row">
+      <span>Main</span>
+      <strong>→</strong>
+      <span>Create branch</span>
+      <strong>→</strong>
+      <span>Write code</span>
+      <strong>→</strong>
+      <span>Commit</span>
+      <strong>→</strong>
+      <span>Push</span>
+      <strong>→</strong>
+      <span>Open PR</span>
+      <strong>→</strong>
+      <span>Review</span>
+      <strong>→</strong>
+      <span>Merge</span>
+    </div>
+
+    <div class="workflow-explanation">
+      <article>
+        <span>1</span>
+        <div>
+          <h3>Create a Separate Branch</h3>
+          <p>
+            Keep unfinished work separate from the stable main branch.
+          </p>
+        </div>
+      </article>
+
+      <article>
+        <span>2</span>
+        <div>
+          <h3>Commit and Push</h3>
+          <p>
+            Save your changes locally and publish your branch to GitHub.
+          </p>
+        </div>
+      </article>
+
+      <article>
+        <span>3</span>
+        <div>
+          <h3>Open a Pull Request</h3>
+          <p>
+            Request that your feature branch be merged into main.
+          </p>
+        </div>
+      </article>
+
+      <article>
+        <span>4</span>
+        <div>
+          <h3>Review and Merge</h3>
+          <p>
+            Address feedback and merge after the work is approved.
+          </p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="creating-branch" class="section">
+    <div class="section-heading">
+      <p class="tag">Start New Work</p>
+      <h2>Creating a Branch</h2>
+    </div>
+
+    <div class="group-grid">
+      <article class="info-card">
+        <h3>Create and Switch</h3>
+
+        <pre><code>git checkout -b feature/login</code></pre>
+
+        <p>
+          Creates a branch named <code>feature/login</code> and immediately
+          switches to it.
+        </p>
+      </article>
+
+      <article class="info-card">
+        <h3>See Your Branches</h3>
+
+        <pre><code>git branch</code></pre>
+
+        <p>
+          The branch with an asterisk is your current branch.
+        </p>
+      </article>
+
+      <article class="info-card">
+        <h3>Switch Branches</h3>
+
+        <pre><code>git checkout main</code></pre>
+
+        <p>
+          Switches from your current branch to <code>main</code>.
+        </p>
+      </article>
+
+      <article class="info-card">
+        <h3>Modern Git Alternative</h3>
+
+        <pre><code>git switch -c feature/login
+```
+
+git switch main</code></pre>
+
+```
+        <p>
+          <code>git switch</code> can also create and change branches.
+        </p>
+      </article>
+    </div>
+
+    <aside class="note">
+      Create your feature branch from an updated copy of
+      <code>main</code> whenever possible.
+    </aside>
+
+    <div class="code-container">
+      <button class="copy-button" type="button">
+        Copy
+      </button>
+
+      <pre><code>git checkout main
+```
+
+git pull
+git checkout -b feature/login</code></pre> </div> </section>
+
+```
+  <section id="making-changes" class="section">
+    <div class="section-heading">
+      <p class="tag">Commit Your Work</p>
+      <h2>Making Changes</h2>
+    </div>
+
+    <div class="process-grid">
+      <article>
+        <span>1</span>
+        <h3>Check Status</h3>
+        <code>git status</code>
+        <p>
+          See which files were added, changed, or deleted.
+        </p>
+      </article>
+
+      <article>
+        <span>2</span>
+        <h3>Stage Files</h3>
+        <code>git add .</code>
+        <p>
+          Add all changed files to the next commit.
+        </p>
+      </article>
+
+      <article>
+        <span>3</span>
+        <h3>Create Commit</h3>
+        <code>git commit -m "Add login form"</code>
+        <p>
+          Save the staged changes with a meaningful message.
+        </p>
+      </article>
+
+      <article>
+        <span>4</span>
+        <h3>Push Branch</h3>
+        <code>git push -u origin feature/login</code>
+        <p>
+          Publish the branch and connect it to the remote branch.
+        </p>
+      </article>
+    </div>
+
+    <aside class="note">
+      The <code>-u</code> option sets the upstream branch. After the first
+      push, future updates can normally use only <code>git push</code>.
+    </aside>
+
+    <div class="code-container">
+      <button class="copy-button" type="button">
+        Copy
+      </button>
+
+      <pre><code>git status
+```
+
+git add .
+git commit -m "Add login form"
+git push -u origin feature/login</code></pre> </div> </section>
+
+```
+  <section id="opening-pr" class="section">
+    <div class="section-heading">
+      <p class="tag">Create the Request</p>
+      <h2>Opening a Pull Request</h2>
+    </div>
+
+    <div class="github-steps">
+      <article>
+        <span>1</span>
+        <div>
+          <h3>Push Your Branch</h3>
+          <p>
+            The branch must exist on GitHub before you can open a Pull
+            Request.
+          </p>
+        </div>
+      </article>
+
+      <article>
+        <span>2</span>
+        <div>
+          <h3>Click Compare &amp; Pull Request</h3>
+          <p>
+            GitHub often displays this button after a new branch is pushed.
+          </p>
+        </div>
+      </article>
+
+      <article>
+        <span>3</span>
+        <div>
+          <h3>Verify the Branches</h3>
+
+          <div class="branch-selection">
+            <div>
+              <small>Base</small>
+              <code>main</code>
+            </div>
+
+            <span>←</span>
+
+            <div>
+              <small>Compare</small>
+              <code>feature/login</code>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article>
+        <span>4</span>
+        <div>
+          <h3>Write the Title and Description</h3>
+          <p>
+            Explain what changed, why it changed, and how the reviewer can
+            test it.
+          </p>
+        </div>
+      </article>
+
+      <article>
+        <span>5</span>
+        <div>
+          <h3>Create the Pull Request</h3>
+          <p>
+            Click <strong>Create Pull Request</strong> to submit it for
+            review.
+          </p>
+        </div>
+      </article>
+    </div>
+
+    <div class="pr-template">
+      <h3>Simple PR Description</h3>
+
+      <div class="code-container">
+        <button class="copy-button" type="button">
+          Copy
+        </button>
+
+        <pre><code>## What changed
+```
+
+* Added the login form
+* Added form validation
+* Added error messages
+
+## How to test
+
+1. Start the application
+2. Open the login page
+3. Submit valid and invalid information
+
+## Checklist
+
+* [x] Code works locally
+* [x] Tests pass
+* [x] I reviewed my own changes</code></pre> </div> </div> </section>
+
+  ```
+  <section id="reviewing-pr" class="section">
+    <div class="section-heading">
+      <p class="tag">Code Review</p>
+      <h2>Reviewing a Pull Request</h2>
+    </div>
+
+    <div class="review-grid">
+      <article>
+        <h3>Functionality</h3>
+
+        <ul>
+          <li>Does the code work?</li>
+          <li>Does it solve the requested problem?</li>
+          <li>Do the tests pass?</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Readability</h3>
+
+        <ul>
+          <li>Are variable names clear?</li>
+          <li>Are functions focused?</li>
+          <li>Is the code easy to follow?</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Code Quality</h3>
+
+        <ul>
+          <li>Is there duplicate code?</li>
+          <li>Are unnecessary files included?</li>
+          <li>Are errors handled correctly?</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Documentation</h3>
+
+        <ul>
+          <li>Is the PR description clear?</li>
+          <li>Are complex decisions explained?</li>
+          <li>Were important instructions updated?</li>
+        </ul>
+      </article>
+    </div>
+
+    <h3>Possible Review Actions</h3>
+
+    <div class="review-actions">
+      <article class="comment-card">
+        <strong>Comment</strong>
+        <p>
+          Leave general feedback without approving or blocking the PR.
+        </p>
+      </article>
+
+      <article class="approve-card">
+        <strong>Approve</strong>
+        <p>
+          Confirm that the code is ready to merge.
+        </p>
+      </article>
+
+      <article class="request-card">
+        <strong>Request Changes</strong>
+        <p>
+          Require specific corrections before the PR is merged.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section id="updating-pr" class="section">
+    <div class="section-heading">
+      <p class="tag">Respond to Feedback</p>
+      <h2>Updating a Pull Request</h2>
+    </div>
+
+    <p>
+      You do not need to create a new Pull Request after receiving review
+      feedback. Add more commits to the same branch and push them.
+    </p>
+
+    <div class="example-layout">
+      <article class="code-card">
+        <h3>Update Commands</h3>
+
+        <div class="code-container">
+          <button class="copy-button" type="button">
+            Copy
+          </button>
+
+          <pre><code>git status
+  ```
+
+git add .
+git commit -m "Address review comments"
+git push</code></pre> </div> </article>
+
+```
+      <article class="explanation-card">
+        <h3>What Happens</h3>
+
+        <div class="update-flow">
+          <span>Change code</span>
+          <strong>↓</strong>
+          <span>Create commit</span>
+          <strong>↓</strong>
+          <span>Push branch</span>
+          <strong>↓</strong>
+          <span>PR updates automatically</span>
+        </div>
+      </article>
+    </div>
+
+    <aside class="note">
+      Every commit pushed to the compare branch automatically appears in the
+      existing Pull Request.
+    </aside>
+  </section>
+
+  <section id="merging" class="section">
+    <div class="section-heading">
+      <p class="tag">Complete the PR</p>
+      <h2>Merging</h2>
+    </div>
+
+    <p>
+      After the Pull Request is approved and required checks pass, the
+      changes can be merged into the base branch.
+    </p>
+
+    <div class="merge-options">
+      <article>
+        <p class="card-label">Full History</p>
+        <h3>Create a Merge Commit</h3>
+
+        <p>
+          Keeps every feature-branch commit and creates an additional merge
+          commit.
+        </p>
+      </article>
+
+      <article>
+        <p class="card-label">One Commit</p>
+        <h3>Squash and Merge</h3>
+
+        <p>
+          Combines all Pull Request commits into one commit on the base
+          branch.
+        </p>
+      </article>
+
+      <article>
+        <p class="card-label">Linear History</p>
+        <h3>Rebase and Merge</h3>
+
+        <p>
+          Adds the feature commits onto the base branch without a merge
+          commit.
+        </p>
+      </article>
+    </div>
+
+    <aside class="note">
+      Use the merge option required by your team or repository. Do not pick
+      a different method only because it looks cleaner.
+    </aside>
+
+    <h3>After Merging</h3>
+
+    <div class="code-container">
+      <button class="copy-button" type="button">
+        Copy
+      </button>
+
+      <pre><code>git checkout main
+```
+
+git pull
+git branch -d feature/login</code></pre> </div> </section>
+
+```
+  <section id="conflicts" class="section">
+    <div class="section-heading">
+      <p class="tag">Fix Merge Conflicts</p>
+      <h2>Resolving Conflicts</h2>
+    </div>
+
+    <div class="conflict-message">
+      <span>!</span>
+
+      <div>
+        <strong>This branch has conflicts that must be resolved.</strong>
+        <p>
+          Git cannot automatically decide which version of the changed code
+          should be kept.
+        </p>
+      </div>
+    </div>
+
+    <div class="conflict-steps">
+      <article>
+        <span>1</span>
+        <div>
+          <h3>Switch to Your Branch</h3>
+          <code>git checkout feature/login</code>
+        </div>
+      </article>
+
+      <article>
+        <span>2</span>
+        <div>
+          <h3>Merge Main into It</h3>
+          <code>git merge main</code>
+        </div>
+      </article>
+
+      <article>
+        <span>3</span>
+        <div>
+          <h3>Open Conflicted Files</h3>
+          <p>
+            Choose the correct code and remove the conflict markers.
+          </p>
+        </div>
+      </article>
+
+      <article>
+        <span>4</span>
+        <div>
+          <h3>Stage the Resolved Files</h3>
+          <code>git add .</code>
+        </div>
+      </article>
+
+      <article>
+        <span>5</span>
+        <div>
+          <h3>Complete the Merge</h3>
+          <code>git commit</code>
+        </div>
+      </article>
+
+      <article>
+        <span>6</span>
+        <div>
+          <h3>Update the Pull Request</h3>
+          <code>git push</code>
+        </div>
+      </article>
+    </div>
+
+    <h3>Conflict Markers</h3>
+
+    <pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+```
+
+# Code from your current branch
+
+Code from the branch being merged
+>>>>>>> main</code></pre>
+
+```
+    <aside class="warning">
+      Do not commit the <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>,
+      <code>=======</code>, or <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>
+      markers. Resolve the code and remove all markers first.
+    </aside>
+  </section>
+
+  <section id="useful-commands" class="section">
+    <div class="section-heading">
+      <p class="tag">Git Reference</p>
+      <h2>Useful Commands</h2>
+    </div>
+
+    <div class="group-grid">
+      <article class="info-card">
+        <h3>Branches</h3>
+
+        <div class="command-table">
+          <div>
+            <code>git branch</code>
+            <span>Show local branches</span>
+          </div>
+
+          <div>
+            <code>git checkout branch-name</code>
+            <span>Switch branches</span>
+          </div>
+
+          <div>
+            <code>git checkout -b new-branch</code>
+            <span>Create and switch</span>
+          </div>
+
+          <div>
+            <code>git branch -d branch-name</code>
+            <span>Delete a merged local branch</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="info-card">
+        <h3>Remote Changes</h3>
+
+        <div class="command-table">
+          <div>
+            <code>git push</code>
+            <span>Upload local commits</span>
+          </div>
+
+          <div>
+            <code>git pull</code>
+            <span>Download and merge remote changes</span>
+          </div>
+
+          <div>
+            <code>git push -u origin branch</code>
+            <span>Publish a new branch</span>
+          </div>
+
+          <div>
+            <code>git push origin --delete branch</code>
+            <span>Delete a remote branch</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="info-card">
+        <h3>Changes and Commits</h3>
+
+        <div class="command-table">
+          <div>
+            <code>git status</code>
+            <span>See repository status</span>
+          </div>
+
+          <div>
+            <code>git add .</code>
+            <span>Stage all changes</span>
+          </div>
+
+          <div>
+            <code>git commit -m "message"</code>
+            <span>Create a commit</span>
+          </div>
+
+          <div>
+            <code>git log --oneline</code>
+            <span>View concise commit history</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="info-card">
+        <h3>Merging</h3>
+
+        <div class="command-table">
+          <div>
+            <code>git merge feature-branch</code>
+            <span>Merge a branch into the current branch</span>
+          </div>
+
+          <div>
+            <code>git merge --abort</code>
+            <span>Cancel an unfinished merge</span>
+          </div>
+
+          <div>
+            <code>git diff</code>
+            <span>See unstaged differences</span>
+          </div>
+
+          <div>
+            <code>git diff --staged</code>
+            <span>See staged differences</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="workflow-example" class="section">
+    <div class="section-heading">
+      <p class="tag">End-to-End Example</p>
+      <h2>Typical Workflow Example</h2>
+    </div>
+
+    <div class="workflow-column">
+      <article>
+        <span>1</span>
+
+        <div>
+          <h3>Create a Feature Branch</h3>
+          <code>git checkout -b feature/navbar</code>
+        </div>
+      </article>
+
+      <strong>↓</strong>
+
+      <article>
+        <span>2</span>
+
+        <div>
+          <h3>Write the Code</h3>
+          <p>
+            Build and test the responsive navbar locally.
+          </p>
+        </div>
+      </article>
+
+      <strong>↓</strong>
+
+      <article>
+        <span>3</span>
+
+        <div>
+          <h3>Stage the Changes</h3>
+          <code>git add .</code>
+        </div>
+      </article>
+
+      <strong>↓</strong>
+
+      <article>
+        <span>4</span>
+
+        <div>
+          <h3>Create a Commit</h3>
+          <code>git commit -m "Add responsive navbar"</code>
+        </div>
+      </article>
+
+      <strong>↓</strong>
+
+      <article>
+        <span>5</span>
+
+        <div>
+          <h3>Push the Branch</h3>
+          <code>git push -u origin feature/navbar</code>
+        </div>
+      </article>
+
+      <strong>↓</strong>
+
+      <article>
+        <span>6</span>
+
+        <div>
+          <h3>Open the Pull Request</h3>
+          <p>
+            Set <code>main</code> as the base branch and
+            <code>feature/navbar</code> as the compare branch.
+          </p>
+        </div>
+      </article>
+
+      <strong>↓</strong>
+
+      <article>
+        <span>7</span>
+
+        <div>
+          <h3>Complete Code Review</h3>
+          <p>
+            Review comments, tests, and required checks.
+          </p>
+        </div>
+      </article>
+
+      <strong>↓</strong>
+
+      <article>
+        <span>8</span>
+
+        <div>
+          <h3>Make Requested Changes</h3>
+          <code>git add .</code>
+          <code>git commit -m "Address navbar review"</code>
+          <code>git push</code>
+        </div>
+      </article>
+
+      <strong>↓</strong>
+
+      <article>
+        <span>9</span>
+
+        <div>
+          <h3>Merge the Pull Request</h3>
+          <p>
+            Use the merge method required by the repository.
+          </p>
+        </div>
+      </article>
+
+      <strong>↓</strong>
+
+      <article>
+        <span>10</span>
+
+        <div>
+          <h3>Update and Clean Up</h3>
+          <code>git checkout main</code>
+          <code>git pull</code>
+          <code>git branch -d feature/navbar</code>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="common-terms" class="section">
+    <div class="section-heading">
+      <p class="tag">Vocabulary</p>
+      <h2>Common Terms</h2>
+    </div>
+
+    <div class="terms-grid">
+      <article>
+        <code>Branch</code>
+        <p>
+          A separate line of development.
+        </p>
+      </article>
+
+      <article>
+        <code>PR</code>
+        <p>
+          An abbreviation for Pull Request.
+        </p>
+      </article>
+
+      <article>
+        <code>Review</code>
+        <p>
+          Feedback given before changes are merged.
+        </p>
+      </article>
+
+      <article>
+        <code>Approve</code>
+        <p>
+          A reviewer accepts the proposed changes.
+        </p>
+      </article>
+
+      <article>
+        <code>Merge</code>
+        <p>
+          Combine changes from one branch into another.
+        </p>
+      </article>
+
+      <article>
+        <code>Conflict</code>
+        <p>
+          Git cannot automatically combine competing changes.
+        </p>
+      </article>
+
+      <article>
+        <code>Base Branch</code>
+        <p>
+          The branch receiving the changes, often <code>main</code>.
+        </p>
+      </article>
+
+      <article>
+        <code>Compare Branch</code>
+        <p>
+          The branch containing the proposed changes.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section id="checklist" class="section">
+    <div class="section-heading">
+      <p class="tag">Before Requesting Review</p>
+      <h2>My Pull Request Checklist</h2>
+    </div>
+
+    <div class="checklist-layout">
+      <article class="checklist-card">
+        <h3>Code Quality</h3>
+
+        <label>
+          <input type="checkbox" />
+          <span>Code works</span>
+        </label>
+
+        <label>
+          <input type="checkbox" />
+          <span>Tests pass</span>
+        </label>
+
+        <label>
+          <input type="checkbox" />
+          <span>No unnecessary files</span>
+        </label>
+
+        <label>
+          <input type="checkbox" />
+          <span>Commit messages are meaningful</span>
+        </label>
+      </article>
+
+      <article class="checklist-card">
+        <h3>Branch and Review</h3>
+
+        <label>
+          <input type="checkbox" />
+          <span>Latest changes from main are included</span>
+        </label>
+
+        <label>
+          <input type="checkbox" />
+          <span>I reviewed my own changes</span>
+        </label>
+
+        <label>
+          <input type="checkbox" />
+          <span>The PR title and description are clear</span>
+        </label>
+
+        <label>
+          <input type="checkbox" />
+          <span>I responded to reviewer comments</span>
+        </label>
+      </article>
+    </div>
+
+    <aside class="note">
+      Review the Pull Request's <strong>Files changed</strong> tab before
+      requesting someone else's review.
+    </aside>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>
+    <a href="../">Return to all cheat sheets</a>
+  </p>
+</footer>
+
+<script>
+  const copyButtons = document.querySelectorAll(".copy-button");
+
+  copyButtons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      const codeBlock = button.nextElementSibling;
+      const code = codeBlock.innerText;
+
+      try {
+        await navigator.clipboard.writeText(code);
+
+        button.innerText = "Copied!";
+
+        setTimeout(() => {
+          button.innerText = "Copy";
+        }, 1500);
+      } catch (error) {
+        button.innerText = "Failed";
+      }
+    });
+  });
+</script>
+```
+
+  </body>
+</html>

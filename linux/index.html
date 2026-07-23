@@ -1,0 +1,883 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    ```
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+      name="description"
+      content="A quick reference for common Linux terminal commands used during development."
+    />
+
+    <title>Linux Terminal Cheat Sheet</title>
+
+    <link rel="stylesheet" href="style.css" />
+    ```
+  </head>
+
+  <body>
+    <header class="page-header">
+      <nav class="nav container">
+        <a class="home-link" href="../"> ← All Cheat Sheets </a>
+
+        ```
+        <a class="next-link" href="../git/"> Git Cheat Sheet → </a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="hero">
+        <p class="tag">Command Line</p>
+
+        <h1>Linux Terminal Cheat Sheet</h1>
+
+        <p>
+          A quick reference for navigating folders, managing files, searching,
+          viewing processes, installing packages, and working from the terminal.
+        </p>
+      </section>
+
+      <section class="table-of-contents">
+        <h2>Table of Contents</h2>
+
+        <div class="contents-grid">
+          <a href="#quick-commands">Quick Commands</a>
+          <a href="#navigation">Navigation</a>
+          <a href="#files-directories">Files and Directories</a>
+          <a href="#viewing-files">Viewing Files</a>
+          <a href="#searching">Searching</a>
+          <a href="#permissions">Permissions</a>
+          <a href="#git-helpers">Git Helpers</a>
+          <a href="#processes">Processes</a>
+          <a href="#packages">Package Manager</a>
+          <a href="#networking">Networking</a>
+          <a href="#shortcuts">Shortcuts</a>
+          <a href="#workflow">Typical Workflow</a>
+        </div>
+      </section>
+
+      <section id="quick-commands" class="section">
+        <div class="section-heading">
+          <p class="tag">Daily Use</p>
+
+          <h2>Quick Commands</h2>
+
+          <p>
+            These are the commands you are most likely to use while working on
+            projects.
+          </p>
+        </div>
+
+        <div class="quick-grid">
+          <article class="quick-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label">Location</p>
+                <h3>Current Directory</h3>
+              </div>
+
+              <span class="command-badge">Navigate</span>
+            </div>
+
+            <div class="command">
+              <code>pwd</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>
+              Print the full path of the directory you are currently inside.
+            </p>
+          </article>
+
+          <article class="quick-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label">Files</p>
+                <h3>Detailed File List</h3>
+              </div>
+
+              <span class="command-badge">List</span>
+            </div>
+
+            <div class="command">
+              <code>ls -la</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>Show files, folders, permissions, and hidden files.</p>
+          </article>
+
+          <article class="quick-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label">Navigation</p>
+                <h3>Change Directory</h3>
+              </div>
+
+              <span class="command-badge">Move</span>
+            </div>
+
+            <div class="command">
+              <code>cd folder-name</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>Move into another directory.</p>
+          </article>
+
+          <article class="quick-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label">File</p>
+                <h3>Create a File</h3>
+              </div>
+
+              <span class="command-badge">Create</span>
+            </div>
+
+            <div class="command">
+              <code>touch app.py</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>
+              Create a new empty file or update an existing file's timestamp.
+            </p>
+          </article>
+
+          <article class="quick-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label">Folder</p>
+                <h3>Create a Directory</h3>
+              </div>
+
+              <span class="command-badge">Create</span>
+            </div>
+
+            <div class="command">
+              <code>mkdir project</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>Create a new directory.</p>
+          </article>
+
+          <article class="quick-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label">Rename</p>
+                <h3>Move or Rename</h3>
+              </div>
+
+              <span class="command-badge">Move</span>
+            </div>
+
+            <div class="command">
+              <code>mv old.py new.py</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>Move a file to another location or rename it.</p>
+          </article>
+
+          <article class="quick-card danger-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label danger-label">Delete</p>
+                <h3>Remove a File</h3>
+              </div>
+
+              <span class="command-badge danger-badge">Danger</span>
+            </div>
+
+            <div class="command">
+              <code>rm file.py</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>Permanently delete a file from the terminal.</p>
+          </article>
+
+          <article class="quick-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label">Editor</p>
+                <h3>Open VS Code</h3>
+              </div>
+
+              <span class="command-badge">Develop</span>
+            </div>
+
+            <div class="command">
+              <code>code .</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>Open the current project folder in VS Code.</p>
+          </article>
+
+          <article class="quick-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label">History</p>
+                <h3>Previous Commands</h3>
+              </div>
+
+              <span class="command-badge">Recall</span>
+            </div>
+
+            <div class="command">
+              <code>history</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>Display commands you previously entered.</p>
+          </article>
+
+          <article class="quick-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label">Stop</p>
+                <h3>Cancel a Command</h3>
+              </div>
+
+              <span class="command-badge">Shortcut</span>
+            </div>
+
+            <div class="command">
+              <code>Ctrl + C</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>Stop a running command or development server.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="navigation" class="section">
+        <div class="section-heading">
+          <p class="tag">Move Around</p>
+          <h2>Navigation</h2>
+        </div>
+
+        <div class="command-list">
+          <article>
+            <h3>Current Directory</h3>
+
+            <pre><code>pwd</code></pre>
+
+            <p>Prints the full path of your current location.</p>
+          </article>
+
+          <article>
+            <h3>List Files</h3>
+
+            <pre><code>ls</code></pre>
+
+            <p>Displays files and folders in the current directory.</p>
+          </article>
+
+          <article>
+            <h3>Detailed List</h3>
+
+            <pre><code>ls -l</code></pre>
+
+            <p>Shows permissions, owner, size, and modification date.</p>
+          </article>
+
+          <article>
+            <h3>Show Hidden Files</h3>
+
+            <pre><code>ls -la</code></pre>
+
+            <p>Includes hidden files such as <code>.gitignore</code>.</p>
+          </article>
+
+          <article>
+            <h3>Change Directory</h3>
+
+            <pre><code>cd folder</code></pre>
+
+            <p>Moves into the selected directory.</p>
+          </article>
+
+          <article>
+            <h3>Go Back One Folder</h3>
+
+            <pre><code>cd ..</code></pre>
+
+            <p>Moves to the parent directory.</p>
+          </article>
+
+          <article>
+            <h3>Go Home</h3>
+
+            <pre><code>cd ~</code></pre>
+
+            <p>Moves to your Linux home directory.</p>
+          </article>
+
+          <article>
+            <h3>Previous Directory</h3>
+
+            <pre><code>cd -</code></pre>
+
+            <p>Switches between your current and previous directory.</p>
+          </article>
+        </div>
+
+        <aside class="note">
+          Use <code>pwd</code> whenever you are unsure which folder your
+          terminal is currently using.
+        </aside>
+      </section>
+
+      <section id="files-directories" class="section">
+        <div class="section-heading">
+          <p class="tag">File Management</p>
+          <h2>Files and Directories</h2>
+        </div>
+
+        <div class="two-card-grid">
+          <article class="info-card">
+            <p class="card-label">Directories</p>
+            <h3>Create Folders</h3>
+
+            <pre><code>mkdir project</code></pre>
+
+            <p>Create one directory.</p>
+
+            <pre><code>mkdir -p src/components</code></pre>
+
+            <p>Create nested directories, including missing parent folders.</p>
+          </article>
+
+          <article class="info-card">
+            <p class="card-label">Files</p>
+            <h3>Create a File</h3>
+
+            <pre><code>touch app.py</code></pre>
+
+            <p>Create an empty file.</p>
+          </article>
+        </div>
+
+        <h3>Copy a File</h3>
+
+        <pre><code>cp old.py new.py</code></pre>
+
+        <h3>Copy a Directory</h3>
+
+        <pre><code>cp -r folder backup</code></pre>
+
+        <p>
+          The <code>-r</code> option copies the folder and everything inside it.
+        </p>
+
+        <h3>Move or Rename</h3>
+
+        <pre><code>mv old.py new.py</code></pre>
+
+        <p>The same command can rename a file or move it to another folder.</p>
+
+        <div class="danger-zone">
+          <div class="danger-zone-heading">
+            <p class="danger-tag">Use Carefully</p>
+            <h3>Delete Commands</h3>
+          </div>
+
+          <div class="delete-grid">
+            <article>
+              <h4>Delete a File</h4>
+
+              <pre><code>rm file.py</code></pre>
+            </article>
+
+            <article>
+              <h4>Delete a Folder</h4>
+
+              <pre><code>rm -r folder</code></pre>
+            </article>
+
+            <article>
+              <h4>Delete an Empty Folder</h4>
+
+              <pre><code>rmdir folder</code></pre>
+            </article>
+          </div>
+
+          <p>Terminal deletions do not normally go to the Recycle Bin.</p>
+        </div>
+      </section>
+
+      <section id="viewing-files" class="section">
+        <div class="section-heading">
+          <p class="tag">Read Content</p>
+          <h2>Viewing Files</h2>
+        </div>
+
+        <div class="command-list">
+          <article>
+            <h3>Display Entire File</h3>
+
+            <pre><code>cat file.txt</code></pre>
+
+            <p>Prints the full file directly in the terminal.</p>
+          </article>
+
+          <article>
+            <h3>First 10 Lines</h3>
+
+            <pre><code>head file.txt</code></pre>
+
+            <p>Displays the beginning of a file.</p>
+          </article>
+
+          <article>
+            <h3>Last 10 Lines</h3>
+
+            <pre><code>tail file.txt</code></pre>
+
+            <p>Displays the end of a file.</p>
+          </article>
+
+          <article>
+            <h3>Follow a Log File</h3>
+
+            <pre><code>tail -f logfile.log</code></pre>
+
+            <p>Shows new log entries as they are added.</p>
+          </article>
+
+          <article>
+            <h3>View Page by Page</h3>
+
+            <pre><code>less file.txt</code></pre>
+
+            <p>Opens a scrollable file viewer.</p>
+          </article>
+
+          <article>
+            <h3>Exit Less</h3>
+
+            <pre><code>q</code></pre>
+
+            <p>Closes the <code>less</code> file viewer.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="searching" class="section">
+        <div class="section-heading">
+          <p class="tag">Find Things</p>
+          <h2>Searching</h2>
+        </div>
+
+        <div class="two-card-grid">
+          <article class="info-card">
+            <p class="card-label">Files</p>
+            <h3>Find by Name</h3>
+
+            <pre><code>find . -name "*.py"</code></pre>
+
+            <p>
+              Search the current directory and its subdirectories for Python
+              files.
+            </p>
+          </article>
+
+          <article class="info-card">
+            <p class="card-label">Text</p>
+            <h3>Search Inside a File</h3>
+
+            <pre><code>grep "Pokemon" app.py</code></pre>
+
+            <p>Find lines containing the selected text.</p>
+          </article>
+        </div>
+
+        <h3>Search Recursively</h3>
+
+        <pre><code>grep -r "useState" .</code></pre>
+
+        <p>Search every file under the current directory.</p>
+
+        <h3>Case-Insensitive Search</h3>
+
+        <pre><code>grep -ri "pokemon" .</code></pre>
+
+        <p>
+          The <code>-i</code> option ignores uppercase and lowercase
+          differences.
+        </p>
+
+        <h3>Show Line Numbers</h3>
+
+        <pre><code>grep -rn "useState" .</code></pre>
+      </section>
+
+      <section id="permissions" class="section">
+        <div class="section-heading">
+          <p class="tag">Access Control</p>
+          <h2>Permissions</h2>
+        </div>
+
+        <div class="two-card-grid">
+          <article class="info-card">
+            <p class="card-label">View</p>
+            <h3>Check Permissions</h3>
+
+            <pre><code>ls -l</code></pre>
+
+            <p>Shows permissions at the beginning of each file's row.</p>
+          </article>
+
+          <article class="info-card">
+            <p class="card-label">Execute</p>
+            <h3>Make a Script Executable</h3>
+
+            <pre><code>chmod +x script.sh</code></pre>
+
+            <p>Adds permission to run the file as a program.</p>
+          </article>
+        </div>
+
+        <h3>Run an Executable Script</h3>
+
+        <pre><code>./script.sh</code></pre>
+
+        <aside class="note">
+          A shell script may need both a proper shebang and executable
+          permission before it can be run with <code>./script.sh</code>.
+        </aside>
+      </section>
+
+      <section id="git-helpers" class="section">
+        <div class="section-heading">
+          <p class="tag">Development Helpers</p>
+          <h2>Git and Editor Helpers</h2>
+        </div>
+
+        <div class="two-card-grid">
+          <article class="info-card">
+            <p class="card-label">Git</p>
+            <h3>Current Branch</h3>
+
+            <pre><code>git branch</code></pre>
+
+            <p>
+              Lists local branches and marks the current branch with an
+              asterisk.
+            </p>
+          </article>
+
+          <article class="info-card">
+            <p class="card-label">VS Code</p>
+            <h3>Open Current Folder</h3>
+
+            <pre><code>code .</code></pre>
+
+            <p>Opens the current terminal directory as a VS Code workspace.</p>
+          </article>
+        </div>
+
+        <h3>Check Git Status</h3>
+
+        <pre><code>git status</code></pre>
+
+        <h3>Open One File in VS Code</h3>
+
+        <pre><code>code app.py</code></pre>
+      </section>
+
+      <section id="processes" class="section">
+        <div class="section-heading">
+          <p class="tag">Running Programs</p>
+          <h2>Processes</h2>
+        </div>
+
+        <h3>Show Current Processes</h3>
+
+        <pre><code>ps</code></pre>
+
+        <h3>Detailed Process List</h3>
+
+        <pre><code>ps aux</code></pre>
+
+        <h3>Find a Process</h3>
+
+        <pre><code>ps aux | grep python</code></pre>
+
+        <div class="two-card-grid">
+          <article class="info-card">
+            <p class="card-label">Stop</p>
+            <h3>Kill a Process</h3>
+
+            <pre><code>kill PID</code></pre>
+
+            <p>Sends a normal termination request to the process.</p>
+          </article>
+
+          <article class="info-card danger-card">
+            <p class="card-label danger-label">Force</p>
+            <h3>Force Kill</h3>
+
+            <pre><code>kill -9 PID</code></pre>
+
+            <p>Immediately stops a process that will not close normally.</p>
+          </article>
+        </div>
+
+        <aside class="warning">
+          Try <code>kill PID</code> before using <code>kill -9 PID</code>.
+        </aside>
+      </section>
+
+      <section id="packages" class="section">
+        <div class="section-heading">
+          <p class="tag">APT Package Manager</p>
+          <h2>Install and Remove Software</h2>
+        </div>
+
+        <div class="command-list">
+          <article>
+            <h3>Update Package Information</h3>
+
+            <pre><code>sudo apt update</code></pre>
+
+            <p>Downloads the latest available package information.</p>
+          </article>
+
+          <article>
+            <h3>Upgrade Packages</h3>
+
+            <pre><code>sudo apt upgrade</code></pre>
+
+            <p>Installs available updates for existing packages.</p>
+          </article>
+
+          <article>
+            <h3>Install a Package</h3>
+
+            <pre><code>sudo apt install package-name</code></pre>
+
+            <p>Downloads and installs a new package.</p>
+          </article>
+
+          <article>
+            <h3>Remove a Package</h3>
+
+            <pre><code>sudo apt remove package-name</code></pre>
+
+            <p>Uninstalls the selected package.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="networking" class="section">
+        <div class="section-heading">
+          <p class="tag">Network Tools</p>
+          <h2>Networking</h2>
+        </div>
+
+        <div class="command-list">
+          <article>
+            <h3>Show IP Information</h3>
+
+            <pre><code>ip addr</code></pre>
+
+            <p>Displays network interfaces and IP addresses.</p>
+          </article>
+
+          <article>
+            <h3>Test a Connection</h3>
+
+            <pre><code>ping google.com</code></pre>
+
+            <p>Tests whether a host can be reached over the network.</p>
+          </article>
+
+          <article>
+            <h3>Download a File</h3>
+
+            <pre><code>wget URL</code></pre>
+
+            <p>Downloads a file from a URL.</p>
+          </article>
+        </div>
+
+        <aside class="note">
+          Stop a continuously running <code>ping</code> command with
+          <code>Ctrl + C</code>.
+        </aside>
+      </section>
+
+      <section id="shortcuts" class="section">
+        <div class="section-heading">
+          <p class="tag">Keyboard</p>
+          <h2>Useful Terminal Shortcuts</h2>
+        </div>
+
+        <div class="shortcut-grid">
+          <article>
+            <kbd>Ctrl</kbd>
+            <span>+</span>
+            <kbd>C</kbd>
+
+            <h3>Stop Command</h3>
+
+            <p>Stop a running command, server, or program.</p>
+          </article>
+
+          <article>
+            <kbd>Ctrl</kbd>
+            <span>+</span>
+            <kbd>Z</kbd>
+
+            <h3>Suspend Program</h3>
+
+            <p>Pause the current foreground process.</p>
+          </article>
+
+          <article>
+            <kbd>Ctrl</kbd>
+            <span>+</span>
+            <kbd>L</kbd>
+
+            <h3>Clear Screen</h3>
+
+            <p>
+              Clear visible terminal output without deleting command history.
+            </p>
+          </article>
+
+          <article>
+            <kbd>Ctrl</kbd>
+            <span>+</span>
+            <kbd>R</kbd>
+
+            <h3>Search History</h3>
+
+            <p>Search for a command you previously entered.</p>
+          </article>
+
+          <article>
+            <kbd>Tab</kbd>
+
+            <h3>Auto-Complete</h3>
+
+            <p>Complete file names, folder names, and some commands.</p>
+          </article>
+
+          <article>
+            <kbd>↑</kbd>
+
+            <h3>Previous Command</h3>
+
+            <p>Move backward through command history.</p>
+          </article>
+        </div>
+
+        <h3>Clear the Terminal</h3>
+
+        <pre><code>clear</code></pre>
+
+        <h3>Display Command History</h3>
+
+        <pre><code>history</code></pre>
+      </section>
+
+      <section id="workflow" class="section">
+        <div class="section-heading">
+          <p class="tag">Daily Development</p>
+          <h2>Typical Workflow</h2>
+        </div>
+
+        <div class="workflow">
+          <span>Open project folder</span>
+          <strong>↓</strong>
+          <span>Open VS Code</span>
+          <strong>↓</strong>
+          <span>Check Git</span>
+          <strong>↓</strong>
+          <span>Run project</span>
+        </div>
+
+        <h3>Open the Project</h3>
+
+        <pre><code>cd ~/code/project</code></pre>
+
+        <h3>Confirm the Current Folder</h3>
+
+        <pre><code>pwd
+```
+
+ls -la</code></pre>
+
+        ```
+        <h3>Open VS Code</h3>
+
+        <pre><code>code .</code></pre>
+
+        <h3>Check Git</h3>
+
+        <pre><code>git status</code></pre>
+
+        <h3>Run Python</h3>
+
+        <pre><code>python3 main.py</code></pre>
+
+        <h3>Run a JavaScript Project</h3>
+
+        <pre><code>npm run dev</code></pre>
+
+        <h3>Stop the Program</h3>
+
+        <pre><code>Ctrl + C</code></pre>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        <a href="../">Return to all cheat sheets</a>
+      </p>
+    </footer>
+
+    <script>
+      const copyButtons = document.querySelectorAll(".copy-button");
+
+      copyButtons.forEach((button) => {
+        button.addEventListener("click", async () => {
+          const command = button.previousElementSibling.innerText;
+
+          try {
+            await navigator.clipboard.writeText(command);
+
+            button.innerText = "Copied!";
+
+            setTimeout(() => {
+              button.innerText = "Copy";
+            }, 1500);
+          } catch (error) {
+            button.innerText = "Failed";
+          }
+        });
+      });
+    </script>
+    ```
+  </body>
+</html>

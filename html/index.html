@@ -1,0 +1,1277 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+```
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/>
+
+<meta
+  name="description"
+  content="A quick reference for common HTML elements, forms, semantic layouts, tables, links, and attributes."
+/>
+
+<title>HTML Cheat Sheet</title>
+
+<link rel="stylesheet" href="style.css" />
+```
+
+  </head>
+
+  <body>
+    <header class="page-header">
+      <nav class="nav container">
+        <a class="home-link" href="../">
+          ← All Cheat Sheets
+        </a>
+
+```
+    <a class="top-link" href="#starter-template">
+      Starter Template
+    </a>
+  </nav>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <p class="tag">Web Structure</p>
+
+    <h1>HTML Cheat Sheet</h1>
+
+    <p>
+      A quick reference for structuring web pages with semantic elements,
+      forms, links, images, lists, tables, and common attributes.
+    </p>
+  </section>
+
+  <section class="table-of-contents">
+    <h2>Table of Contents</h2>
+
+    <div class="contents-grid">
+      <a href="#important-examples">Important Examples</a>
+      <a href="#basic-page">Basic Page</a>
+      <a href="#headings-text">Headings and Text</a>
+      <a href="#links-images">Links and Images</a>
+      <a href="#lists">Lists</a>
+      <a href="#containers">Containers</a>
+      <a href="#semantic-layout">Semantic Layout</a>
+      <a href="#forms">Forms</a>
+      <a href="#input-types">Input Types</a>
+      <a href="#tables">Tables</a>
+      <a href="#attributes">Attributes</a>
+      <a href="#entities">HTML Entities</a>
+      <a href="#comments">Comments</a>
+      <a href="#file-paths">File Paths</a>
+      <a href="#starter-template">Starter Template</a>
+    </div>
+  </section>
+
+  <section id="important-examples" class="section">
+    <div class="section-heading">
+      <p class="tag">Most Important</p>
+
+      <h2>Common HTML Examples</h2>
+
+      <p>
+        These two examples combine several HTML concepts you will use
+        frequently.
+      </p>
+    </div>
+
+    <div class="important-grid">
+      <article class="example-card">
+        <div class="example-heading">
+          <div>
+            <p class="card-label">Forms</p>
+            <h3>Search Form</h3>
+          </div>
+
+          <span class="example-badge">Interactive</span>
+        </div>
+
+        <div class="live-example">
+          <form class="demo-search-form" action="#" method="get">
+            <label for="demo-search">
+              Search the cheat sheet
+            </label>
+
+            <div class="search-row">
+              <input
+                id="demo-search"
+                name="search"
+                type="search"
+                placeholder="Search HTML topics"
+                required
+              />
+
+              <button type="submit">
+                Search
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="code-container">
+          <button class="copy-button" type="button">
+            Copy
+          </button>
+
+          <pre><code>&lt;form action="/search" method="get"&gt;
+```
+
+<label for="search">
+Search
+</label>
+
+<input
+id="search"
+name="query"
+type="search"
+placeholder="Search topics"
+required
+/>
+
+<button type="submit">
+Search
+</button>
+</form></code></pre> </div>
+
+```
+        <ul class="example-points">
+          <li>
+            The label's <code>for</code> matches the input's
+            <code>id</code>.
+          </li>
+
+          <li>
+            The <code>name</code> determines the submitted form-data key.
+          </li>
+
+          <li>
+            The button uses <code>type="submit"</code>.
+          </li>
+        </ul>
+      </article>
+
+      <article class="example-card">
+        <div class="example-heading">
+          <div>
+            <p class="card-label">Page Structure</p>
+            <h3>Semantic Layout</h3>
+          </div>
+
+          <span class="example-badge">Structure</span>
+        </div>
+
+        <div class="semantic-preview">
+          <div class="semantic-header">
+            &lt;header&gt;
+          </div>
+
+          <div class="semantic-nav">
+            &lt;nav&gt;
+          </div>
+
+          <div class="semantic-body">
+            <div class="semantic-main">
+              &lt;main&gt;
+
+              <div class="semantic-section">
+                &lt;section&gt;
+              </div>
+
+              <div class="semantic-article">
+                &lt;article&gt;
+              </div>
+            </div>
+
+            <div class="semantic-aside">
+              &lt;aside&gt;
+            </div>
+          </div>
+
+          <div class="semantic-footer">
+            &lt;footer&gt;
+          </div>
+        </div>
+
+        <div class="code-container">
+          <button class="copy-button" type="button">
+            Copy
+          </button>
+
+          <pre><code>&lt;header&gt;
+```
+
+<h1>My Website</h1>
+</header>
+
+<nav>
+<a href="/">Home</a>
+<a href="/about">About</a>
+</nav>
+
+<main>
+<section>
+<h2>Projects</h2>
+</section>
+
+<article>
+<h2>Project Name</h2>
+</article>
+</main>
+
+<footer>
+<p>&copy; 2026</p>
+</footer></code></pre> </div> </article> </div> </section>
+
+```
+  <section id="basic-page" class="section">
+    <div class="section-heading">
+      <p class="tag">Foundation</p>
+      <h2>Basic HTML Page</h2>
+    </div>
+
+    <div class="code-container">
+      <button class="copy-button" type="button">
+        Copy
+      </button>
+
+      <pre><code>&lt;!doctype html&gt;
+```
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+
+```
+&lt;meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/&gt;
+
+&lt;title&gt;Page Title&lt;/title&gt;
+
+&lt;link
+  rel="stylesheet"
+  href="./assets/style.css"
+/&gt;
+```
+
+</head>
+
+<body>
+<h1>Hello World</h1>
+
+```
+&lt;script src="./main.js"&gt;&lt;/script&gt;
+```
+
+</body>
+</html></code></pre> </div>
+
+```
+    <div class="explanation-grid">
+      <article>
+        <h3><code>&lt;!doctype html&gt;</code></h3>
+        <p>Tells the browser to use modern HTML.</p>
+      </article>
+
+      <article>
+        <h3><code>lang="en"</code></h3>
+        <p>Identifies the page's main language.</p>
+      </article>
+
+      <article>
+        <h3><code>&lt;head&gt;</code></h3>
+        <p>Contains page metadata, title, and linked files.</p>
+      </article>
+
+      <article>
+        <h3><code>&lt;body&gt;</code></h3>
+        <p>Contains the visible page content.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="headings-text" class="section">
+    <div class="section-heading">
+      <p class="tag">Content</p>
+      <h2>Headings and Text</h2>
+    </div>
+
+    <div class="two-card-grid">
+      <article class="info-card">
+        <h3>Headings</h3>
+
+        <pre><code>&lt;h1&gt;Main page heading&lt;/h1&gt;
+```
+
+<h2>Major section</h2>
+<h3>Subsection</h3>
+<h4>Smaller subsection</h4></code></pre>
+
+```
+        <aside class="note">
+          A page should normally have one main
+          <code>&lt;h1&gt;</code>.
+        </aside>
+      </article>
+
+      <article class="info-card">
+        <h3>Text Elements</h3>
+
+        <pre><code>&lt;p&gt;This is a paragraph.&lt;/p&gt;
+```
+
+<strong>Important text</strong>
+
+<em>Emphasized text</em>
+
+First line<br />
+Second line
+
+<hr /></code></pre> </article> </div>
+
+```
+    <aside class="note">
+      Use separate paragraphs instead of <code>&lt;br /&gt;</code> when the
+      text contains separate ideas.
+    </aside>
+  </section>
+
+  <section id="links-images" class="section">
+    <div class="section-heading">
+      <p class="tag">Navigation and Media</p>
+      <h2>Links and Images</h2>
+    </div>
+
+    <div class="two-card-grid">
+      <article class="info-card">
+        <h3>Links</h3>
+
+        <p>Standard link:</p>
+
+        <pre><code>&lt;a href="https://example.com"&gt;
+```
+
+Visit Example
+</a></code></pre>
+
+```
+        <p>Open in a new tab:</p>
+
+        <pre><code>&lt;a
+```
+
+href="https://example.com"
+target="_blank"
+rel="noopener noreferrer"
+>
+Visit Example
+</a></code></pre>
+
+```
+        <p>Link to another page:</p>
+
+        <pre><code>&lt;a href="./about.html"&gt;
+```
+
+About
+</a></code></pre>
+
+```
+        <p>Link to a section:</p>
+
+        <pre><code>&lt;a href="#contact"&gt;Contact&lt;/a&gt;
+```
+
+<section id="contact">
+<h2>Contact</h2>
+</section></code></pre> </article>
+
+```
+      <article class="info-card">
+        <h3>Images</h3>
+
+        <pre><code>&lt;img
+```
+
+src="./assets/pikachu.png"
+alt="Pikachu standing and smiling"
+/></code></pre>
+
+```
+        <p>Image with a set width:</p>
+
+        <pre><code>&lt;img
+```
+
+src="./assets/pikachu.png"
+alt="Pikachu"
+width="300"
+/></code></pre>
+
+```
+        <aside class="note">
+          Give meaningful images a useful <code>alt</code> description.
+        </aside>
+      </article>
+    </div>
+  </section>
+
+  <section id="lists" class="section">
+    <div class="section-heading">
+      <p class="tag">Grouped Content</p>
+      <h2>Lists</h2>
+    </div>
+
+    <div class="three-card-grid">
+      <article class="info-card">
+        <h3>Unordered List</h3>
+
+        <pre><code>&lt;ul&gt;
+```
+
+<li>Learn HTML</li>
+<li>Learn CSS</li>
+<li>Learn JavaScript</li>
+</ul></code></pre> </article>
+
+```
+      <article class="info-card">
+        <h3>Ordered List</h3>
+
+        <pre><code>&lt;ol&gt;
+```
+
+<li>Clone the repository</li>
+<li>Install dependencies</li>
+<li>Run the project</li>
+</ol></code></pre> </article>
+
+```
+      <article class="info-card">
+        <h3>Navigation List</h3>
+
+        <pre><code>&lt;nav&gt;
+```
+
+<ul>
+<li>
+<a href="./index.html">Home</a>
+</li>
+
+```
+&lt;li&gt;
+  &lt;a href="./about.html"&gt;About&lt;/a&gt;
+&lt;/li&gt;
+```
+
+</ul>
+</nav></code></pre> </article> </div> </section>
+
+```
+  <section id="containers" class="section">
+    <div class="section-heading">
+      <p class="tag">Grouping</p>
+      <h2>Containers</h2>
+    </div>
+
+    <div class="comparison-grid">
+      <article class="comparison-card">
+        <p class="card-label">Block Container</p>
+
+        <h3><code>&lt;div&gt;</code></h3>
+
+        <pre><code>&lt;div class="card"&gt;
+```
+
+<h2>Pikachu</h2>
+<p>Electric-type Pokémon</p>
+</div></code></pre>
+
+```
+        <p>
+          Use a <code>&lt;div&gt;</code> to group larger sections or
+          components.
+        </p>
+      </article>
+
+      <article class="comparison-card">
+        <p class="card-label">Inline Container</p>
+
+        <h3><code>&lt;span&gt;</code></h3>
+
+        <pre><code>&lt;p&gt;
+```
+
+Your score is
+<span class="score">100</span>.
+</p></code></pre>
+
+```
+        <p>
+          Use a <code>&lt;span&gt;</code> to group text inside a line.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section id="semantic-layout" class="section">
+    <div class="section-heading">
+      <p class="tag">Meaningful Structure</p>
+      <h2>Semantic Layout</h2>
+    </div>
+
+    <p>
+      Semantic elements describe the purpose of their content.
+    </p>
+
+    <div class="semantic-table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Element</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td><code>&lt;header&gt;</code></td>
+            <td>Introductory content</td>
+          </tr>
+
+          <tr>
+            <td><code>&lt;nav&gt;</code></td>
+            <td>Navigation links</td>
+          </tr>
+
+          <tr>
+            <td><code>&lt;main&gt;</code></td>
+            <td>The page's main content</td>
+          </tr>
+
+          <tr>
+            <td><code>&lt;section&gt;</code></td>
+            <td>A related group of content</td>
+          </tr>
+
+          <tr>
+            <td><code>&lt;article&gt;</code></td>
+            <td>Independent content</td>
+          </tr>
+
+          <tr>
+            <td><code>&lt;aside&gt;</code></td>
+            <td>Supporting or related content</td>
+          </tr>
+
+          <tr>
+            <td><code>&lt;footer&gt;</code></td>
+            <td>Footer or closing information</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <aside class="note">
+      Prefer semantic elements when an element accurately describes the
+      content. Use <code>&lt;div&gt;</code> when no semantic element fits.
+    </aside>
+  </section>
+
+  <section id="forms" class="section">
+    <div class="section-heading">
+      <p class="tag">User Input</p>
+      <h2>Forms</h2>
+    </div>
+
+    <h3>Basic Form</h3>
+
+    <pre><code>&lt;form&gt;
+```
+
+<label for="username">Name</label>
+
+<input
+id="username"
+name="username"
+type="text"
+placeholder="Enter your name"
+/>
+
+<button type="submit">
+Submit
+</button>
+</form></code></pre>
+
+```
+    <aside class="note">
+      The label's <code>for</code> value should match the input's
+      <code>id</code>.
+    </aside>
+
+    <h3>Contact Form</h3>
+
+    <pre><code>&lt;form&gt;
+```
+
+<label for="name">Name</label>
+
+<input
+id="name"
+name="name"
+type="text"
+required
+/>
+
+<label for="email">Email</label>
+
+<input
+id="email"
+name="email"
+type="email"
+required
+/>
+
+<label for="message">Message</label>
+
+<textarea
+id="message"
+name="message"
+rows="5"
+></textarea>
+
+<button type="submit">
+Send
+</button>
+</form></code></pre>
+
+```
+    <h3>Button Types</h3>
+
+    <div class="three-card-grid">
+      <article class="info-card small-card">
+        <h3>Submit</h3>
+
+        <pre><code>&lt;button type="submit"&gt;
+```
+
+Submit
+</button></code></pre> </article>
+
+```
+      <article class="info-card small-card">
+        <h3>Regular Button</h3>
+
+        <pre><code>&lt;button type="button"&gt;
+```
+
+Generate Team
+</button></code></pre> </article>
+
+```
+      <article class="info-card small-card">
+        <h3>Reset</h3>
+
+        <pre><code>&lt;button type="reset"&gt;
+```
+
+Reset
+</button></code></pre> </article> </div>
+
+```
+    <aside class="warning">
+      Inside a form, always set the button's <code>type</code>.
+    </aside>
+  </section>
+
+  <section id="input-types" class="section">
+    <div class="section-heading">
+      <p class="tag">Form Controls</p>
+      <h2>Common Input Types</h2>
+    </div>
+
+    <div class="input-grid">
+      <article class="info-card">
+        <h3>Text</h3>
+        <pre><code>&lt;input type="text" name="username" /&gt;</code></pre>
+      </article>
+
+      <article class="info-card">
+        <h3>Search</h3>
+        <pre><code>&lt;input type="search" name="query" /&gt;</code></pre>
+      </article>
+
+      <article class="info-card">
+        <h3>Email</h3>
+        <pre><code>&lt;input type="email" name="email" /&gt;</code></pre>
+      </article>
+
+      <article class="info-card">
+        <h3>Password</h3>
+        <pre><code>&lt;input type="password" name="password" /&gt;</code></pre>
+      </article>
+
+      <article class="info-card">
+        <h3>Number</h3>
+        <pre><code>&lt;input
+```
+
+type="number"
+name="age"
+min="1"
+max="120"
+/></code></pre> </article>
+
+```
+      <article class="info-card">
+        <h3>Date</h3>
+        <pre><code>&lt;input type="date" name="startDate" /&gt;</code></pre>
+      </article>
+    </div>
+
+    <h3>Checkbox</h3>
+
+    <pre><code>&lt;label&gt;
+```
+
+<input
+type="checkbox"
+name="newsletter"
+/>
+
+Subscribe to the newsletter
+</label></code></pre>
+
+```
+    <h3>Radio Buttons</h3>
+
+    <pre><code>&lt;label&gt;
+```
+
+<input
+type="radio"
+name="accountType"
+value="personal"
+/>
+
+Personal
+</label>
+
+<label>
+<input
+type="radio"
+name="accountType"
+value="business"
+/>
+
+Business
+</label></code></pre>
+
+```
+    <aside class="note">
+      Related radio buttons must share the same <code>name</code> so they
+      act as one group.
+    </aside>
+
+    <h3>Text Area</h3>
+
+    <pre><code>&lt;label for="message"&gt;Message&lt;/label&gt;
+```
+
+<textarea
+id="message"
+name="message"
+rows="5"
+placeholder="Enter your message"
+></textarea></code></pre>
+
+```
+    <h3>Select Menu</h3>
+
+    <pre><code>&lt;label for="pokemon-type"&gt;
+```
+
+Pokémon Type
+</label>
+
+<select
+id="pokemon-type"
+name="pokemonType"
+>
+<option value="">Choose a type</option>
+<option value="fire">Fire</option>
+<option value="water">Water</option>
+<option value="electric">Electric</option>
+</select></code></pre> </section>
+
+```
+  <section id="tables" class="section">
+    <div class="section-heading">
+      <p class="tag">Tabular Data</p>
+      <h2>Tables</h2>
+    </div>
+
+    <div class="table-example-grid">
+      <article>
+        <h3>HTML</h3>
+
+        <pre><code>&lt;table&gt;
+```
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Level</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Pikachu</td>
+<td>Electric</td>
+<td>25</td>
+</tr>
+
+```
+&lt;tr&gt;
+  &lt;td&gt;Charmander&lt;/td&gt;
+  &lt;td&gt;Fire&lt;/td&gt;
+  &lt;td&gt;18&lt;/td&gt;
+&lt;/tr&gt;
+```
+
+</tbody>
+</table></code></pre> </article>
+
+```
+      <article>
+        <h3>Rendered Result</h3>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Level</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Pikachu</td>
+                <td>Electric</td>
+                <td>25</td>
+              </tr>
+
+              <tr>
+                <td>Charmander</td>
+                <td>Fire</td>
+                <td>18</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </div>
+
+    <aside class="warning">
+      Use tables for actual tabular data, not for arranging the page
+      layout.
+    </aside>
+  </section>
+
+  <section id="attributes" class="section">
+    <div class="section-heading">
+      <p class="tag">Element Information</p>
+      <h2>Useful Attributes</h2>
+    </div>
+
+    <div class="attribute-grid">
+      <article class="attribute-card">
+        <h3>class</h3>
+
+        <pre><code>&lt;div class="card"&gt;&lt;/div&gt;</code></pre>
+
+        <p>Used for reusable CSS styling and groups of elements.</p>
+      </article>
+
+      <article class="attribute-card">
+        <h3>id</h3>
+
+        <pre><code>&lt;h2 id="projects"&gt;
+```
+
+Projects
+</h2></code></pre>
+
+```
+        <p>
+          Used for unique elements, page links, labels, or JavaScript
+          selection.
+        </p>
+      </article>
+
+      <article class="attribute-card">
+        <h3>name</h3>
+
+        <pre><code>&lt;input
+```
+
+type="text"
+name="pokemonName"
+/></code></pre>
+
+```
+        <p>Determines the form-data key when a form is submitted.</p>
+      </article>
+
+      <article class="attribute-card">
+        <h3>value</h3>
+
+        <pre><code>&lt;input
+```
+
+type="radio"
+name="difficulty"
+value="easy"
+/></code></pre>
+
+```
+        <p>Provides the submitted value for a form control.</p>
+      </article>
+
+      <article class="attribute-card">
+        <h3>placeholder</h3>
+
+        <pre><code>&lt;input
+```
+
+type="text"
+placeholder="Enter Pokémon name"
+/></code></pre>
+
+```
+        <p>Shows temporary guidance inside an empty input.</p>
+      </article>
+
+      <article class="attribute-card">
+        <h3>required</h3>
+
+        <pre><code>&lt;input
+```
+
+type="email"
+name="email"
+required
+/></code></pre>
+
+```
+        <p>Prevents submission while the control is empty or invalid.</p>
+      </article>
+
+      <article class="attribute-card">
+        <h3>disabled</h3>
+
+        <pre><code>&lt;button type="submit" disabled&gt;
+```
+
+Submit
+</button></code></pre>
+
+```
+        <p>Prevents the user from interacting with the element.</p>
+      </article>
+
+      <article class="attribute-card">
+        <h3>data-*</h3>
+
+        <pre><code>&lt;button data-pokemon-id="25"&gt;
+```
+
+Remove Pikachu
+</button></code></pre>
+
+```
+        <p>Stores custom information for JavaScript.</p>
+      </article>
+    </div>
+
+    <h3>Reading a Data Attribute With JavaScript</h3>
+
+    <pre><code>const id = button.dataset.pokemonId;</code></pre>
+
+    <aside class="note">
+      An <code>id</code> should be unique on the page. A
+      <code>class</code> can be reused.
+    </aside>
+  </section>
+
+  <section id="entities" class="section">
+    <div class="section-heading">
+      <p class="tag">Special Characters</p>
+      <h2>Common HTML Entities</h2>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Character</th>
+            <th>HTML Entity</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>©</td>
+            <td><code>&amp;copy;</code></td>
+          </tr>
+
+          <tr>
+            <td>&amp;</td>
+            <td><code>&amp;amp;</code></td>
+          </tr>
+
+          <tr>
+            <td>&lt;</td>
+            <td><code>&amp;lt;</code></td>
+          </tr>
+
+          <tr>
+            <td>&gt;</td>
+            <td><code>&amp;gt;</code></td>
+          </tr>
+
+          <tr>
+            <td>Non-breaking space</td>
+            <td><code>&amp;nbsp;</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Example:</p>
+
+    <pre><code>&lt;p&gt;&amp;copy; 2026 Mohamed Gad&lt;/p&gt;</code></pre>
+  </section>
+
+  <section id="comments" class="section">
+    <div class="section-heading">
+      <p class="tag">Developer Notes</p>
+      <h2>HTML Comments</h2>
+    </div>
+
+    <pre><code>&lt;!-- This is an HTML comment --&gt;</code></pre>
+
+    <p>
+      Comments are visible in the page source but are not displayed on the
+      page.
+    </p>
+  </section>
+
+  <section id="file-paths" class="section">
+    <div class="section-heading">
+      <p class="tag">Project Navigation</p>
+      <h2>File Paths</h2>
+    </div>
+
+    <div class="three-card-grid">
+      <article class="info-card">
+        <h3>Same Folder</h3>
+
+        <pre><code>&lt;a href="./about.html"&gt;
+```
+
+About
+</a></code></pre> </article>
+
+```
+      <article class="info-card">
+        <h3>Inside a Folder</h3>
+
+        <pre><code>&lt;img
+```
+
+src="./assets/image.png"
+alt="Description"
+/></code></pre> </article>
+
+```
+      <article class="info-card">
+        <h3>Move Up One Folder</h3>
+
+        <pre><code>&lt;a href="../index.html"&gt;
+```
+
+Home
+</a></code></pre> </article> </div> </section>
+
+```
+  <section id="starter-template" class="section">
+    <div class="section-heading">
+      <p class="tag">Reusable Template</p>
+      <h2>HTML Starter Template</h2>
+
+      <p>
+        Copy this structure when beginning a small HTML, CSS, and
+        JavaScript project.
+      </p>
+    </div>
+
+    <div class="code-container">
+      <button class="copy-button" type="button">
+        Copy
+      </button>
+
+      <pre><code>&lt;!doctype html&gt;
+```
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+
+```
+&lt;meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/&gt;
+
+&lt;title&gt;My Project&lt;/title&gt;
+
+&lt;link
+  rel="stylesheet"
+  href="./assets/style.css"
+/&gt;
+```
+
+</head>
+
+<body>
+<header>
+<h1>My Project</h1>
+
+```
+  &lt;nav&gt;
+    &lt;a href="#home"&gt;Home&lt;/a&gt;
+    &lt;a href="#projects"&gt;Projects&lt;/a&gt;
+    &lt;a href="#contact"&gt;Contact&lt;/a&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;
+
+&lt;main&gt;
+  &lt;section id="home"&gt;
+    &lt;h2&gt;Welcome&lt;/h2&gt;
+    &lt;p&gt;Welcome to my website.&lt;/p&gt;
+  &lt;/section&gt;
+
+  &lt;section id="projects"&gt;
+    &lt;h2&gt;Projects&lt;/h2&gt;
+
+    &lt;article class="card"&gt;
+      &lt;h3&gt;Project Name&lt;/h3&gt;
+      &lt;p&gt;Project description.&lt;/p&gt;
+      &lt;a href="#"&gt;View Project&lt;/a&gt;
+    &lt;/article&gt;
+  &lt;/section&gt;
+
+  &lt;section id="contact"&gt;
+    &lt;h2&gt;Contact&lt;/h2&gt;
+
+    &lt;form&gt;
+      &lt;label for="name"&gt;Name&lt;/label&gt;
+
+      &lt;input
+        id="name"
+        name="name"
+        type="text"
+        required
+      /&gt;
+
+      &lt;label for="email"&gt;Email&lt;/label&gt;
+
+      &lt;input
+        id="email"
+        name="email"
+        type="email"
+        required
+      /&gt;
+
+      &lt;label for="message"&gt;Message&lt;/label&gt;
+
+      &lt;textarea
+        id="message"
+        name="message"
+        rows="5"
+      &gt;&lt;/textarea&gt;
+
+      &lt;button type="submit"&gt;
+        Send
+      &lt;/button&gt;
+    &lt;/form&gt;
+  &lt;/section&gt;
+&lt;/main&gt;
+
+&lt;footer&gt;
+  &lt;p&gt;&amp;copy; 2026 Mohamed Gad&lt;/p&gt;
+&lt;/footer&gt;
+
+&lt;script src="./main.js"&gt;&lt;/script&gt;
+```
+
+</body>
+</html></code></pre> </div> </section> </main>
+
+```
+<footer class="page-footer">
+  <p>
+    <a href="../">
+      Return to all cheat sheets
+    </a>
+  </p>
+</footer>
+
+<script>
+  const copyButtons = document.querySelectorAll(".copy-button");
+  const demoSearchForm = document.querySelector(".demo-search-form");
+
+  copyButtons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      const codeBlock = button.nextElementSibling;
+      const code = codeBlock.innerText;
+
+      try {
+        await navigator.clipboard.writeText(code);
+        button.innerText = "Copied!";
+
+        setTimeout(() => {
+          button.innerText = "Copy";
+        }, 1500);
+      } catch (error) {
+        button.innerText = "Failed";
+      }
+    });
+  });
+
+  demoSearchForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const searchValue = formData.get("search");
+
+    alert(`You searched for: ${searchValue}`);
+  });
+</script>
+```
+
+  </body>
+</html>

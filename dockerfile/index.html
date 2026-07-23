@@ -1,0 +1,715 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    ```
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+      name="description"
+      content="A quick reference for Dockerfile instructions, examples, and common workflows."
+    />
+
+    <title>Dockerfile Cheat Sheet</title>
+
+    <link rel="stylesheet" href="style.css" />
+    ```
+  </head>
+
+  <body>
+    <header class="page-header">
+      <nav class="nav container">
+        <a class="home-link" href="../"> ← All Cheat Sheets </a>
+
+        ```
+        <a class="docker-link" href="../docker/"> Docker Commands → </a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="hero">
+        <p class="tag">Docker Images</p>
+
+        <h1>Dockerfile Cheat Sheet</h1>
+
+        <p>
+          A quick reference for building Docker images for React, Vite, Python,
+          and other development projects.
+        </p>
+      </section>
+
+      <section class="table-of-contents">
+        <h2>Table of Contents</h2>
+
+        <div class="contents-grid">
+          <a href="#examples">Examples</a>
+          <a href="#what-is-dockerfile">What Is a Dockerfile?</a>
+          <a href="#basic-structure">Basic Structure</a>
+          <a href="#from">FROM</a>
+          <a href="#workdir">WORKDIR</a>
+          <a href="#copy">COPY</a>
+          <a href="#run">RUN</a>
+          <a href="#expose">EXPOSE</a>
+          <a href="#cmd">CMD</a>
+          <a href="#run-vs-cmd">RUN vs CMD</a>
+          <a href="#env">ENV</a>
+          <a href="#dockerignore">.dockerignore</a>
+          <a href="#build-run">Build and Run</a>
+          <a href="#improved-node">Improved Node Pattern</a>
+          <a href="#common-problems">Common Problems</a>
+          <a href="#workflow">React Workflow</a>
+        </div>
+      </section>
+
+      <section id="examples" class="section examples-section">
+        <div class="section-heading">
+          <p class="tag">Common Templates</p>
+          <h2>Dockerfile Examples</h2>
+
+          <p>
+            These two examples can be used as starting points for React and
+            Python projects.
+          </p>
+        </div>
+
+        <div class="example-grid">
+          <article class="example-card">
+            <div class="example-card-heading">
+              <div>
+                <p class="card-label">Node</p>
+                <h3>React and Vite</h3>
+              </div>
+
+              <span class="language-badge">Dockerfile</span>
+            </div>
+
+            <div class="code-container">
+              <button class="copy-button" type="button">Copy</button>
+
+              <pre><code>FROM node:24
+```
+
+WORKDIR /app
+
+COPY . .
+
+RUN npm install
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]</code></pre>
+            </div>
+
+            ```
+            <p>
+              Starts a Vite development server and makes it accessible outside
+              the container.
+            </p>
+          </article>
+
+          <article class="example-card">
+            <div class="example-card-heading">
+              <div>
+                <p class="card-label">Python</p>
+                <h3>Python Application</h3>
+              </div>
+
+              <span class="language-badge">Dockerfile</span>
+            </div>
+
+            <div class="code-container">
+              <button class="copy-button" type="button">Copy</button>
+
+              <pre><code>FROM python:3.13
+```
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+CMD ["python", "main.py"]</code></pre>
+            </div>
+
+            ```
+            <p>
+              Installs dependencies from <code>requirements.txt</code> and runs
+              <code>main.py</code>.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="what-is-dockerfile" class="section">
+        <h2>What Is a Dockerfile?</h2>
+
+        <p>
+          A <code>Dockerfile</code> is a text file containing instructions
+          Docker uses to build an image.
+        </p>
+
+        <p>The file is normally named exactly:</p>
+
+        <pre><code>Dockerfile</code></pre>
+
+        <p>No file extension is required.</p>
+
+        <div class="process">
+          <span>Dockerfile</span>
+          <strong>↓</strong>
+          <span>docker build</span>
+          <strong>↓</strong>
+          <span>Docker image</span>
+          <strong>↓</strong>
+          <span>docker run</span>
+          <strong>↓</strong>
+          <span>Running container</span>
+        </div>
+      </section>
+
+      <section id="basic-structure" class="section">
+        <h2>Basic Structure</h2>
+
+        <p>A basic React and Vite development Dockerfile may look like this:</p>
+
+        <div class="code-container">
+          <button class="copy-button" type="button">Copy</button>
+
+          <pre><code>FROM node:24
+```
+
+WORKDIR /app
+
+COPY . .
+
+RUN npm install
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]</code></pre>
+        </div>
+      </section>
+
+      ```
+      <section id="from" class="section instruction-section">
+        <div class="instruction-heading">
+          <h2>FROM</h2>
+          <span class="instruction-badge">Base Image</span>
+        </div>
+
+        <p>Selects the base image that your application will build on.</p>
+
+        <p>Node example:</p>
+
+        <pre><code>FROM node:24</code></pre>
+
+        <p>Python example:</p>
+
+        <pre><code>FROM python:3.13</code></pre>
+
+        <p>Smaller Node image:</p>
+
+        <pre><code>FROM node:24-alpine</code></pre>
+
+        <aside class="note">
+          <strong>Remember:</strong> <code>FROM</code> is usually the first
+          instruction in a Dockerfile.
+        </aside>
+      </section>
+
+      <section id="workdir" class="section instruction-section">
+        <div class="instruction-heading">
+          <h2>WORKDIR</h2>
+          <span class="instruction-badge">Working Folder</span>
+        </div>
+
+        <p>Sets the working directory inside the image.</p>
+
+        <pre><code>WORKDIR /app</code></pre>
+
+        <p>
+          After this instruction, later commands operate from
+          <code>/app</code>.
+        </p>
+
+        <pre><code>WORKDIR /app
+```
+
+RUN npm install</code></pre>
+
+        ```
+        <aside class="note">
+          Docker creates the directory if it does not already exist.
+        </aside>
+      </section>
+
+      <section id="copy" class="section instruction-section">
+        <div class="instruction-heading">
+          <h2>COPY</h2>
+          <span class="instruction-badge">Project Files</span>
+        </div>
+
+        <p>Copies files from your computer into the Docker image.</p>
+
+        <p>Copy everything:</p>
+
+        <pre><code>COPY . .</code></pre>
+
+        <div class="meaning-grid">
+          <article>
+            <h3>First dot</h3>
+            <p>The current project folder on your computer.</p>
+          </article>
+
+          <article>
+            <h3>Second dot</h3>
+            <p>The current <code>WORKDIR</code> inside the image.</p>
+          </article>
+        </div>
+
+        <p>Copy one file:</p>
+
+        <pre><code>COPY package.json .</code></pre>
+
+        <p>Copy dependency files:</p>
+
+        <pre><code>COPY package.json package-lock.json ./</code></pre>
+
+        <p>Copy a folder:</p>
+
+        <pre><code>COPY src ./src</code></pre>
+      </section>
+
+      <section id="run" class="section instruction-section">
+        <div class="instruction-heading">
+          <h2>RUN</h2>
+          <span class="instruction-badge">Build Time</span>
+        </div>
+
+        <p>Executes a command while Docker is building the image.</p>
+
+        <pre><code>RUN npm install</code></pre>
+
+        <p>Python example:</p>
+
+        <pre><code>RUN pip install -r requirements.txt</code></pre>
+
+        <p>Run multiple commands:</p>
+
+        <pre><code>RUN npm install && npm run build</code></pre>
+
+        <aside class="note">
+          <code>RUN</code> happens during <code>docker build</code>. It does not
+          run every time the container starts.
+        </aside>
+      </section>
+
+      <section id="expose" class="section instruction-section">
+        <div class="instruction-heading">
+          <h2>EXPOSE</h2>
+          <span class="instruction-badge">Application Port</span>
+        </div>
+
+        <p>Documents which port the application uses inside the container.</p>
+
+        <pre><code>EXPOSE 5173</code></pre>
+
+        <p>Other examples:</p>
+
+        <pre><code>EXPOSE 3000
+```
+
+EXPOSE 5000</code></pre>
+
+        ```
+        <aside class="warning">
+          <code>EXPOSE</code> does not publish the port to your computer. You
+          still need the <code>-p</code> option when running the container.
+        </aside>
+
+        <pre><code>docker run -p 5173:5173 image-name</code></pre>
+
+        <div class="port-map">
+          <span>Computer port</span>
+          <strong>:</strong>
+          <span>Container port</span>
+        </div>
+      </section>
+
+      <section id="cmd" class="section instruction-section">
+        <div class="instruction-heading">
+          <h2>CMD</h2>
+          <span class="instruction-badge">Container Start</span>
+        </div>
+
+        <p>
+          Specifies the default command that runs when the container starts.
+        </p>
+
+        <p>Node example:</p>
+
+        <pre><code>CMD ["npm", "run", "dev"]</code></pre>
+
+        <p>Vite example:</p>
+
+        <pre><code>CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]</code></pre>
+
+        <p>Python example:</p>
+
+        <pre><code>CMD ["python", "main.py"]</code></pre>
+
+        <p>Preferred format:</p>
+
+        <pre><code>CMD ["command", "argument1", "argument2"]</code></pre>
+
+        <aside class="note">
+          A Dockerfile should normally contain only one <code>CMD</code>.
+        </aside>
+      </section>
+
+      <section id="run-vs-cmd" class="section">
+        <h2>RUN vs CMD</h2>
+
+        <div class="comparison-grid">
+          <article class="comparison-card">
+            <p class="card-label">Build Time</p>
+            <h3>RUN</h3>
+
+            <pre><code>RUN npm install</code></pre>
+
+            <p>
+              Installs packages or prepares the image while it is being built.
+            </p>
+          </article>
+
+          <article class="comparison-card">
+            <p class="card-label">Start Time</p>
+            <h3>CMD</h3>
+
+            <pre><code>CMD ["npm", "run", "dev"]</code></pre>
+
+            <p>Starts the application when a new container begins running.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="env" class="section instruction-section">
+        <div class="instruction-heading">
+          <h2>ENV</h2>
+          <span class="instruction-badge">Environment Variables</span>
+        </div>
+
+        <p>Creates an environment variable inside the image.</p>
+
+        <pre><code>ENV NODE_ENV=development</code></pre>
+
+        <p>Multiple variables:</p>
+
+        <pre><code>ENV HOST=0.0.0.0
+```
+
+ENV PORT=5173</code></pre>
+
+        ```
+        <p>Reading an environment variable in Python:</p>
+
+        <pre><code>import os
+```
+
+port = os.getenv("PORT")</code></pre>
+
+        ```
+        <aside class="warning">
+          Do not place passwords, API tokens, or private keys directly inside a
+          Dockerfile.
+        </aside>
+      </section>
+
+      <section id="dockerignore" class="section">
+        <h2>.dockerignore</h2>
+
+        <p>
+          A <code>.dockerignore</code> file prevents unnecessary files from
+          being copied into the image.
+        </p>
+
+        <div class="example-grid">
+          <article class="example-card small-card">
+            <div class="example-card-heading">
+              <h3>Node</h3>
+              <span class="language-badge">.dockerignore</span>
+            </div>
+
+            <pre><code>node_modules
+```
+
+dist
+.git
+.gitignore
+Dockerfile
+README.md
+npm-debug.log
+.env</code></pre>
+          </article>
+
+          ```
+          <article class="example-card small-card">
+            <div class="example-card-heading">
+              <h3>Python</h3>
+              <span class="language-badge">.dockerignore</span>
+            </div>
+
+            <pre><code>__pycache__
+```
+
+*.pyc
+.venv
+venv
+.git
+.pytest_cache
+.env</code></pre>
+          </article>
+        </div>
+
+        ```
+        <h3>Benefits</h3>
+
+        <ul>
+          <li>Smaller build context</li>
+          <li>Faster builds</li>
+          <li>Avoids copying local dependencies</li>
+          <li>Avoids copying private files accidentally</li>
+        </ul>
+      </section>
+
+      <section id="build-run" class="section">
+        <h2>Build and Run</h2>
+
+        <div class="command-list">
+          <article>
+            <h3>Build an image</h3>
+            <pre><code>docker build -t my-image .</code></pre>
+          </article>
+
+          <article>
+            <h3>Build without cache</h3>
+            <pre><code>docker build --no-cache -t my-image .</code></pre>
+          </article>
+
+          <article>
+            <h3>Run an image</h3>
+            <pre><code>docker run my-image</code></pre>
+          </article>
+
+          <article>
+            <h3>Remove the container afterward</h3>
+            <pre><code>docker run --rm my-image</code></pre>
+          </article>
+
+          <article>
+            <h3>Run interactively</h3>
+            <pre><code>docker run --rm -it my-image</code></pre>
+          </article>
+
+          <article>
+            <h3>Publish a port</h3>
+            <pre><code>docker run --rm -p 5173:5173 my-image</code></pre>
+          </article>
+
+          <article>
+            <h3>Use a different Dockerfile</h3>
+            <pre><code>docker build -f Dockerfile.dev -t my-image .</code></pre>
+          </article>
+        </div>
+      </section>
+
+      <section id="improved-node" class="section">
+        <div class="section-heading">
+          <p class="tag">Recommended Pattern</p>
+          <h2>Improved Node Dockerfile</h2>
+
+          <p>
+            Copying the package files before the rest of the project improves
+            Docker layer caching.
+          </p>
+        </div>
+
+        <div class="code-container">
+          <button class="copy-button" type="button">Copy</button>
+
+          <pre><code>FROM node:24
+```
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]</code></pre>
+        </div>
+
+        ```
+        <div class="process">
+          <span>Package files unchanged</span>
+          <strong>↓</strong>
+          <span>Reuse npm install layer</span>
+          <strong>↓</strong>
+          <span>Faster rebuild</span>
+        </div>
+
+        <aside class="note">
+          When <code>package.json</code> or
+          <code>package-lock.json</code> changes, Docker runs
+          <code>npm install</code> again.
+        </aside>
+      </section>
+
+      <section id="common-problems" class="section">
+        <h2>Common Problems</h2>
+
+        <div class="problem-list">
+          <article class="problem-card">
+            <h3>Vite cannot open in the browser</h3>
+
+            <p>Make sure Vite listens on every network interface.</p>
+
+            <pre><code>CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]</code></pre>
+
+            <p>Then publish the port:</p>
+
+            <pre><code>docker run -p 5173:5173 react-img</code></pre>
+          </article>
+
+          <article class="problem-card">
+            <h3>Port is already in use</h3>
+
+            <p>Use a different port on your computer:</p>
+
+            <pre><code>docker run -p 5174:5173 react-img</code></pre>
+
+            <p>
+              Open <code>http://localhost:5174</code>. The application still
+              uses port <code>5173</code> inside the container.
+            </p>
+          </article>
+
+          <article class="problem-card">
+            <h3>Changes do not appear</h3>
+
+            <p>Possible causes:</p>
+
+            <ul>
+              <li>The image was not rebuilt.</li>
+              <li>The project folder was not mounted.</li>
+              <li>The bind mount points to the wrong folder.</li>
+              <li>The container is running an older image.</li>
+            </ul>
+
+            <pre><code>docker build -t react-img .</code></pre>
+          </article>
+
+          <article class="problem-card">
+            <h3>Package missing inside the container</h3>
+
+            <p>After installing a new package, rebuild the image:</p>
+
+            <pre><code>npm install react-bootstrap bootstrap
+```
+
+docker build -t react-img .</code></pre>
+          </article>
+
+          ```
+          <article class="problem-card">
+            <h3>Wrong build context</h3>
+
+            <p>
+              The final dot tells Docker to use the current directory as the
+              build context.
+            </p>
+
+            <pre><code>docker build -t react-img .</code></pre>
+
+            <p>If the project is inside a <code>client</code> folder:</p>
+
+            <pre><code>docker build -t react-img ./client</code></pre>
+          </article>
+        </div>
+      </section>
+
+      <section id="workflow" class="section">
+        <h2>Typical React Workflow</h2>
+
+        <div class="workflow">
+          <span>npm install</span>
+          <strong>↓</strong>
+          <span>docker build</span>
+          <strong>↓</strong>
+          <span>docker run</span>
+          <strong>↓</strong>
+          <span>Open localhost</span>
+        </div>
+
+        <pre><code>npm install
+```
+
+docker build -t react-img .
+
+docker run --rm -it -p 5173:5173 react-img</code></pre>
+
+        ```
+        <p>Stop the running container with:</p>
+
+        <pre><code>Ctrl + C</code></pre>
+
+        <h3>After changing dependencies</h3>
+
+        <pre><code>docker build -t react-img .
+```
+
+docker run --rm -it -p 5173:5173 react-img</code></pre>
+      </section>
+    </main>
+
+    ```
+    <footer>
+      <p>
+        <a href="../">Return to all cheat sheets</a>
+      </p>
+    </footer>
+
+    <script>
+      const copyButtons = document.querySelectorAll(".copy-button");
+
+      copyButtons.forEach((button) => {
+        button.addEventListener("click", async () => {
+          const codeBlock = button.nextElementSibling;
+          const command = codeBlock.innerText;
+
+          try {
+            await navigator.clipboard.writeText(command);
+
+            button.innerText = "Copied!";
+
+            setTimeout(() => {
+              button.innerText = "Copy";
+            }, 1500);
+          } catch (error) {
+            button.innerText = "Failed";
+          }
+        });
+      });
+    </script>
+    ```
+  </body>
+</html>

@@ -1,0 +1,681 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    ```
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+      name="description"
+      content="A quick reference for common Docker terminal commands and workflows."
+    />
+
+    <title>Docker Cheat Sheet</title>
+
+    <link rel="stylesheet" href="style.css" />
+    ```
+  </head>
+
+  <body>
+    <header class="page-header">
+      <nav class="nav container">
+        <a class="home-link" href="../"> ← All Cheat Sheets </a>
+
+        ```
+        <a class="dockerfile-link" href="../dockerfile/">
+          Dockerfile Cheat Sheet →
+        </a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="hero">
+        <p class="tag">Docker Terminal</p>
+
+        <h1>Docker Cheat Sheet</h1>
+
+        <p>
+          A quick reference for building images, running containers, checking
+          logs, opening container shells, and cleaning Docker resources.
+        </p>
+      </section>
+
+      <section class="table-of-contents">
+        <h2>Table of Contents</h2>
+
+        <div class="contents-grid">
+          <a href="#quick-commands">Quick Commands</a>
+          <a href="#images">Images</a>
+          <a href="#containers">Containers</a>
+          <a href="#ports">Ports</a>
+          <a href="#volumes">Volumes</a>
+          <a href="#logs">Logs</a>
+          <a href="#shell">Shell</a>
+          <a href="#cleanup">Cleanup</a>
+          <a href="#compose">Docker Compose</a>
+          <a href="#useful">Useful Commands</a>
+          <a href="#workflow">Typical Workflow</a>
+        </div>
+      </section>
+
+      <section id="quick-commands" class="section">
+        <div class="section-heading">
+          <p class="tag">Most Used</p>
+
+          <h2>Quick Commands</h2>
+
+          <p>
+            These are the Docker commands you are most likely to use during
+            normal development.
+          </p>
+        </div>
+
+        <div class="quick-grid">
+          <article class="quick-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label">Image</p>
+                <h3>Build an Image</h3>
+              </div>
+
+              <span class="command-badge">Build</span>
+            </div>
+
+            <div class="command">
+              <code>docker build -t react-img .</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>Build an image from the Dockerfile in the current folder.</p>
+          </article>
+
+          <article class="quick-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label">Container</p>
+                <h3>Run a Vite App</h3>
+              </div>
+
+              <span class="command-badge">Run</span>
+            </div>
+
+            <div class="command">
+              <code>docker run --rm -it -p 5173:5173 react-img</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>Run the React container and publish Vite on port 5173.</p>
+          </article>
+
+          <article class="quick-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label">Status</p>
+                <h3>Running Containers</h3>
+              </div>
+
+              <span class="command-badge">List</span>
+            </div>
+
+            <div class="command">
+              <code>docker ps</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>Display containers that are currently running.</p>
+          </article>
+
+          <article class="quick-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label">Status</p>
+                <h3>All Containers</h3>
+              </div>
+
+              <span class="command-badge">List</span>
+            </div>
+
+            <div class="command">
+              <code>docker ps -a</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>Display running and stopped containers.</p>
+          </article>
+
+          <article class="quick-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label">Output</p>
+                <h3>Follow Logs</h3>
+              </div>
+
+              <span class="command-badge">Logs</span>
+            </div>
+
+            <div class="command">
+              <code>docker logs -f &lt;CONTAINER_ID&gt;</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>Watch the container output update live.</p>
+          </article>
+
+          <article class="quick-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label">Terminal</p>
+                <h3>Open Bash</h3>
+              </div>
+
+              <span class="command-badge">Shell</span>
+            </div>
+
+            <div class="command">
+              <code>docker exec -it &lt;CONTAINER_ID&gt; bash</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>Open an interactive Bash shell inside a running container.</p>
+          </article>
+
+          <article class="quick-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label">Container</p>
+                <h3>Stop a Container</h3>
+              </div>
+
+              <span class="command-badge">Stop</span>
+            </div>
+
+            <div class="command">
+              <code>docker stop &lt;CONTAINER_ID&gt;</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>Stop a running container safely.</p>
+          </article>
+
+          <article class="quick-card">
+            <div class="quick-card-heading">
+              <div>
+                <p class="card-label">Cleanup</p>
+                <h3>Remove Unused Resources</h3>
+              </div>
+
+              <span class="command-badge">Clean</span>
+            </div>
+
+            <div class="command">
+              <code>docker system prune</code>
+
+              <button class="copy-button" type="button">Copy</button>
+            </div>
+
+            <p>
+              Remove stopped containers, unused networks, and dangling images.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="images" class="section">
+        <div class="section-heading">
+          <p class="tag">Image Management</p>
+          <h2>Images</h2>
+        </div>
+
+        <p>Build an image and give it a name.</p>
+
+        <pre><code>docker build -t react-img .</code></pre>
+
+        <p>
+          The final dot tells Docker to use the current folder as the build
+          context.
+        </p>
+
+        <p>List local images.</p>
+
+        <pre><code>docker images</code></pre>
+
+        <p>Remove an image by name.</p>
+
+        <pre><code>docker rmi react-img</code></pre>
+
+        <p>Remove an image by ID.</p>
+
+        <pre><code>docker rmi &lt;IMAGE_ID&gt;</code></pre>
+
+        <p>Force-remove an image.</p>
+
+        <pre><code>docker rmi -f &lt;IMAGE_ID&gt;</code></pre>
+
+        <aside class="warning">
+          Force-removing an image may also affect containers that depend on it.
+        </aside>
+      </section>
+
+      <section id="containers" class="section">
+        <div class="section-heading">
+          <p class="tag">Container Management</p>
+          <h2>Containers</h2>
+        </div>
+
+        <p>Run a container from an image.</p>
+
+        <pre><code>docker run react-img</code></pre>
+
+        <p>Run a container and remove it automatically when it stops.</p>
+
+        <pre><code>docker run --rm react-img</code></pre>
+
+        <p>Run interactively with terminal access.</p>
+
+        <pre><code>docker run --rm -it react-img</code></pre>
+
+        <p>Run a Vite React application.</p>
+
+        <pre><code>docker run --rm -it -p 5173:5173 react-img</code></pre>
+
+        <p>Run in the background.</p>
+
+        <pre><code>docker run -d react-img</code></pre>
+
+        <p>Give the container a name.</p>
+
+        <pre><code>docker run --name react-container react-img</code></pre>
+
+        <p>List running containers.</p>
+
+        <pre><code>docker ps</code></pre>
+
+        <p>List running and stopped containers.</p>
+
+        <pre><code>docker ps -a</code></pre>
+
+        <div class="container-control-grid">
+          <article>
+            <h3>Stop</h3>
+
+            <pre><code>docker stop &lt;CONTAINER_ID&gt;</code></pre>
+          </article>
+
+          <article>
+            <h3>Start</h3>
+
+            <pre><code>docker start &lt;CONTAINER_ID&gt;</code></pre>
+          </article>
+
+          <article>
+            <h3>Restart</h3>
+
+            <pre><code>docker restart &lt;CONTAINER_ID&gt;</code></pre>
+          </article>
+
+          <article>
+            <h3>Remove</h3>
+
+            <pre><code>docker rm &lt;CONTAINER_ID&gt;</code></pre>
+          </article>
+        </div>
+      </section>
+
+      <section id="ports" class="section">
+        <div class="section-heading">
+          <p class="tag">Networking</p>
+          <h2>Ports</h2>
+        </div>
+
+        <p>Publish a container port to your computer.</p>
+
+        <pre><code>docker run -p 5173:5173 react-img</code></pre>
+
+        <div class="port-map">
+          <span>Computer port</span>
+          <strong>:</strong>
+          <span>Container port</span>
+        </div>
+
+        <p>Use a different port on your computer.</p>
+
+        <pre><code>docker run -p 5174:5173 react-img</code></pre>
+
+        <p>In this example, open:</p>
+
+        <pre><code>http://localhost:5174</code></pre>
+
+        <aside class="note">
+          The app still uses port <code>5173</code> inside the container.
+        </aside>
+      </section>
+
+      <section id="volumes" class="section">
+        <div class="section-heading">
+          <p class="tag">Local Files</p>
+          <h2>Volumes and Bind Mounts</h2>
+        </div>
+
+        <p>
+          Run a container with the current project folder mounted inside
+          <code>/app</code>.
+        </p>
+
+        <pre><code>docker run --rm -it \
+```
+
+-v "$(pwd):/app" 
+-p 5173:5173 
+react-img</code></pre>
+
+        ```
+        <p>
+          Keep <code>node_modules</code> inside the container instead of
+          replacing it with the mounted project folder.
+        </p>
+
+        <pre><code>docker run --rm -it \
+```
+
+-v "$(pwd):/app" 
+-v /app/node_modules 
+-p 5173:5173 
+react-img</code></pre>
+
+        ```
+        <aside class="note">
+          A bind mount lets the container see changes you make to files on your
+          computer.
+        </aside>
+
+        <p>List Docker volumes.</p>
+
+        <pre><code>docker volume ls</code></pre>
+
+        <p>Remove an unused volume.</p>
+
+        <pre><code>docker volume rm &lt;VOLUME_NAME&gt;</code></pre>
+      </section>
+
+      <section id="logs" class="section">
+        <div class="section-heading">
+          <p class="tag">Container Output</p>
+          <h2>Logs</h2>
+        </div>
+
+        <div class="two-card-grid">
+          <article class="info-card">
+            <p class="card-label">Current Output</p>
+            <h3>View Logs</h3>
+
+            <pre><code>docker logs &lt;CONTAINER_ID&gt;</code></pre>
+
+            <p>Display output that the container has already produced.</p>
+          </article>
+
+          <article class="info-card">
+            <p class="card-label">Live Output</p>
+            <h3>Follow Logs</h3>
+
+            <pre><code>docker logs -f &lt;CONTAINER_ID&gt;</code></pre>
+
+            <p>Keep the terminal open and show new output as it appears.</p>
+          </article>
+        </div>
+
+        <p>Show only the most recent lines.</p>
+
+        <pre><code>docker logs --tail 50 &lt;CONTAINER_ID&gt;</code></pre>
+      </section>
+
+      <section id="shell" class="section">
+        <div class="section-heading">
+          <p class="tag">Container Terminal</p>
+          <h2>Shell</h2>
+        </div>
+
+        <div class="two-card-grid">
+          <article class="info-card">
+            <p class="card-label">Bash</p>
+            <h3>Open Bash</h3>
+
+            <pre><code>docker exec -it &lt;CONTAINER_ID&gt; bash</code></pre>
+
+            <p>Use this when Bash is installed inside the container.</p>
+          </article>
+
+          <article class="info-card">
+            <p class="card-label">Shell</p>
+            <h3>Open sh</h3>
+
+            <pre><code>docker exec -it &lt;CONTAINER_ID&gt; sh</code></pre>
+
+            <p>Use this for smaller images that do not include Bash.</p>
+          </article>
+        </div>
+
+        <p>Run one command inside a container without opening a full shell.</p>
+
+        <pre><code>docker exec &lt;CONTAINER_ID&gt; ls</code></pre>
+      </section>
+
+      <section id="cleanup" class="section">
+        <div class="section-heading">
+          <p class="tag">Remove Resources</p>
+          <h2>Cleanup</h2>
+        </div>
+
+        <div class="cleanup-grid">
+          <article class="info-card">
+            <h3>Remove One Container</h3>
+
+            <pre><code>docker rm &lt;CONTAINER_ID&gt;</code></pre>
+          </article>
+
+          <article class="info-card">
+            <h3>Remove Stopped Containers</h3>
+
+            <pre><code>docker container prune</code></pre>
+          </article>
+
+          <article class="info-card">
+            <h3>Remove Unused Images</h3>
+
+            <pre><code>docker image prune</code></pre>
+          </article>
+
+          <article class="info-card">
+            <h3>Remove Unused Volumes</h3>
+
+            <pre><code>docker volume prune</code></pre>
+          </article>
+
+          <article class="info-card">
+            <h3>General Cleanup</h3>
+
+            <pre><code>docker system prune</code></pre>
+          </article>
+
+          <article class="info-card">
+            <h3>More Complete Cleanup</h3>
+
+            <pre><code>docker system prune -a</code></pre>
+          </article>
+        </div>
+
+        <aside class="warning">
+          Review the confirmation message before accepting a prune command.
+          Docker may remove resources you intended to keep.
+        </aside>
+      </section>
+
+      <section id="compose" class="section">
+        <div class="section-heading">
+          <p class="tag">Multiple Services</p>
+          <h2>Docker Compose</h2>
+        </div>
+
+        <div class="compose-grid">
+          <article class="info-card">
+            <h3>Start Services</h3>
+
+            <pre><code>docker compose up</code></pre>
+          </article>
+
+          <article class="info-card">
+            <h3>Run in Background</h3>
+
+            <pre><code>docker compose up -d</code></pre>
+          </article>
+
+          <article class="info-card">
+            <h3>Stop Services</h3>
+
+            <pre><code>docker compose down</code></pre>
+          </article>
+
+          <article class="info-card">
+            <h3>Rebuild and Start</h3>
+
+            <pre><code>docker compose up --build</code></pre>
+          </article>
+        </div>
+
+        <p>View running Compose services.</p>
+
+        <pre><code>docker compose ps</code></pre>
+
+        <p>View Compose logs.</p>
+
+        <pre><code>docker compose logs</code></pre>
+
+        <p>Follow Compose logs live.</p>
+
+        <pre><code>docker compose logs -f</code></pre>
+      </section>
+
+      <section id="useful" class="section">
+        <div class="section-heading">
+          <p class="tag">Information</p>
+          <h2>Useful Commands</h2>
+        </div>
+
+        <div class="command-list">
+          <article>
+            <h3>Docker Version</h3>
+
+            <pre><code>docker --version</code></pre>
+          </article>
+
+          <article>
+            <h3>Docker Information</h3>
+
+            <pre><code>docker info</code></pre>
+          </article>
+
+          <article>
+            <h3>Container Processes</h3>
+
+            <pre><code>docker top &lt;CONTAINER_ID&gt;</code></pre>
+          </article>
+
+          <article>
+            <h3>Inspect a Container</h3>
+
+            <pre><code>docker inspect &lt;CONTAINER_ID&gt;</code></pre>
+          </article>
+
+          <article>
+            <h3>Inspect an Image</h3>
+
+            <pre><code>docker inspect &lt;IMAGE_ID&gt;</code></pre>
+          </article>
+
+          <article>
+            <h3>Disk Usage</h3>
+
+            <pre><code>docker system df</code></pre>
+          </article>
+        </div>
+      </section>
+
+      <section id="workflow" class="section">
+        <div class="section-heading">
+          <p class="tag">Development Process</p>
+          <h2>Typical Workflow</h2>
+        </div>
+
+        <div class="workflow">
+          <span>Build image</span>
+          <strong>↓</strong>
+          <span>Run container</span>
+          <strong>↓</strong>
+          <span>Test application</span>
+          <strong>↓</strong>
+          <span>Stop container</span>
+          <strong>↓</strong>
+          <span>Clean if needed</span>
+        </div>
+
+        <h3>Build the Image</h3>
+
+        <pre><code>docker build -t react-img .</code></pre>
+
+        <h3>Run the Project</h3>
+
+        <pre><code>docker run --rm -it -p 5173:5173 react-img</code></pre>
+
+        <h3>Stop the Project</h3>
+
+        <pre><code>Ctrl + C</code></pre>
+
+        <h3>Clean Up if Needed</h3>
+
+        <pre><code>docker system prune</code></pre>
+
+        <aside class="note">
+          Because the container uses <code>--rm</code>, Docker automatically
+          removes it after you stop it.
+        </aside>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        <a href="../">Return to all cheat sheets</a>
+      </p>
+    </footer>
+
+    <script>
+      const copyButtons = document.querySelectorAll(".copy-button");
+
+      copyButtons.forEach((button) => {
+        button.addEventListener("click", async () => {
+          const command = button.previousElementSibling.innerText;
+
+          try {
+            await navigator.clipboard.writeText(command);
+
+            button.innerText = "Copied!";
+
+            setTimeout(() => {
+              button.innerText = "Copy";
+            }, 1500);
+          } catch (error) {
+            button.innerText = "Failed";
+          }
+        });
+      });
+    </script>
+    ```
+  </body>
+</html>

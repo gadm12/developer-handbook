@@ -1,0 +1,1210 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+```
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/>
+
+<meta
+  name="description"
+  content="A quick reference for npm packages, development dependencies, ESLint plugins, common React packages, Python tools, package scripts, and dependency troubleshooting."
+/>
+
+<title>Packages and Dependencies Cheat Sheet</title>
+
+<link rel="stylesheet" href="style.css" />
+```
+
+  </head>
+
+  <body>
+    <header class="page-header">
+      <nav class="nav container">
+        <a class="home-link" href="../">
+          ← All Cheat Sheets
+        </a>
+
+```
+    <a class="next-link" href="../vscode/">
+      VS Code Cheat Sheet →
+    </a>
+  </nav>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <p class="tag">Project Setup</p>
+
+    <h1>Packages &amp; Dependencies</h1>
+
+    <p>
+      A quick reference for installing packages, managing dependencies,
+      fixing missing plugins, cleaning node_modules, configuring ESLint,
+      and remembering common project setup commands.
+    </p>
+  </section>
+
+  <section class="table-of-contents">
+    <h2>Table of Contents</h2>
+
+    <div class="contents-grid">
+      <a href="#daily-use">Daily Commands</a>
+      <a href="#npm-basics">npm Basics</a>
+      <a href="#dependency-types">Dependency Types</a>
+      <a href="#common-packages">Common Packages</a>
+      <a href="#eslint">ESLint Fixes</a>
+      <a href="#package-scripts">Package Scripts</a>
+      <a href="#node-modules">node_modules</a>
+      <a href="#package-information">Package Information</a>
+      <a href="#environment-variables">Environment Variables</a>
+      <a href="#python-packages">Python Packages</a>
+      <a href="#common-errors">Common Errors</a>
+      <a href="#workflow">Typical Workflow</a>
+    </div>
+  </section>
+
+  <section id="daily-use" class="section">
+    <div class="section-heading">
+      <p class="tag">Most Used</p>
+
+      <h2>Daily Package Commands</h2>
+
+      <p>
+        Each card groups commands that are normally used together.
+      </p>
+    </div>
+
+    <div class="daily-grid">
+      <article class="daily-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">Install Packages</p>
+            <h3>Basic Installation</h3>
+          </div>
+
+          <span class="feature-badge">npm</span>
+        </div>
+
+        <div class="command-table">
+          <div>
+            <code>npm install</code>
+            <span>Install everything in package.json</span>
+          </div>
+
+          <div>
+            <code>npm install package-name</code>
+            <span>Install a regular dependency</span>
+          </div>
+
+          <div>
+            <code>npm install -D package-name</code>
+            <span>Install a development dependency</span>
+          </div>
+
+          <div>
+            <code>npm uninstall package-name</code>
+            <span>Remove a package</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="daily-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">Run the Project</p>
+            <h3>Package Scripts</h3>
+          </div>
+
+          <span class="feature-badge">Scripts</span>
+        </div>
+
+        <div class="command-table">
+          <div>
+            <code>npm run dev</code>
+            <span>Start the development server</span>
+          </div>
+
+          <div>
+            <code>npm test</code>
+            <span>Run the test script</span>
+          </div>
+
+          <div>
+            <code>npm run build</code>
+            <span>Create a production build</span>
+          </div>
+
+          <div>
+            <code>npm run lint</code>
+            <span>Run the configured linter</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="daily-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">Inspect Packages</p>
+            <h3>Package Information</h3>
+          </div>
+
+          <span class="feature-badge">Check</span>
+        </div>
+
+        <div class="command-table">
+          <div>
+            <code>npm list</code>
+            <span>Show installed packages</span>
+          </div>
+
+          <div>
+            <code>npm outdated</code>
+            <span>Show outdated packages</span>
+          </div>
+
+          <div>
+            <code>npm view package version</code>
+            <span>See the latest published version</span>
+          </div>
+
+          <div>
+            <code>npm update</code>
+            <span>Update allowed dependency versions</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="daily-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">Repair Dependencies</p>
+            <h3>Clean Reinstall</h3>
+          </div>
+
+          <span class="feature-badge">Fix</span>
+        </div>
+
+        <div class="command-table">
+          <div>
+            <code>rm -rf node_modules</code>
+            <span>Delete installed packages</span>
+          </div>
+
+          <div>
+            <code>npm install</code>
+            <span>Reinstall from package.json</span>
+          </div>
+
+          <div>
+            <code>npm ci</code>
+            <span>Install exactly from package-lock.json</span>
+          </div>
+
+          <div>
+            <code>npm cache verify</code>
+            <span>Verify the npm cache</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="daily-card wide-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">Common Frontend Setup</p>
+            <h3>React Project Packages</h3>
+          </div>
+
+          <span class="feature-badge">React</span>
+        </div>
+
+        <div class="command-table two-column-table">
+          <div>
+            <code>npm install axios</code>
+            <span>Send HTTP requests</span>
+          </div>
+
+          <div>
+            <code>npm install react-router-dom</code>
+            <span>Add client-side routing</span>
+          </div>
+
+          <div>
+            <code>npm install clsx</code>
+            <span>Build conditional class names</span>
+          </div>
+
+          <div>
+            <code>npm install uuid</code>
+            <span>Generate unique IDs</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="npm-basics" class="section">
+    <div class="section-heading">
+      <p class="tag">Package Manager</p>
+      <h2>npm Basics</h2>
+    </div>
+
+    <div class="group-grid">
+      <article class="info-card">
+        <h3>Install Project Dependencies</h3>
+
+        <pre><code>npm install</code></pre>
+
+        <p>
+          Reads <code>package.json</code> and installs the project's
+          dependencies into <code>node_modules</code>.
+        </p>
+      </article>
+
+      <article class="info-card">
+        <h3>Install One Package</h3>
+
+        <pre><code>npm install axios</code></pre>
+
+        <p>
+          Installs the package and adds it to
+          <code>dependencies</code>.
+        </p>
+      </article>
+
+      <article class="info-card">
+        <h3>Install a Development Tool</h3>
+
+        <pre><code>npm install --save-dev eslint</code></pre>
+
+        <p>
+          Installs the package and adds it to
+          <code>devDependencies</code>.
+        </p>
+      </article>
+
+      <article class="info-card">
+        <h3>Short Development Flag</h3>
+
+        <pre><code>npm install -D prettier</code></pre>
+
+        <p>
+          <code>-D</code> is the shorter version of
+          <code>--save-dev</code>.
+        </p>
+      </article>
+
+      <article class="info-card">
+        <h3>Remove a Package</h3>
+
+        <pre><code>npm uninstall axios</code></pre>
+
+        <p>
+          Removes the package from <code>node_modules</code> and
+          <code>package.json</code>.
+        </p>
+      </article>
+
+      <article class="info-card">
+        <h3>Install Globally</h3>
+
+        <pre><code>npm install -g package-name</code></pre>
+
+        <p>
+          Installs a command-line package globally instead of inside one
+          project.
+        </p>
+      </article>
+    </div>
+
+    <aside class="note">
+      Most project packages should be installed locally. Use global
+      installation only when the tool is intended to be available as a
+      system-wide terminal command.
+    </aside>
+  </section>
+
+  <section id="dependency-types" class="section">
+    <div class="section-heading">
+      <p class="tag">package.json</p>
+      <h2>Dependency Types</h2>
+    </div>
+
+    <div class="dependency-grid">
+      <article>
+        <p class="card-label">Application Code</p>
+        <h3>dependencies</h3>
+
+        <p>
+          Packages needed while the application is running.
+        </p>
+
+        <div class="example-list">
+          <code>axios</code>
+          <code>react</code>
+          <code>react-router-dom</code>
+          <code>express</code>
+        </div>
+
+        <pre><code>npm install axios</code></pre>
+      </article>
+
+      <article>
+        <p class="card-label">Development Tools</p>
+        <h3>devDependencies</h3>
+
+        <p>
+          Packages used while developing, testing, formatting, or building
+          the project.
+        </p>
+
+        <div class="example-list">
+          <code>eslint</code>
+          <code>prettier</code>
+          <code>vitest</code>
+          <code>cypress</code>
+        </div>
+
+        <pre><code>npm install -D eslint</code></pre>
+      </article>
+    </div>
+
+    <h3>Example package.json</h3>
+
+    <div class="code-container">
+      <button class="copy-button" type="button">
+        Copy
+      </button>
+
+      <pre><code>{
+```
+
+"dependencies": {
+"axios": "^1.0.0",
+"react": "^19.0.0",
+"react-router-dom": "^7.0.0"
+},
+"devDependencies": {
+"eslint": "^9.0.0",
+"prettier": "^3.0.0",
+"vitest": "^3.0.0"
+}
+}</code></pre> </div> </section>
+
+```
+  <section id="common-packages" class="section">
+    <div class="section-heading">
+      <p class="tag">Frontend Development</p>
+      <h2>Common Packages</h2>
+    </div>
+
+    <div class="package-grid">
+      <article>
+        <p class="card-label">HTTP Requests</p>
+        <h3>Axios</h3>
+
+        <pre><code>npm install axios</code></pre>
+
+        <p>
+          Send GET, POST, PUT, PATCH, and DELETE requests.
+        </p>
+      </article>
+
+      <article>
+        <p class="card-label">Navigation</p>
+        <h3>React Router</h3>
+
+        <pre><code>npm install react-router-dom</code></pre>
+
+        <p>
+          Add client-side routes and navigation to a React application.
+        </p>
+      </article>
+
+      <article>
+        <p class="card-label">Class Names</p>
+        <h3>clsx</h3>
+
+        <pre><code>npm install clsx</code></pre>
+
+        <p>
+          Apply CSS class names conditionally.
+        </p>
+      </article>
+
+      <article>
+        <p class="card-label">Unique Values</p>
+        <h3>UUID</h3>
+
+        <pre><code>npm install uuid</code></pre>
+
+        <p>
+          Generate unique identifiers for objects or records.
+        </p>
+      </article>
+
+      <article>
+        <p class="card-label">Testing</p>
+        <h3>Vitest</h3>
+
+        <pre><code>npm install -D vitest</code></pre>
+
+        <p>
+          Run unit tests in modern JavaScript and Vite projects.
+        </p>
+      </article>
+
+      <article>
+        <p class="card-label">Browser Testing</p>
+        <h3>Cypress</h3>
+
+        <pre><code>npm install -D cypress</code></pre>
+
+        <p>
+          Test user interactions inside a real browser.
+        </p>
+      </article>
+
+      <article>
+        <p class="card-label">Code Quality</p>
+        <h3>ESLint</h3>
+
+        <pre><code>npm install -D eslint</code></pre>
+
+        <p>
+          Find JavaScript and React code problems.
+        </p>
+      </article>
+
+      <article>
+        <p class="card-label">Formatting</p>
+        <h3>Prettier</h3>
+
+        <pre><code>npm install -D prettier</code></pre>
+
+        <p>
+          Format JavaScript, JSON, CSS, Markdown, and other files.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section id="eslint" class="section">
+    <div class="section-heading">
+      <p class="tag">Linting Fixes</p>
+      <h2>ESLint Plugins</h2>
+    </div>
+
+    <div class="problem-card">
+      <div class="problem-icon">!</div>
+
+      <div>
+        <h3>ESLint Cannot Find the Cypress Plugin</h3>
+
+        <p>
+          Install the missing plugin, import it into the ESLint
+          configuration, and apply it to Cypress files.
+        </p>
+      </div>
+    </div>
+
+    <h3>1. Install the Plugin</h3>
+
+    <div class="code-container">
+      <button class="copy-button" type="button">
+        Copy
+      </button>
+
+      <pre><code>npm install --save-dev eslint-plugin-cypress</code></pre>
+    </div>
+
+    <h3>2. Import the Plugin</h3>
+
+    <div class="code-container">
+      <button class="copy-button" type="button">
+        Copy
+      </button>
+
+      <pre><code>import cypress from "eslint-plugin-cypress";</code></pre>
+    </div>
+
+    <h3>3. Add the Cypress Configuration</h3>
+
+    <div class="code-container">
+      <button class="copy-button" type="button">
+        Copy
+      </button>
+
+      <pre><code>export default [
+```
+
+{
+files: ["cypress/**/*.{js,jsx}"],
+extends: [cypress.configs.recommended],
+},
+];</code></pre> </div>
+
+```
+    <aside class="note">
+      The exact configuration can vary depending on the ESLint configuration
+      format and plugin version used by the project. Keep the version that
+      works with your course or repository.
+    </aside>
+
+    <div class="group-grid">
+      <article class="info-card">
+        <h3>Install ESLint</h3>
+
+        <pre><code>npm install -D eslint</code></pre>
+      </article>
+
+      <article class="info-card">
+        <h3>Run ESLint</h3>
+
+        <pre><code>npx eslint .</code></pre>
+      </article>
+
+      <article class="info-card">
+        <h3>Automatically Fix Issues</h3>
+
+        <pre><code>npx eslint . --fix</code></pre>
+      </article>
+
+      <article class="info-card">
+        <h3>Run the Project Script</h3>
+
+        <pre><code>npm run lint</code></pre>
+      </article>
+    </div>
+
+    <h3>Common ESLint Plugins</h3>
+
+    <div class="plugin-list">
+      <article>
+        <code>eslint-plugin-cypress</code>
+        <span>Cypress testing rules</span>
+      </article>
+
+      <article>
+        <code>eslint-plugin-react</code>
+        <span>React component rules</span>
+      </article>
+
+      <article>
+        <code>eslint-plugin-react-hooks</code>
+        <span>React Hooks rules</span>
+      </article>
+
+      <article>
+        <code>eslint-plugin-import</code>
+        <span>Import and export rules</span>
+      </article>
+    </div>
+  </section>
+
+  <section id="package-scripts" class="section">
+    <div class="section-heading">
+      <p class="tag">Automation</p>
+      <h2>package.json Scripts</h2>
+    </div>
+
+    <p>
+      Scripts create short commands for starting, testing, formatting,
+      linting, and building a project.
+    </p>
+
+    <div class="example-layout">
+      <article class="code-card">
+        <h3>Example Scripts</h3>
+
+        <div class="code-container">
+          <button class="copy-button" type="button">
+            Copy
+          </button>
+
+          <pre><code>{
+```
+
+"scripts": {
+"dev": "vite",
+"build": "vite build",
+"preview": "vite preview",
+"test": "vitest",
+"lint": "eslint .",
+"format": "prettier . --write"
+}
+}</code></pre> </div> </article>
+
+```
+      <article class="explanation-card">
+        <h3>Run the Scripts</h3>
+
+        <div class="command-table">
+          <div>
+            <code>npm run dev</code>
+            <span>Start Vite</span>
+          </div>
+
+          <div>
+            <code>npm run build</code>
+            <span>Create the production build</span>
+          </div>
+
+          <div>
+            <code>npm test</code>
+            <span>Run tests</span>
+          </div>
+
+          <div>
+            <code>npm run lint</code>
+            <span>Check ESLint rules</span>
+          </div>
+
+          <div>
+            <code>npm run format</code>
+            <span>Format project files</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="node-modules" class="section">
+    <div class="section-heading">
+      <p class="tag">Dependency Storage</p>
+      <h2>node_modules</h2>
+    </div>
+
+    <div class="node-layout">
+      <article class="folder-card">
+        <span class="folder-icon">📁</span>
+
+        <div>
+          <h3>node_modules</h3>
+
+          <p>
+            Contains the packages installed for the current project.
+          </p>
+        </div>
+      </article>
+
+      <article class="folder-card">
+        <span class="file-icon">JSON</span>
+
+        <div>
+          <h3>package.json</h3>
+
+          <p>
+            Lists project information, scripts, and dependency ranges.
+          </p>
+        </div>
+      </article>
+
+      <article class="folder-card">
+        <span class="file-icon">LOCK</span>
+
+        <div>
+          <h3>package-lock.json</h3>
+
+          <p>
+            Records the exact dependency versions installed.
+          </p>
+        </div>
+      </article>
+    </div>
+
+    <aside class="warning">
+      Do not commit <code>node_modules</code> to Git. Add it to
+      <code>.gitignore</code>.
+    </aside>
+
+    <h3>Delete and Reinstall</h3>
+
+    <div class="code-container">
+      <button class="copy-button" type="button">
+        Copy
+      </button>
+
+      <pre><code>rm -rf node_modules
+```
+
+npm install</code></pre> </div>
+
+```
+    <h3>Full Clean Reinstall</h3>
+
+    <div class="code-container">
+      <button class="copy-button" type="button">
+        Copy
+      </button>
+
+      <pre><code>rm -rf node_modules
+```
+
+rm package-lock.json
+npm install</code></pre> </div>
+
+```
+    <aside class="warning">
+      Deleting <code>package-lock.json</code> can install different package
+      versions. Try deleting only <code>node_modules</code> first.
+    </aside>
+
+    <h3>Exact Lockfile Install</h3>
+
+    <div class="code-container">
+      <button class="copy-button" type="button">
+        Copy
+      </button>
+
+      <pre><code>npm ci</code></pre>
+    </div>
+
+    <p>
+      <code>npm ci</code> removes the existing
+      <code>node_modules</code> folder and installs the exact versions in
+      <code>package-lock.json</code>.
+    </p>
+  </section>
+
+  <section id="package-information" class="section">
+    <div class="section-heading">
+      <p class="tag">Inspect and Update</p>
+      <h2>Package Information</h2>
+    </div>
+
+    <div class="group-grid">
+      <article class="info-card">
+        <h3>Installed Packages</h3>
+
+        <div class="command-table">
+          <div>
+            <code>npm list</code>
+            <span>Show the dependency tree</span>
+          </div>
+
+          <div>
+            <code>npm list --depth=0</code>
+            <span>Show only top-level packages</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="info-card">
+        <h3>Outdated Packages</h3>
+
+        <div class="command-table">
+          <div>
+            <code>npm outdated</code>
+            <span>Compare current and available versions</span>
+          </div>
+
+          <div>
+            <code>npm update</code>
+            <span>Update packages within allowed ranges</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="info-card">
+        <h3>Package Details</h3>
+
+        <div class="command-table">
+          <div>
+            <code>npm view axios version</code>
+            <span>See the latest version</span>
+          </div>
+
+          <div>
+            <code>npm view axios</code>
+            <span>See package information</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="info-card">
+        <h3>Find Why a Package Exists</h3>
+
+        <div class="command-table">
+          <div>
+            <code>npm explain package-name</code>
+            <span>Explain which dependency installed it</span>
+          </div>
+
+          <div>
+            <code>npm list package-name</code>
+            <span>Find it in the dependency tree</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="environment-variables" class="section">
+    <div class="section-heading">
+      <p class="tag">Configuration</p>
+      <h2>Environment Variables</h2>
+    </div>
+
+    <div class="example-layout">
+      <article class="code-card">
+        <h3>.env</h3>
+
+        <div class="code-container">
+          <button class="copy-button" type="button">
+            Copy
+          </button>
+
+          <pre><code>VITE_API_URL=http://localhost:3000
+```
+
+VITE_APP_NAME=My Application</code></pre> </div> </article>
+
+```
+      <article class="code-card">
+        <h3>Read in Vite</h3>
+
+        <div class="code-container">
+          <button class="copy-button" type="button">
+            Copy
+          </button>
+
+          <pre><code>const apiUrl = import.meta.env.VITE_API_URL;
+```
+
+console.log(apiUrl);</code></pre> </div> </article> </div>
+
+```
+    <aside class="warning">
+      Variables exposed to frontend code are visible to users. Never place
+      passwords, private keys, or secret API credentials in a frontend
+      environment variable.
+    </aside>
+
+    <h3>Ignore Local Environment Files</h3>
+
+    <pre><code># .gitignore
+```
+
+.env
+.env.local</code></pre> </section>
+
+```
+  <section id="python-packages" class="section">
+    <div class="section-heading">
+      <p class="tag">Python Tools</p>
+      <h2>Python Packages</h2>
+    </div>
+
+    <div class="group-grid">
+      <article class="info-card">
+        <h3>Install a Package</h3>
+
+        <pre><code>pip install package-name</code></pre>
+
+        <p>
+          Install a Python package into the active environment.
+        </p>
+      </article>
+
+      <article class="info-card">
+        <h3>Install Requirements</h3>
+
+        <pre><code>pip install -r requirements.txt</code></pre>
+
+        <p>
+          Install all packages listed in the requirements file.
+        </p>
+      </article>
+
+      <article class="info-card">
+        <h3>Save Installed Packages</h3>
+
+        <pre><code>pip freeze &gt; requirements.txt</code></pre>
+
+        <p>
+          Write the current environment's installed packages to a file.
+        </p>
+      </article>
+
+      <article class="info-card">
+        <h3>See Installed Packages</h3>
+
+        <pre><code>pip list</code></pre>
+
+        <p>
+          Display packages installed in the active environment.
+        </p>
+      </article>
+    </div>
+
+    <h3>Common Python Development Tools</h3>
+
+    <div class="package-grid">
+      <article>
+        <p class="card-label">Formatting</p>
+        <h3>Black</h3>
+
+        <pre><code>pip install black</code></pre>
+      </article>
+
+      <article>
+        <p class="card-label">Linting</p>
+        <h3>Pylint</h3>
+
+        <pre><code>pip install pylint</code></pre>
+      </article>
+
+      <article>
+        <p class="card-label">Testing</p>
+        <h3>pytest</h3>
+
+        <pre><code>pip install pytest</code></pre>
+      </article>
+
+      <article>
+        <p class="card-label">Command-Line Tool</p>
+        <h3>pipx</h3>
+
+        <pre><code>pipx install black</code></pre>
+      </article>
+    </div>
+  </section>
+
+  <section id="common-errors" class="section">
+    <div class="section-heading">
+      <p class="tag">Troubleshooting</p>
+      <h2>Common Errors and Fixes</h2>
+    </div>
+
+    <div class="error-grid">
+      <article>
+        <div class="error-heading">
+          <span>!</span>
+          <h3>Module Not Found</h3>
+        </div>
+
+        <p>
+          The project dependencies may not be installed.
+        </p>
+
+        <pre><code>npm install</code></pre>
+      </article>
+
+      <article>
+        <div class="error-heading">
+          <span>!</span>
+          <h3>Missing ESLint Plugin</h3>
+        </div>
+
+        <p>
+          Install the plugin named in the error message.
+        </p>
+
+        <pre><code>npm install -D eslint-plugin-cypress</code></pre>
+      </article>
+
+      <article>
+        <div class="error-heading">
+          <span>!</span>
+          <h3>Broken node_modules</h3>
+        </div>
+
+        <p>
+          Delete installed packages and reinstall them.
+        </p>
+
+        <pre><code>rm -rf node_modules
+```
+
+npm install</code></pre> </article>
+
+```
+      <article>
+        <div class="error-heading">
+          <span>!</span>
+          <h3>Command Not Found</h3>
+        </div>
+
+        <p>
+          Run a local package command through <code>npx</code>.
+        </p>
+
+        <pre><code>npx eslint .
+```
+
+npx prettier . --write</code></pre> </article>
+
+```
+      <article>
+        <div class="error-heading">
+          <span>!</span>
+          <h3>Port Already in Use</h3>
+        </div>
+
+        <p>
+          Find the process using the port and stop it.
+        </p>
+
+        <pre><code>lsof -i :5173
+```
+
+kill -9 PID</code></pre> </article>
+
+```
+      <article>
+        <div class="error-heading">
+          <span>!</span>
+          <h3>npm Script Missing</h3>
+        </div>
+
+        <p>
+          Check the scripts available in <code>package.json</code>.
+        </p>
+
+        <pre><code>npm run</code></pre>
+      </article>
+    </div>
+
+    <aside class="note">
+      Read the first useful error message before reinstalling everything.
+      The error often names the exact missing package, file, script, or
+      configuration.
+    </aside>
+  </section>
+
+  <section id="workflow" class="section">
+    <div class="section-heading">
+      <p class="tag">New Project Setup</p>
+      <h2>Typical Package Workflow</h2>
+    </div>
+
+    <div class="workflow-column">
+      <article>
+        <span>1</span>
+
+        <div>
+          <h3>Open the Project</h3>
+          <p>
+            Make sure the terminal is inside the folder containing
+            <code>package.json</code>.
+          </p>
+        </div>
+      </article>
+
+      <strong>↓</strong>
+
+      <article>
+        <span>2</span>
+
+        <div>
+          <h3>Install Existing Dependencies</h3>
+          <code>npm install</code>
+        </div>
+      </article>
+
+      <strong>↓</strong>
+
+      <article>
+        <span>3</span>
+
+        <div>
+          <h3>Install Additional Packages</h3>
+          <code>npm install axios</code>
+          <code>npm install -D eslint-plugin-cypress</code>
+        </div>
+      </article>
+
+      <strong>↓</strong>
+
+      <article>
+        <span>4</span>
+
+        <div>
+          <h3>Update Configuration</h3>
+          <p>
+            Add the required ESLint plugin, script, import, or environment
+            variable.
+          </p>
+        </div>
+      </article>
+
+      <strong>↓</strong>
+
+      <article>
+        <span>5</span>
+
+        <div>
+          <h3>Run the Project</h3>
+          <code>npm run dev</code>
+        </div>
+      </article>
+
+      <strong>↓</strong>
+
+      <article>
+        <span>6</span>
+
+        <div>
+          <h3>Run Quality Checks</h3>
+          <code>npm run lint</code>
+          <code>npm test</code>
+          <code>npm run build</code>
+        </div>
+      </article>
+
+      <strong>↓</strong>
+
+      <article>
+        <span>7</span>
+
+        <div>
+          <h3>Commit Package Files</h3>
+
+          <p>
+            Commit <code>package.json</code> and
+            <code>package-lock.json</code>, but not
+            <code>node_modules</code>.
+          </p>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>
+    <a href="../">Return to all cheat sheets</a>
+  </p>
+</footer>
+
+<script>
+  const copyButtons = document.querySelectorAll(".copy-button");
+
+  copyButtons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      const codeBlock = button.nextElementSibling;
+      const code = codeBlock.innerText;
+
+      try {
+        await navigator.clipboard.writeText(code);
+
+        button.innerText = "Copied!";
+
+        setTimeout(() => {
+          button.innerText = "Copy";
+        }, 1500);
+      } catch (error) {
+        button.innerText = "Failed";
+      }
+    });
+  });
+</script>
+```
+
+  </body>
+</html>

@@ -1,0 +1,951 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+```
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/>
+
+<meta
+  name="description"
+  content="A quick reference for common Markdown syntax used in README files, documentation, and GitHub."
+/>
+
+<title>Markdown Cheat Sheet</title>
+
+<link rel="stylesheet" href="style.css" />
+```
+
+  </head>
+
+  <body>
+    <header class="page-header">
+      <nav class="nav container">
+        <a class="home-link" href="../">
+          ← All Cheat Sheets
+        </a>
+
+````
+    <a class="next-link" href="../github/">
+      GitHub Cheat Sheet →
+    </a>
+  </nav>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <p class="tag">Documentation Syntax</p>
+
+    <h1>Markdown Cheat Sheet</h1>
+
+    <p>
+      A quick reference for writing README files, documentation, notes,
+      tables, code examples, links, images, and GitHub alerts.
+    </p>
+  </section>
+
+  <section class="table-of-contents">
+    <h2>Table of Contents</h2>
+
+    <div class="contents-grid">
+      <a href="#daily-markdown">Daily Markdown</a>
+      <a href="#headings">Headings</a>
+      <a href="#text-formatting">Text Formatting</a>
+      <a href="#lists">Lists</a>
+      <a href="#links">Links</a>
+      <a href="#images">Images</a>
+      <a href="#code">Code</a>
+      <a href="#tables">Tables</a>
+      <a href="#blockquotes">Blockquotes</a>
+      <a href="#horizontal-rules">Horizontal Rules</a>
+      <a href="#task-lists">Task Lists</a>
+      <a href="#github-alerts">GitHub Alerts</a>
+      <a href="#escaping">Escaping</a>
+      <a href="#readme-template">README Template</a>
+    </div>
+  </section>
+
+  <section id="daily-markdown" class="section">
+    <div class="section-heading">
+      <p class="tag">Most Used</p>
+
+      <h2>Daily Markdown</h2>
+
+      <p>
+        These cards group the Markdown syntax you are most likely to use
+        together.
+      </p>
+    </div>
+
+    <div class="daily-grid">
+      <article class="daily-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">Structure</p>
+            <h3>Headings and Text</h3>
+          </div>
+
+          <span class="syntax-badge">Text</span>
+        </div>
+
+        <div class="syntax-table">
+          <div>
+            <code># Heading</code>
+            <span>Main heading</span>
+          </div>
+
+          <div>
+            <code>## Heading</code>
+            <span>Section heading</span>
+          </div>
+
+          <div>
+            <code>**Bold**</code>
+            <span>Important text</span>
+          </div>
+
+          <div>
+            <code>_Italic_</code>
+            <span>Emphasized text</span>
+          </div>
+
+          <div>
+            <code>~~Deleted~~</code>
+            <span>Strikethrough</span>
+          </div>
+
+          <div>
+            <code>`code`</code>
+            <span>Inline code</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="daily-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">Content</p>
+            <h3>Lists and Links</h3>
+          </div>
+
+          <span class="syntax-badge">Layout</span>
+        </div>
+
+        <div class="syntax-table">
+          <div>
+            <code>- Item</code>
+            <span>Unordered list</span>
+          </div>
+
+          <div>
+            <code>1. Item</code>
+            <span>Ordered list</span>
+          </div>
+
+          <div>
+            <code>- [ ] Task</code>
+            <span>Incomplete task</span>
+          </div>
+
+          <div>
+            <code>- [x] Task</code>
+            <span>Completed task</span>
+          </div>
+
+          <div>
+            <code>[Text](URL)</code>
+            <span>Clickable link</span>
+          </div>
+
+          <div>
+            <code>![Alt](path)</code>
+            <span>Display image</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="daily-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">Development</p>
+            <h3>Code and Quotes</h3>
+          </div>
+
+          <span class="syntax-badge">Code</span>
+        </div>
+
+        <div class="syntax-table">
+          <div>
+            <code>`git status`</code>
+            <span>Inline command</span>
+          </div>
+
+          <div>
+            <code>```python</code>
+            <span>Start Python block</span>
+          </div>
+
+          <div>
+            <code>```</code>
+            <span>Close code block</span>
+          </div>
+
+          <div>
+            <code>&gt; Quote</code>
+            <span>Blockquote</span>
+          </div>
+
+          <div>
+            <code>---</code>
+            <span>Horizontal divider</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="daily-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">GitHub</p>
+            <h3>README Features</h3>
+          </div>
+
+          <span class="syntax-badge">GitHub</span>
+        </div>
+
+        <div class="syntax-table">
+          <div>
+            <code>&gt; [!NOTE]</code>
+            <span>Important information</span>
+          </div>
+
+          <div>
+            <code>&gt; [!TIP]</code>
+            <span>Helpful advice</span>
+          </div>
+
+          <div>
+            <code>&gt; [!WARNING]</code>
+            <span>Possible danger</span>
+          </div>
+
+          <div>
+            <code>| Name | Type |</code>
+            <span>Table header</span>
+          </div>
+
+          <div>
+            <code>[Section](#section)</code>
+            <span>README section link</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="headings" class="section">
+    <div class="section-heading">
+      <p class="tag">Page Structure</p>
+      <h2>Headings</h2>
+    </div>
+
+    <div class="example-layout">
+      <div class="code-card">
+        <h3>Markdown</h3>
+
+        <pre><code># Heading 1
+````
+
+## Heading 2
+
+### Heading 3
+
+#### Heading 4</code></pre>
+
+```
+      </div>
+
+      <div class="preview-card">
+        <h3>Result</h3>
+
+        <div class="heading-preview">
+          <p class="preview-h1">Heading 1</p>
+          <p class="preview-h2">Heading 2</p>
+          <p class="preview-h3">Heading 3</p>
+          <p class="preview-h4">Heading 4</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="note">
+      Put one space between the <code>#</code> symbol and the heading text.
+      Most README files should have one main level-one heading.
+    </aside>
+  </section>
+
+  <section id="text-formatting" class="section">
+    <div class="section-heading">
+      <p class="tag">Emphasis</p>
+      <h2>Text Formatting</h2>
+    </div>
+
+    <div class="group-grid">
+      <article class="command-group">
+        <h3>Basic Formatting</h3>
+
+        <div class="syntax-table">
+          <div>
+            <code>**Bold**</code>
+            <span><strong>Bold</strong></span>
+          </div>
+
+          <div>
+            <code>_Italic_</code>
+            <span><em>Italic</em></span>
+          </div>
+
+          <div>
+            <code>**_Bold Italic_**</code>
+            <span><strong><em>Bold Italic</em></strong></span>
+          </div>
+
+          <div>
+            <code>~~Deleted~~</code>
+            <span><s>Deleted</s></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="command-group">
+        <h3>Inline Code</h3>
+
+        <pre><code>Use `git status` to check your repository.</code></pre>
+
+        <div class="result-box">
+          Use <code>git status</code> to check your repository.
+        </div>
+
+        <p>
+          Inline code is useful for commands, filenames, variables, and
+          short code references.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section id="lists" class="section">
+    <div class="section-heading">
+      <p class="tag">Grouped Items</p>
+      <h2>Lists</h2>
+    </div>
+
+    <div class="group-grid">
+      <article class="command-group">
+        <h3>Unordered List</h3>
+
+        <pre><code>- HTML
+```
+
+* CSS
+* JavaScript</code></pre>
+
+  ```
+        <div class="result-box">
+          <ul>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>JavaScript</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="command-group">
+        <h3>Ordered List</h3>
+
+        <pre><code>1. Clone repository
+  ```
+
+2. Install packages
+3. Run project</code></pre>
+
+   ```
+        <div class="result-box">
+          <ol>
+            <li>Clone repository</li>
+            <li>Install packages</li>
+            <li>Run project</li>
+          </ol>
+        </div>
+      </article>
+
+      <article class="command-group wide-card">
+        <h3>Nested List</h3>
+
+        <pre><code>- Frontend
+   ```
+
+* HTML
+
+* CSS
+
+* React
+
+* Backend
+
+  * Python
+  * PostgreSQL</code></pre>
+
+    ```
+        <div class="result-box">
+          <ul>
+            <li>
+              Frontend
+              <ul>
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>React</li>
+              </ul>
+            </li>
+
+            <li>
+              Backend
+              <ul>
+                <li>Python</li>
+                <li>PostgreSQL</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </article>
+    </div>
+    ```
+
+      </section>
+
+      <section id="links" class="section">
+        <div class="section-heading">
+          <p class="tag">Navigation</p>
+          <h2>Links</h2>
+        </div>
+
+    ```
+    <div class="group-grid">
+      <article class="command-group">
+        <h3>Regular Link</h3>
+
+        <pre><code>[Google](https://google.com)</code></pre>
+
+        <div class="result-box">
+          <a href="https://google.com">
+            Google
+          </a>
+        </div>
+      </article>
+
+      <article class="command-group">
+        <h3>Section Link</h3>
+
+        <pre><code>[Installation](#installation)</code></pre>
+
+        <p>
+          This links to a heading named <code>Installation</code> in the
+          same Markdown document.
+        </p>
+      </article>
+
+      <article class="command-group wide-card">
+        <h3>Link with a Title</h3>
+
+        <pre><code>[GitHub](https://github.com "Visit GitHub")</code></pre>
+      </article>
+    </div>
+    ```
+
+      </section>
+
+      <section id="images" class="section">
+        <div class="section-heading">
+          <p class="tag">Media</p>
+          <h2>Images</h2>
+        </div>
+
+    ```
+    <div class="group-grid">
+      <article class="command-group">
+        <h3>Display an Image</h3>
+
+        <pre><code>![Project logo](images/logo.png)</code></pre>
+
+        <p>
+          The text inside the brackets is the image's alternative text.
+        </p>
+      </article>
+
+      <article class="command-group">
+        <h3>Clickable Image</h3>
+
+        <pre><code>[![Project logo](images/logo.png)](https://github.com)</code></pre>
+
+        <p>
+          This wraps the image inside a link.
+        </p>
+      </article>
+    </div>
+
+    <aside class="note">
+      Use a path relative to the Markdown file, such as
+      <code>images/logo.png</code> or <code>./assets/screenshot.png</code>.
+    </aside>
+    ```
+
+      </section>
+
+      <section id="code" class="section">
+        <div class="section-heading">
+          <p class="tag">Code Examples</p>
+          <h2>Code</h2>
+        </div>
+
+    ````
+    <div class="group-grid">
+      <article class="command-group">
+        <h3>Inline Code</h3>
+
+        <pre><code>Run `npm install` first.</code></pre>
+
+        <div class="result-box">
+          Run <code>npm install</code> first.
+        </div>
+      </article>
+
+      <article class="command-group">
+        <h3>Code Block</h3>
+
+        <pre><code>```python
+    ````
+
+def greet(name):
+return f"Hello, {name}"
+
+````</code></pre>
+          </article>
+
+          <article class="command-group wide-card">
+            <h3>Common Language Labels</h3>
+
+            <div class="language-grid">
+              <code>```python</code>
+              <code>```javascript</code>
+              <code>```jsx</code>
+              <code>```html</code>
+              <code>```css</code>
+              <code>```bash</code>
+              <code>```json</code>
+              <code>```sql</code>
+            </div>
+
+            <p>
+              The language name enables syntax highlighting on GitHub and many
+              Markdown viewers.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="tables" class="section">
+        <div class="section-heading">
+          <p class="tag">Structured Information</p>
+          <h2>Tables</h2>
+        </div>
+
+        <div class="example-layout">
+          <div class="code-card">
+            <h3>Markdown</h3>
+
+            <pre><code>| Name | Type | Level |
+|---|---|---:|
+| Pikachu | Electric | 25 |
+| Charmander | Fire | 18 |</code></pre>
+          </div>
+
+          <div class="preview-card">
+            <h3>Result</h3>
+
+            <div class="responsive-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Level</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td>Pikachu</td>
+                    <td>Electric</td>
+                    <td class="number-cell">25</td>
+                  </tr>
+
+                  <tr>
+                    <td>Charmander</td>
+                    <td>Fire</td>
+                    <td class="number-cell">18</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <h3>Column Alignment</h3>
+
+        <div class="syntax-table alignment-table">
+          <div>
+            <code>|:---|</code>
+            <span>Left aligned</span>
+          </div>
+
+          <div>
+            <code>|:---:|</code>
+            <span>Center aligned</span>
+          </div>
+
+          <div>
+            <code>|---:|</code>
+            <span>Right aligned</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="blockquotes" class="section">
+        <div class="section-heading">
+          <p class="tag">Quotes and Notes</p>
+          <h2>Blockquotes</h2>
+        </div>
+
+        <div class="group-grid">
+          <article class="command-group">
+            <h3>Single Line</h3>
+
+            <pre><code>&gt; This is a blockquote.</code></pre>
+
+            <blockquote class="result-quote">
+              This is a blockquote.
+            </blockquote>
+          </article>
+
+          <article class="command-group">
+            <h3>Multiple Lines</h3>
+
+            <pre><code>&gt; This is the first line.
+&gt;
+&gt; This is another paragraph.</code></pre>
+          </article>
+        </div>
+      </section>
+
+      <section id="horizontal-rules" class="section">
+        <div class="section-heading">
+          <p class="tag">Section Separators</p>
+          <h2>Horizontal Rules</h2>
+        </div>
+
+        <article class="command-group">
+          <div class="syntax-table">
+            <div>
+              <code>---</code>
+              <span>Three hyphens</span>
+            </div>
+
+            <div>
+              <code>***</code>
+              <span>Three asterisks</span>
+            </div>
+
+            <div>
+              <code>___</code>
+              <span>Three underscores</span>
+            </div>
+          </div>
+        </article>
+
+        <div class="rule-preview">
+          <span>Section above</span>
+          <hr />
+          <span>Section below</span>
+        </div>
+      </section>
+
+      <section id="task-lists" class="section">
+        <div class="section-heading">
+          <p class="tag">Checklists</p>
+          <h2>Task Lists</h2>
+        </div>
+
+        <div class="example-layout">
+          <div class="code-card">
+            <h3>Markdown</h3>
+
+            <pre><code>- [x] Create repository
+- [x] Add README
+- [ ] Finish project
+- [ ] Deploy website</code></pre>
+          </div>
+
+          <div class="preview-card">
+            <h3>Result</h3>
+
+            <div class="task-preview">
+              <label>
+                <input type="checkbox" checked disabled />
+                Create repository
+              </label>
+
+              <label>
+                <input type="checkbox" checked disabled />
+                Add README
+              </label>
+
+              <label>
+                <input type="checkbox" disabled />
+                Finish project
+              </label>
+
+              <label>
+                <input type="checkbox" disabled />
+                Deploy website
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="github-alerts" class="section">
+        <div class="section-heading">
+          <p class="tag">GitHub Markdown</p>
+          <h2>GitHub Alerts</h2>
+        </div>
+
+        <div class="alert-grid">
+          <article class="github-alert note-alert">
+            <strong>NOTE</strong>
+            <p>Useful information the reader should know.</p>
+          </article>
+
+          <article class="github-alert tip-alert">
+            <strong>TIP</strong>
+            <p>Helpful advice for completing a task.</p>
+          </article>
+
+          <article class="github-alert important-alert">
+            <strong>IMPORTANT</strong>
+            <p>Information needed to complete the task correctly.</p>
+          </article>
+
+          <article class="github-alert warning-alert">
+            <strong>WARNING</strong>
+            <p>Something that may cause a problem or data loss.</p>
+          </article>
+
+          <article class="github-alert caution-alert">
+            <strong>CAUTION</strong>
+            <p>A serious risk the reader should consider carefully.</p>
+          </article>
+        </div>
+
+        <h3>Syntax</h3>
+
+        <pre><code>&gt; [!NOTE]
+&gt; Useful information.
+
+&gt; [!TIP]
+&gt; Helpful advice.
+
+&gt; [!IMPORTANT]
+&gt; Information required for success.
+
+&gt; [!WARNING]
+&gt; Something may go wrong.
+
+&gt; [!CAUTION]
+&gt; Be careful before continuing.</code></pre>
+      </section>
+
+      <section id="escaping" class="section">
+        <div class="section-heading">
+          <p class="tag">Show Markdown Symbols</p>
+          <h2>Escaping Characters</h2>
+        </div>
+
+        <p>
+          Add a backslash before a Markdown symbol when you want to display the
+          symbol instead of using its formatting behavior.
+        </p>
+
+        <div class="group-grid">
+          <article class="command-group">
+            <h3>Show an Asterisk</h3>
+
+            <pre><code>\*Not italic\*</code></pre>
+
+            <div class="result-box">
+              *Not italic*
+            </div>
+          </article>
+
+          <article class="command-group">
+            <h3>Show a Heading Symbol</h3>
+
+            <pre><code>\# Not a heading</code></pre>
+
+            <div class="result-box">
+              # Not a heading
+            </div>
+          </article>
+
+          <article class="command-group wide-card">
+            <h3>Common Characters to Escape</h3>
+
+            <div class="language-grid">
+              <code>\*</code>
+              <code>\_</code>
+              <code>\#</code>
+              <code>\-</code>
+              <code>\[</code>
+              <code>\]</code>
+              <code>\(</code>
+              <code>\)</code>
+              <code>\`</code>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="readme-template" class="section">
+        <div class="section-heading">
+          <p class="tag">Project Documentation</p>
+          <h2>README Template</h2>
+        </div>
+
+        <div class="code-container">
+          <button class="copy-button" type="button">
+            Copy
+          </button>
+
+          <pre><code># Project Name
+
+A short description of the project and what it does.
+
+## Features
+
+- Feature one
+- Feature two
+- Feature three
+
+## Technologies
+
+- HTML
+- CSS
+- JavaScript
+
+## Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/username/project.git
+````
+
+2. Move into the project:
+
+   ```bash
+   cd project
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+4. Start the project:
+
+   ```bash
+   npm run dev
+   ```
+
+## Usage
+
+Explain how to use the project.
+
+```javascript
+console.log("Example");
+```
+
+## Project Structure
+
+```text
+project/
+├── src/
+├── assets/
+├── index.html
+└── README.md
+```
+
+## Screenshots
+
+![Project screenshot](images/screenshot.png)
+
+## Roadmap
+
+* [x] Create the project
+* [x] Add the main features
+* [ ] Add tests
+* [ ] Deploy the application
+
+## Author
+
+Mohamed Gad
+
+## License
+
+This project is licensed under the MIT License.</code></pre> </div> </section> </main>
+
+```
+<footer class="site-footer">
+  <p>
+    <a href="../">Return to all cheat sheets</a>
+  </p>
+</footer>
+
+<script>
+  const copyButtons = document.querySelectorAll(".copy-button");
+
+  copyButtons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      const codeBlock = button.nextElementSibling;
+      const code = codeBlock.innerText;
+
+      try {
+        await navigator.clipboard.writeText(code);
+
+        button.innerText = "Copied!";
+
+        setTimeout(() => {
+          button.innerText = "Copy";
+        }, 1500);
+      } catch (error) {
+        button.innerText = "Failed";
+      }
+    });
+  });
+</script>
+```
+
+  </body>
+</html>

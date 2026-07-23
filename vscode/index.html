@@ -1,0 +1,1044 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+```
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/>
+
+<meta
+  name="description"
+  content="A quick reference for VS Code shortcuts, navigation, terminal commands, Git tools, extensions, settings, snippets, and developer tools."
+/>
+
+<title>VS Code Cheat Sheet</title>
+
+<link rel="stylesheet" href="style.css" />
+```
+
+  </head>
+
+  <body>
+    <header class="page-header">
+      <nav class="nav container">
+        <a class="home-link" href="../">
+          ← All Cheat Sheets
+        </a>
+
+```
+    <a class="next-link" href="../python/">
+      Python Cheat Sheet →
+    </a>
+  </nav>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <p class="tag">Code Editor</p>
+
+    <h1>VS Code Cheat Sheet</h1>
+
+    <p>
+      A quick reference for the VS Code shortcuts, settings, extensions,
+      snippets, terminal tools, and developer commands I use every day.
+    </p>
+  </section>
+
+  <section class="table-of-contents">
+    <h2>Table of Contents</h2>
+
+    <div class="contents-grid">
+      <a href="#daily-use">Daily Use</a>
+      <a href="#keyboard-shortcuts">Keyboard Shortcuts</a>
+      <a href="#navigation">Navigation</a>
+      <a href="#editing">Editing</a>
+      <a href="#terminal">Terminal</a>
+      <a href="#search">Search</a>
+      <a href="#git">Git</a>
+      <a href="#extensions">Extensions</a>
+      <a href="#settings">Settings</a>
+      <a href="#snippets">Snippets</a>
+      <a href="#vim-shortcuts">Vim Shortcuts</a>
+      <a href="#developer-tools">Developer Tools</a>
+    </div>
+  </section>
+
+  <section id="daily-use" class="section">
+    <div class="section-heading">
+      <p class="tag">Most Used</p>
+
+      <h2>Daily VS Code Tools</h2>
+
+      <p>
+        Each card groups several related shortcuts and features.
+      </p>
+    </div>
+
+    <div class="daily-grid">
+      <article class="daily-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">Open and Navigate</p>
+            <h3>Navigation</h3>
+          </div>
+
+          <span class="feature-badge">Files</span>
+        </div>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>Ctrl+P</kbd>
+            <span>Quick Open</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+Shift+P</kbd>
+            <span>Command Palette</span>
+          </div>
+
+          <div>
+            <kbd>F12</kbd>
+            <span>Go to Definition</span>
+          </div>
+
+          <div>
+            <kbd>Alt+F12</kbd>
+            <span>Peek Definition</span>
+          </div>
+
+          <div>
+            <kbd>Alt+Left</kbd>
+            <span>Go back</span>
+          </div>
+
+          <div>
+            <kbd>Alt+Right</kbd>
+            <span>Go forward</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="daily-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">Modify Code</p>
+            <h3>Editing</h3>
+          </div>
+
+          <span class="feature-badge">Editor</span>
+        </div>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>Ctrl+/</kbd>
+            <span>Toggle line comment</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+D</kbd>
+            <span>Select next occurrence</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+Shift+L</kbd>
+            <span>Select all occurrences</span>
+          </div>
+
+          <div>
+            <kbd>Alt+Up</kbd>
+            <span>Move line up</span>
+          </div>
+
+          <div>
+            <kbd>Alt+Down</kbd>
+            <span>Move line down</span>
+          </div>
+
+          <div>
+            <kbd>Shift+Alt+Down</kbd>
+            <span>Duplicate line</span>
+          </div>
+
+          <div>
+            <kbd>F2</kbd>
+            <span>Rename symbol</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="daily-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">Run and Find</p>
+            <h3>Terminal and Search</h3>
+          </div>
+
+          <span class="feature-badge">Tools</span>
+        </div>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>Ctrl+`</kbd>
+            <span>Toggle terminal</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+C</kbd>
+            <span>Stop running program</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+Shift+F</kbd>
+            <span>Search project</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+Shift+H</kbd>
+            <span>Replace in project</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+Space</kbd>
+            <span>Trigger IntelliSense</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="daily-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">Source Control</p>
+            <h3>Git</h3>
+          </div>
+
+          <span class="feature-badge">Git</span>
+        </div>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>Ctrl+Shift+G</kbd>
+            <span>Open Source Control</span>
+          </div>
+
+          <div>
+            <kbd>+</kbd>
+            <span>Stage a changed file</span>
+          </div>
+
+          <div>
+            <kbd>✓</kbd>
+            <span>Commit changes</span>
+          </div>
+
+          <div>
+            <kbd>Sync</kbd>
+            <span>Pull and push changes</span>
+          </div>
+
+          <div>
+            <kbd>Push</kbd>
+            <span>Send commits to GitHub</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="daily-card wide-card">
+        <div class="card-heading">
+          <div>
+            <p class="card-label">VS Code Vim</p>
+            <h3>Leader Shortcuts</h3>
+          </div>
+
+          <span class="feature-badge">Vim</span>
+        </div>
+
+        <div class="shortcut-table two-column-table">
+          <div>
+            <kbd>&lt;Space&gt; f</kbd>
+            <span>Open file</span>
+          </div>
+
+          <div>
+            <kbd>&lt;Space&gt; s</kbd>
+            <span>Save current file</span>
+          </div>
+
+          <div>
+            <kbd>&lt;Space&gt; e</kbd>
+            <span>Open Explorer</span>
+          </div>
+
+          <div>
+            <kbd>Esc</kbd>
+            <span>Return to Normal mode</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="keyboard-shortcuts" class="section">
+    <div class="section-heading">
+      <p class="tag">Keyboard</p>
+      <h2>Keyboard Shortcuts</h2>
+    </div>
+
+    <div class="shortcut-grid">
+      <article class="shortcut-card">
+        <h3>Open Tools</h3>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>Ctrl+P</kbd>
+            <span>Quick Open</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+Shift+P</kbd>
+            <span>Command Palette</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+`</kbd>
+            <span>Toggle Terminal</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="shortcut-card">
+        <h3>Edit Code</h3>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>Ctrl+/</kbd>
+            <span>Comment or uncomment line</span>
+          </div>
+
+          <div>
+            <kbd>Alt+Up</kbd>
+            <span>Move line up</span>
+          </div>
+
+          <div>
+            <kbd>Alt+Down</kbd>
+            <span>Move line down</span>
+          </div>
+
+          <div>
+            <kbd>Shift+Alt+Down</kbd>
+            <span>Duplicate line</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="shortcut-card">
+        <h3>Select and Rename</h3>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>Ctrl+D</kbd>
+            <span>Select next occurrence</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+Shift+L</kbd>
+            <span>Select all occurrences</span>
+          </div>
+
+          <div>
+            <kbd>F2</kbd>
+            <span>Rename symbol</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+Space</kbd>
+            <span>Trigger IntelliSense</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="navigation" class="section">
+    <div class="section-heading">
+      <p class="tag">Move Through Code</p>
+      <h2>Navigation</h2>
+    </div>
+
+    <div class="group-grid">
+      <article class="info-card">
+        <h3>Definitions</h3>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>F12</kbd>
+            <span>Open the definition of a function, class, or variable</span>
+          </div>
+
+          <div>
+            <kbd>Alt+F12</kbd>
+            <span>Preview the definition without leaving the file</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="info-card">
+        <h3>Navigation History</h3>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>Alt+Left</kbd>
+            <span>Return to the previous location</span>
+          </div>
+
+          <div>
+            <kbd>Alt+Right</kbd>
+            <span>Move forward after going back</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="info-card wide-card">
+        <h3>Quick File Navigation</h3>
+
+        <div class="shortcut-table two-column-table">
+          <div>
+            <kbd>Ctrl+P</kbd>
+            <span>Search for a file by name</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+Tab</kbd>
+            <span>Switch between recently opened files</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+Shift+E</kbd>
+            <span>Focus the Explorer</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+W</kbd>
+            <span>Close the current editor tab</span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <aside class="note">
+      Use <code>Ctrl+P</code> instead of searching through folders manually.
+      Type part of the filename and press Enter.
+    </aside>
+  </section>
+
+  <section id="editing" class="section">
+    <div class="section-heading">
+      <p class="tag">Write Faster</p>
+      <h2>Editing</h2>
+    </div>
+
+    <div class="group-grid">
+      <article class="info-card">
+        <h3>Lines</h3>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>Alt+Up</kbd>
+            <span>Move current line up</span>
+          </div>
+
+          <div>
+            <kbd>Alt+Down</kbd>
+            <span>Move current line down</span>
+          </div>
+
+          <div>
+            <kbd>Shift+Alt+Down</kbd>
+            <span>Duplicate line downward</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+/</kbd>
+            <span>Toggle line comment</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="info-card">
+        <h3>Multiple Selections</h3>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>Ctrl+D</kbd>
+            <span>Add the next matching word to the selection</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+Shift+L</kbd>
+            <span>Select every occurrence of the current selection</span>
+          </div>
+
+          <div>
+            <kbd>Alt+Click</kbd>
+            <span>Add another cursor</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="info-card">
+        <h3>Refactoring</h3>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>F2</kbd>
+            <span>Rename a symbol throughout the project</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+.</kbd>
+            <span>Open Quick Fix and refactoring actions</span>
+          </div>
+
+          <div>
+            <kbd>Shift+Alt+F</kbd>
+            <span>Format the current document</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="info-card">
+        <h3>Suggestions</h3>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>Ctrl+Space</kbd>
+            <span>Open IntelliSense suggestions</span>
+          </div>
+
+          <div>
+            <kbd>Tab</kbd>
+            <span>Accept a suggestion or snippet</span>
+          </div>
+
+          <div>
+            <kbd>Esc</kbd>
+            <span>Close the suggestion menu</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="terminal" class="section">
+    <div class="section-heading">
+      <p class="tag">Integrated Terminal</p>
+      <h2>Terminal</h2>
+    </div>
+
+    <div class="group-grid">
+      <article class="info-card">
+        <h3>Terminal Controls</h3>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>Ctrl+`</kbd>
+            <span>Open or hide the terminal panel</span>
+          </div>
+
+          <div>
+            <kbd>+</kbd>
+            <span>Create another terminal</span>
+          </div>
+
+          <div>
+            <kbd>Trash</kbd>
+            <span>Close the selected terminal</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="info-card">
+        <h3>Terminal Commands</h3>
+
+        <div class="command-list">
+          <div>
+            <code>clear</code>
+            <span>Clear terminal output</span>
+          </div>
+
+          <div>
+            <code>Ctrl+C</code>
+            <span>Stop a running command</span>
+          </div>
+
+          <div>
+            <code>code .</code>
+            <span>Open the current folder in VS Code</span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <aside class="warning">
+      <code>Ctrl+C</code> inside the terminal stops a running program. In the
+      editor, it normally copies selected text.
+    </aside>
+  </section>
+
+  <section id="search" class="section">
+    <div class="section-heading">
+      <p class="tag">Find and Replace</p>
+      <h2>Search</h2>
+    </div>
+
+    <div class="group-grid">
+      <article class="info-card">
+        <h3>Current File</h3>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>Ctrl+F</kbd>
+            <span>Search in the current file</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+H</kbd>
+            <span>Replace in the current file</span>
+          </div>
+
+          <div>
+            <kbd>Enter</kbd>
+            <span>Move to the next match</span>
+          </div>
+
+          <div>
+            <kbd>Shift+Enter</kbd>
+            <span>Move to the previous match</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="info-card">
+        <h3>Entire Project</h3>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>Ctrl+Shift+F</kbd>
+            <span>Search every file in the project</span>
+          </div>
+
+          <div>
+            <kbd>Ctrl+Shift+H</kbd>
+            <span>Replace matches across the project</span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <aside class="note">
+      Project search supports plain text, case-sensitive matching, whole
+      words, and regular expressions.
+    </aside>
+  </section>
+
+  <section id="git" class="section">
+    <div class="section-heading">
+      <p class="tag">Source Control</p>
+      <h2>Git</h2>
+    </div>
+
+    <div class="git-workflow">
+      <span>Edit</span>
+      <strong>→</strong>
+      <span>Stage</span>
+      <strong>→</strong>
+      <span>Commit</span>
+      <strong>→</strong>
+      <span>Push</span>
+    </div>
+
+    <div class="group-grid">
+      <article class="info-card">
+        <h3>Open Source Control</h3>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>Ctrl+Shift+G</kbd>
+            <span>Open the Source Control panel</span>
+          </div>
+        </div>
+
+        <p>
+          Changed files appear under the Changes section.
+        </p>
+      </article>
+
+      <article class="info-card">
+        <h3>Stage and Commit</h3>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>+</kbd>
+            <span>Stage one file</span>
+          </div>
+
+          <div>
+            <kbd>Stage All</kbd>
+            <span>Stage every changed file</span>
+          </div>
+
+          <div>
+            <kbd>✓</kbd>
+            <span>Create a commit</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="info-card wide-card">
+        <h3>Remote Changes</h3>
+
+        <div class="shortcut-table two-column-table">
+          <div>
+            <kbd>Push</kbd>
+            <span>Send local commits to GitHub</span>
+          </div>
+
+          <div>
+            <kbd>Pull</kbd>
+            <span>Download remote changes</span>
+          </div>
+
+          <div>
+            <kbd>Sync Changes</kbd>
+            <span>Pull and then push</span>
+          </div>
+
+          <div>
+            <kbd>Publish Branch</kbd>
+            <span>Push a new local branch to GitHub</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="extensions" class="section">
+    <div class="section-heading">
+      <p class="tag">Editor Add-ons</p>
+      <h2>Useful Extensions</h2>
+    </div>
+
+    <div class="extension-grid">
+      <article>
+        <h3>Python Development</h3>
+
+        <ul>
+          <li>Python</li>
+          <li>Pylance</li>
+          <li>Black Formatter</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>JavaScript and React</h3>
+
+        <ul>
+          <li>ESLint</li>
+          <li>Prettier</li>
+          <li>ES7 React Snippets</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Git and Docker</h3>
+
+        <ul>
+          <li>GitLens</li>
+          <li>Docker</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Appearance</h3>
+
+        <ul>
+          <li>Material Icon Theme</li>
+          <li>One Dark Pro</li>
+          <li>Error Lens</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Keyboard Editing</h3>
+
+        <ul>
+          <li>VSCodeVim</li>
+        </ul>
+      </article>
+    </div>
+
+    <aside class="note">
+      Install extensions only when they solve a real problem. Too many
+      extensions can create conflicting formatters, shortcuts, or settings.
+    </aside>
+  </section>
+
+  <section id="settings" class="section">
+    <div class="section-heading">
+      <p class="tag">Personal Setup</p>
+      <h2>My Favorite Settings</h2>
+    </div>
+
+    <div class="settings-grid">
+      <article>
+        <span>Font</span>
+        <strong>Fira Code</strong>
+      </article>
+
+      <article>
+        <span>Ligatures</span>
+        <strong>true</strong>
+      </article>
+
+      <article>
+        <span>Format on Save</span>
+        <strong>true</strong>
+      </article>
+
+      <article>
+        <span>Default Formatter</span>
+        <strong>Prettier</strong>
+      </article>
+
+      <article>
+        <span>Theme</span>
+        <strong>One Dark Pro Flat Night</strong>
+      </article>
+
+      <article>
+        <span>Relative Line Numbers</span>
+        <strong>true</strong>
+      </article>
+
+      <article>
+        <span>Word Wrap</span>
+        <strong>off</strong>
+      </article>
+    </div>
+
+    <h3>Example Settings JSON</h3>
+
+    <div class="code-container">
+      <button class="copy-button" type="button">
+        Copy
+      </button>
+
+      <pre><code>{
+```
+
+"editor.fontFamily": "Fira Code",
+"editor.fontLigatures": true,
+"editor.formatOnSave": true,
+"editor.defaultFormatter": "esbenp.prettier-vscode",
+"editor.lineNumbers": "relative",
+"editor.wordWrap": "off",
+"workbench.colorTheme": "One Dark Pro Flat Night"
+}</code></pre> </div>
+
+```
+    <aside class="warning">
+      A project can override your default formatter with workspace settings
+      or language-specific settings.
+    </aside>
+  </section>
+
+  <section id="snippets" class="section">
+    <div class="section-heading">
+      <p class="tag">Reusable Code</p>
+      <h2>Snippets I Created</h2>
+    </div>
+
+    <div class="snippet-grid">
+      <article>
+        <code>af</code>
+        <h3>Arrow Function</h3>
+        <p>Create a general JavaScript arrow function.</p>
+      </article>
+
+      <article>
+        <code>us</code>
+        <h3>useState</h3>
+        <p>Create React state and its setter function.</p>
+      </article>
+
+      <article>
+        <code>ue</code>
+        <h3>useEffect</h3>
+        <p>Create a React effect with a dependency array.</p>
+      </article>
+
+      <article>
+        <code>hs</code>
+        <h3>Handle Submit</h3>
+        <p>Create a form submission handler.</p>
+      </article>
+
+      <article>
+        <code>eh</code>
+        <h3>Event Handler</h3>
+        <p>Create a reusable event handler function.</p>
+      </article>
+
+      <article>
+        <code>ex</code>
+        <h3>Export</h3>
+        <p>Create or export a component or function.</p>
+      </article>
+    </div>
+
+    <h3>Configure Snippets</h3>
+
+    <div class="command-list single-command-list">
+      <div>
+        <code>Snippets: Configure Snippets</code>
+        <span>Open through the Command Palette</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="vim-shortcuts" class="section">
+    <div class="section-heading">
+      <p class="tag">VSCodeVim</p>
+      <h2>Vim Shortcuts</h2>
+    </div>
+
+    <div class="vim-layout">
+      <article class="leader-card">
+        <span>Leader Key</span>
+        <kbd>Space</kbd>
+
+        <p>
+          Press the leader key in Normal mode before using a mapped
+          shortcut.
+        </p>
+      </article>
+
+      <article class="info-card">
+        <h3>My Leader Mappings</h3>
+
+        <div class="shortcut-table">
+          <div>
+            <kbd>&lt;Space&gt; f</kbd>
+            <span>Open file</span>
+          </div>
+
+          <div>
+            <kbd>&lt;Space&gt; s</kbd>
+            <span>Save file</span>
+          </div>
+
+          <div>
+            <kbd>&lt;Space&gt; e</kbd>
+            <span>Open Explorer</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="developer-tools" class="section">
+    <div class="section-heading">
+      <p class="tag">Troubleshooting</p>
+      <h2>Developer Tools</h2>
+    </div>
+
+    <div class="developer-grid">
+      <article>
+        <p class="card-label">Syntax Colors</p>
+        <h3>Inspect Tokens</h3>
+
+        <code>Developer: Inspect Editor Tokens and Scopes</code>
+
+        <p>
+          See which TextMate and semantic token rules control the color of
+          the code under your cursor.
+        </p>
+      </article>
+
+      <article>
+        <p class="card-label">Configuration</p>
+        <h3>Open Settings JSON</h3>
+
+        <code>Preferences: Open User Settings (JSON)</code>
+
+        <p>
+          Edit VS Code settings directly as JSON.
+        </p>
+      </article>
+
+      <article>
+        <p class="card-label">Automation</p>
+        <h3>Configure Snippets</h3>
+
+        <code>Snippets: Configure Snippets</code>
+
+        <p>
+          Create or edit custom user snippets.
+        </p>
+      </article>
+
+      <article>
+        <p class="card-label">Restart</p>
+        <h3>Reload Window</h3>
+
+        <code>Developer: Reload Window</code>
+
+        <p>
+          Restart the VS Code interface without fully closing the program.
+        </p>
+      </article>
+    </div>
+
+    <aside class="note">
+      Open the Command Palette with <code>Ctrl+Shift+P</code>, then type any
+      developer command by name.
+    </aside>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>
+    <a href="../">Return to all cheat sheets</a>
+  </p>
+</footer>
+
+<script>
+  const copyButtons = document.querySelectorAll(".copy-button");
+
+  copyButtons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      const codeBlock = button.nextElementSibling;
+      const code = codeBlock.innerText;
+
+      try {
+        await navigator.clipboard.writeText(code);
+
+        button.innerText = "Copied!";
+
+        setTimeout(() => {
+          button.innerText = "Copy";
+        }, 1500);
+      } catch (error) {
+        button.innerText = "Failed";
+      }
+    });
+  });
+</script>
+```
+
+  </body>
+</html>
