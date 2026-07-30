@@ -16,22 +16,114 @@ const searchTargets = [...document.querySelectorAll("[data-search-target]")];
 const getSearchLabel = (target) =>
   target.querySelector("h2, h3")?.innerText.trim() ?? target.id;
 
+const getCopyText = (button) => {
+  if (button.dataset.copyText) {
+    return button.dataset.copyText;
+  }
+
+  const codeBlock = button.nextElementSibling;
+  return codeBlock?.innerText ?? "";
+};
+
+const getCopyFeedbackNode = (button) =>
+  button.querySelector("[data-copy-label]") ?? button;
+
 copyButtons.forEach((button) => {
   button.addEventListener("click", async () => {
-    const codeBlock = button.nextElementSibling;
-    const code = codeBlock?.innerText ?? "";
+    const code = getCopyText(button);
+    const feedbackNode = getCopyFeedbackNode(button);
+    const defaultLabel =
+      feedbackNode.dataset.defaultLabel ?? feedbackNode.innerText;
+
+    if (feedbackNode.dataset.defaultLabel === undefined) {
+      feedbackNode.dataset.defaultLabel = defaultLabel;
+    }
 
     try {
       await navigator.clipboard.writeText(code);
-      button.innerText = "Copied!";
+      feedbackNode.innerText = "Copied!";
 
       setTimeout(() => {
-        button.innerText = "Copy";
+        feedbackNode.innerText = defaultLabel;
       }, 1500);
     } catch (error) {
-      button.innerText = "Failed";
+      feedbackNode.innerText = "Failed";
     }
   });
+});
+
+const checklistRoots = [...document.querySelectorAll("[data-checklist-root]")];
+
+checklistRoots.forEach((root) => {
+  const rootKey = root.dataset.checklistRoot || "default";
+  const storageKey = `developer-handbook:${window.location.pathname}:${rootKey}`;
+  const milestoneInputs = [...root.querySelectorAll("[data-checklist-item]")];
+  const progressOutput = root.querySelector("[data-checklist-progress]");
+  const resetButton = root.querySelector("[data-checklist-reset]");
+
+  if (!milestoneInputs.length) {
+    return;
+  }
+
+  const readSavedState = () => {
+    try {
+      return JSON.parse(localStorage.getItem(storageKey) ?? "[]");
+    } catch (error) {
+      return [];
+    }
+  };
+
+  const writeSavedState = () => {
+    const state = milestoneInputs.map((input) => input.checked);
+    localStorage.setItem(storageKey, JSON.stringify(state));
+  };
+
+  const updateChecklist = () => {
+    milestoneInputs.forEach((input, index) => {
+      const previousComplete = index === 0 || milestoneInputs[index - 1].checked;
+      const card = input.closest("[data-milestone-card]");
+      const isLocked = !previousComplete && !input.checked;
+
+      input.disabled = isLocked;
+
+      if (card) {
+        card.classList.toggle("is-complete", input.checked);
+        card.classList.toggle("is-locked", isLocked);
+      }
+    });
+
+    const completedCount = milestoneInputs.filter((input) => input.checked).length;
+
+    if (progressOutput) {
+      progressOutput.textContent = `${completedCount} of ${milestoneInputs.length} milestones complete`;
+    }
+
+    writeSavedState();
+  };
+
+  readSavedState().forEach((isChecked, index) => {
+    if (milestoneInputs[index]) {
+      milestoneInputs[index].checked = Boolean(isChecked);
+    }
+  });
+
+  milestoneInputs.forEach((input) => {
+    input.addEventListener("change", () => {
+      updateChecklist();
+    });
+  });
+
+  if (resetButton) {
+    resetButton.addEventListener("click", () => {
+      milestoneInputs.forEach((input) => {
+        input.checked = false;
+      });
+
+      updateChecklist();
+    });
+  }
+
+  updateChecklist();
 });
 
 if (navToggle && siteNav) {

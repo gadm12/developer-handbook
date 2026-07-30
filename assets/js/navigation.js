@@ -2,6 +2,7 @@ const navItems = [
   { key: "git", label: "Git", href: "../git/index.html" },
   { key: "pull-request", label: "Pull Requests", href: "../pull-request/index.html" },
   { key: "github", label: "GitHub Actions", href: "../github/index.html" },
+  { key: "django", label: "Django", href: "../django/index.html" },
   { key: "docker", label: "Docker", href: "../docker/index.html" },
   { key: "dockerfile", label: "Dockerfile", href: "../dockerfile/index.html" },
   { key: "linux", label: "Linux", href: "../linux/index.html" },
@@ -24,6 +25,10 @@ const pageMeta = {
   github: {
     docHref: "https://docs.github.com/en/actions",
     docLabel: "GitHub Actions Docs →",
+  },
+  django: {
+    docHref: "https://docs.djangoproject.com/",
+    docLabel: "Official Django Docs →",
   },
   docker: {
     docHref: "https://docs.docker.com/reference/cli/docker/",

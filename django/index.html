@@ -1,0 +1,1604 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A workflow-first Django handbook that follows the class order: environment setup, early installs, project creation, Docker PostgreSQL setup, apps, models, migrations, fixtures, admin, and troubleshooting."
+    />
+    <title>Django Developer Handbook</title>
+    <link rel="stylesheet" href="../assets/css/base.css" />
+    <link rel="stylesheet" href="../assets/css/layout.css" />
+    <link rel="stylesheet" href="../assets/css/components.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header class="page-header" id="top" data-shared-nav></header>
+
+    <main class="page-shell container">
+      <aside class="page-sidebar">
+        <section class="table-of-contents" aria-labelledby="on-this-page-title">
+          <p class="tag">Navigation</p>
+          <h2 id="on-this-page-title">On This Page</h2>
+
+          <div class="toc-group">
+            <p class="toc-group-label">Workflow</p>
+            <div class="contents-list">
+              <a data-toc-link href="#daily-django-workflow"
+                >Daily Django Workflow</a
+              >
+              <a data-toc-link href="#environment-setup">Environment Setup</a>
+              <a data-toc-link href="#terminal-quality-of-life"
+                >Terminal Quality of Life</a
+              >
+              <a data-toc-link href="#early-installs">Install Dependencies</a>
+              <a data-toc-link href="#create-project">Create Project</a>
+              <a data-toc-link href="#postgres-docker">PostgreSQL and Docker</a>
+              <a data-toc-link href="#apps-models">Create student_app</a>
+              <a data-toc-link href="#installed-apps-card"
+                >Add to INSTALLED_APPS</a
+              >
+              <a data-toc-link href="#student-model-card">Create Student Model</a>
+              <a data-toc-link href="#admin-register-card"
+                >Register Model in Admin</a
+              >
+              <a data-toc-link href="#admin-fixtures">Admin and Fixtures</a>
+              <a data-toc-link href="#troubleshooting-card">Troubleshooting</a>
+            </div>
+          </div>
+
+          <div class="toc-group">
+            <p class="toc-group-label">Reference</p>
+            <div class="contents-list">
+              <a data-toc-link href="#workflow-philosophy"
+                >Workflow Philosophy</a
+              >
+              <a data-toc-link href="#project-layout">Project Layout</a>
+              <a data-toc-link href="#settings-postgres"
+                >Settings and PostgreSQL</a
+              >
+              <a data-toc-link href="#models-migrations"
+                >Models and Migrations</a
+              >
+              <a data-toc-link href="#crud-shell">CRUD and Django Shell</a>
+              <a data-toc-link href="#relationships">Relationships</a>
+              <a data-toc-link href="#fixtures-backups">Fixtures and Backups</a>
+              <a data-toc-link href="#daily-startup">Daily Startup</a>
+              <a data-toc-link href="#commands">Useful Commands</a>
+              <a data-toc-link href="#troubleshooting">Troubleshooting</a>
+            </div>
+          </div>
+        </section>
+      </aside>
+
+      <div class="page-main">
+        <section class="hero">
+          <p class="tag">Workflow-First Backend Guide</p>
+          <h1>Django</h1>
+          <p class="hero-description">
+            A practical Django handbook organized in the same order used in
+            class: set up the environment, install the packages early, create
+            the project, wire PostgreSQL in Docker, build apps and models, run
+            migrations, then use fixtures and the admin site to keep moving.
+          </p>
+        </section>
+
+        <div
+          class="scroll-sentinel"
+          id="scroll-sentinel"
+          aria-hidden="true"
+        ></div>
+
+        <section
+          id="daily-django-workflow"
+          class="section"
+          data-observe
+          data-search-target
+        >
+          <div class="section-heading">
+            <p class="tag">Highest Priority</p>
+            <h2>Daily Django Workflow</h2>
+            <p>
+              Work through the milestones in order. Each card unlocks the next
+              one, and progress is saved in <code>localStorage</code> on this
+              browser.
+            </p>
+          </div>
+
+          <div data-checklist-root="django-workflow">
+            <div class="milestone-toolbar">
+              <span class="progress-chip" data-checklist-progress>
+                0 of 14 milestones complete
+              </span>
+              <button class="ghost-button" type="button" data-checklist-reset>
+                Reset Progress
+              </button>
+            </div>
+
+            <div class="milestone-grid">
+              <article
+                id="environment-setup"
+                class="milestone-card"
+                data-milestone-card
+                data-observe
+                data-search-target
+              >
+                <div class="milestone-meta">
+                  <span class="milestone-step">1</span>
+                  <span class="feature-badge">Setup</span>
+                </div>
+                <h3>Environment Setup</h3>
+                <p>
+                  Deactivate any old virtual environment, create a fresh
+                  <code>.venv</code>, activate it, and ignore it in Git.
+                </p>
+                <div class="mini-command-list">
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="deactivate"
+                  >
+                    <code>deactivate</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="python -m venv .venv"
+                  >
+                    <code>python -m venv .venv</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="source .venv/bin/activate"
+                  >
+                    <code>source .venv/bin/activate</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text='echo ".venv/" &gt;&gt; .gitignore'
+                  >
+                    <code>echo ".venv/" &gt;&gt; .gitignore</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                </div>
+                <label for="milestone-env">
+                  <input
+                    id="milestone-env"
+                    type="checkbox"
+                    data-checklist-item
+                  />
+                  <span>I have a clean project-level virtual environment.</span>
+                </label>
+              </article>
+
+              <article
+                id="terminal-quality-of-life"
+                class="milestone-card"
+                data-milestone-card
+                data-observe
+                data-search-target
+              >
+                <div class="milestone-meta">
+                  <span class="milestone-step">2</span>
+                  <span class="feature-badge">Shell</span>
+                </div>
+                <h3>Terminal Quality of Life</h3>
+                <p>
+                  Add your alias before creating the project.
+                  <code>alias pm="python manage.py"</code> means
+                  <code>pm</code> now runs <code>python manage.py</code>.
+                  After this step, the workflow uses <code>pm</code>.
+                </p>
+                <div class="mini-command-list">
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text='alias pm="python manage.py"'
+                  >
+                    <code>alias pm="python manage.py"</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                </div>
+                <label for="milestone-alias">
+                  <input
+                    id="milestone-alias"
+                    type="checkbox"
+                    data-checklist-item
+                  />
+                  <span>I added the <code>pm</code> alias before moving on.</span>
+                </label>
+              </article>
+
+              <article
+                id="early-installs"
+                class="milestone-card"
+                data-milestone-card
+                data-observe
+                data-search-target
+              >
+                <div class="milestone-meta">
+                  <span class="milestone-step">3</span>
+                  <span class="feature-badge">Install</span>
+                </div>
+                <h3>Install Dependencies Early</h3>
+                <p>
+                  Install the Python packages you know you will need up front so
+                  the workflow stays smooth later.
+                </p>
+                <div class="mini-command-list">
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text='pip install django "psycopg[binary]" django-stubs'
+                  >
+                    <code
+                      >pip install django "psycopg[binary]" django-stubs</code
+                    >
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                </div>
+                <label for="milestone-install">
+                  <input
+                    id="milestone-install"
+                    type="checkbox"
+                    data-checklist-item
+                  />
+                  <span
+                    >I installed Django, Psycopg 3, and my typing helper
+                    now.</span
+                  >
+                </label>
+              </article>
+
+              <article
+                id="create-project"
+                class="milestone-card"
+                data-milestone-card
+                data-observe
+                data-search-target
+              >
+                <div class="milestone-meta">
+                  <span class="milestone-step">4</span>
+                  <span class="feature-badge">Project</span>
+                </div>
+                <h3>Create the Project</h3>
+                <p>
+                  Start the nested Django project first, then wait to freeze
+                  dependencies until the environment is actually complete.
+                </p>
+                <div class="mini-command-list">
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="django-admin startproject school_proj"
+                  >
+                    <code>django-admin startproject school_proj</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="cd school_proj"
+                  >
+                    <code>cd school_proj</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="pm runserver"
+                  >
+                    <code>pm runserver</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                </div>
+                <label for="milestone-project">
+                  <input
+                    id="milestone-project"
+                    type="checkbox"
+                    data-checklist-item
+                  />
+                  <span
+                    >I created the project and verified the default
+                    server.</span
+                  >
+                </label>
+              </article>
+
+              <article
+                id="postgres-docker"
+                class="milestone-card"
+                data-milestone-card
+                data-observe
+                data-search-target
+              >
+                <div class="milestone-meta">
+                  <span class="milestone-step">5</span>
+                  <span class="feature-badge">PostgreSQL</span>
+                </div>
+                <h3>Build PostgreSQL in Docker</h3>
+                <p>
+                  Create the database image, put both containers on the same
+                  Docker network, and confirm PostgreSQL is reachable.
+                </p>
+                <div class="mini-command-list">
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="mkdir db"
+                  >
+                    <code>mkdir db</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="docker network create school-network"
+                  >
+                    <code>docker network create school-network</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="docker exec -it db-container bash"
+                  >
+                    <code>docker exec -it db-container bash</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="psql -d school_db -U student"
+                  >
+                    <code>psql -d school_db -U student</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                </div>
+                <label for="milestone-postgres">
+                  <input
+                    id="milestone-postgres"
+                    type="checkbox"
+                    data-checklist-item
+                  />
+                  <span
+                    >I can enter the DB container and connect with
+                    <code>psql</code>.</span
+                  >
+                </label>
+              </article>
+
+              <article
+                id="settings-postgres-card"
+                class="milestone-card"
+                data-milestone-card
+                data-observe
+                data-search-target
+              >
+                <div class="milestone-meta">
+                  <span class="milestone-step">6</span>
+                  <span class="feature-badge">Settings</span>
+                </div>
+                <h3>Configure Settings</h3>
+                <p>
+                  Point Django at PostgreSQL, update
+                  <code>ALLOWED_HOSTS</code>, and make sure the Django container
+                  is running on the same network.
+                </p>
+                <div class="mini-command-list">
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text='ALLOWED_HOSTS = ["localhost", "127.0.0.1"]'
+                  >
+                    <code>ALLOWED_HOSTS = ["localhost", "127.0.0.1"]</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text='ENGINE = "django.db.backends.postgresql"'
+                  >
+                    <code>ENGINE = "django.db.backends.postgresql"</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text='HOST = "db-container"'
+                  >
+                    <code>HOST = "db-container"</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                </div>
+                <label for="milestone-settings">
+                  <input
+                    id="milestone-settings"
+                    type="checkbox"
+                    data-checklist-item
+                  />
+                  <span
+                    >I updated <code>settings.py</code> for my Dockerized
+                    database.</span
+                  >
+                </label>
+              </article>
+
+              <article
+                id="requirements-card"
+                class="milestone-card"
+                data-milestone-card
+                data-observe
+                data-search-target
+              >
+                <div class="milestone-meta">
+                  <span class="milestone-step">7</span>
+                  <span class="feature-badge">Freeze</span>
+                </div>
+                <h3>Freeze Dependencies at the Right Time</h3>
+                <p>
+                  Freeze after the environment has the packages you actually
+                  need, not after every single install step.
+                </p>
+                <div class="mini-command-list">
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="pip freeze &gt; requirements.txt"
+                  >
+                    <code>pip freeze &gt; requirements.txt</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="pip install -r requirements.txt"
+                  >
+                    <code>pip install -r requirements.txt</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                </div>
+                <label for="milestone-freeze">
+                  <input
+                    id="milestone-freeze"
+                    type="checkbox"
+                    data-checklist-item
+                  />
+                  <span
+                    >I created <code>requirements.txt</code> after setup
+                    stabilized.</span
+                  >
+                </label>
+              </article>
+
+              <article
+                id="apps-models"
+                class="milestone-card"
+                data-milestone-card
+                data-observe
+                data-search-target
+              >
+                <div class="milestone-meta">
+                  <span class="milestone-step">8</span>
+                  <span class="feature-badge">App</span>
+                </div>
+                <h3>Create <code>student_app</code></h3>
+                <p>
+                  Start the app inside the Django container. This creates the
+                  app folder, migrations folder, and starter files you will use
+                  for the rest of the assignment.
+                </p>
+                <div class="mini-command-list">
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="pm startapp student_app"
+                  >
+                    <code>pm startapp student_app</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                </div>
+                <label for="milestone-app">
+                  <input
+                    id="milestone-app"
+                    type="checkbox"
+                    data-checklist-item
+                  />
+                  <span>I created <code>student_app</code> inside the Django project.</span>
+                </label>
+              </article>
+
+              <article
+                id="installed-apps-card"
+                class="milestone-card"
+                data-milestone-card
+                data-observe
+                data-search-target
+              >
+                <div class="milestone-meta">
+                  <span class="milestone-step">9</span>
+                  <span class="feature-badge">Settings</span>
+                </div>
+                <h3>Add the App to <code>INSTALLED_APPS</code></h3>
+                <p>
+                  Django has to know the app exists. If you forget this step,
+                  you get no models, no migrations, no admin entry, and no
+                  database tables for the app.
+                </p>
+                <div class="mini-command-list">
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text='"student_app",'
+                  >
+                    <code>"student_app",</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                </div>
+                <div class="code-container">
+                  <button class="copy-button" type="button">Copy</button>
+                  <pre><code>INSTALLED_APPS = [
+    ...
+    "student_app",
+]</code></pre>
+                </div>
+                <label for="milestone-installed-apps">
+                  <input
+                    id="milestone-installed-apps"
+                    type="checkbox"
+                    data-checklist-item
+                  />
+                  <span>I added <code>student_app</code> to <code>INSTALLED_APPS</code>.</span>
+                </label>
+              </article>
+
+              <article
+                id="student-model-card"
+                class="milestone-card"
+                data-milestone-card
+                data-observe
+                data-search-target
+              >
+                <div class="milestone-meta">
+                  <span class="milestone-step">10</span>
+                  <span class="feature-badge">Model</span>
+                </div>
+                <h3>Create the <code>Student</code> Model</h3>
+                <p>
+                  Define the schema in <code>student_app/models.py</code>
+                  before you worry about the admin site or fixtures.
+                </p>
+                <div class="code-container">
+                  <button class="copy-button" type="button">Copy</button>
+                  <pre><code>from django.db import models
+
+
+class Student(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    grade = models.IntegerField(default=9)
+    notes = models.TextField(default="No notes yet.")
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"&lt; Student: {self.first_name} {self.last_name} &gt;"
+
+    def next_grade(self):
+        self.grade += 1
+        self.save()</code></pre>
+                </div>
+                <label for="milestone-model">
+                  <input
+                    id="milestone-model"
+                    type="checkbox"
+                    data-checklist-item
+                  />
+                  <span>I created the <code>Student</code> model in <code>models.py</code>.</span>
+                </label>
+              </article>
+
+              <article
+                id="admin-register-card"
+                class="milestone-card"
+                data-milestone-card
+                data-observe
+                data-search-target
+              >
+                <div class="milestone-meta">
+                  <span class="milestone-step">11</span>
+                  <span class="feature-badge">Admin</span>
+                </div>
+                <h3>Register the Model in <code>admin.py</code></h3>
+                <p>
+                  This step is required for <code>Student</code> to appear in
+                  the Django Admin interface. If you skip it, the admin site
+                  loads, but your model is missing from the sidebar.
+                </p>
+                <div class="code-container">
+                  <button class="copy-button" type="button">Copy</button>
+                  <pre><code>from django.contrib import admin
+from student_app.models import Student
+
+admin.site.register(Student)</code></pre>
+                </div>
+                <label for="milestone-admin-register">
+                  <input
+                    id="milestone-admin-register"
+                    type="checkbox"
+                    data-checklist-item
+                  />
+                  <span>I registered <code>Student</code> in <code>admin.py</code>.</span>
+                </label>
+              </article>
+
+              <article
+                id="migrations-card"
+                class="milestone-card"
+                data-milestone-card
+                data-observe
+                data-search-target
+              >
+                <div class="milestone-meta">
+                  <span class="milestone-step">12</span>
+                  <span class="feature-badge">Migrations</span>
+                </div>
+                <h3>Run Migrations</h3>
+                <p>
+                  Run these inside the Django container after model changes.
+                  The first command creates migration files. The second updates
+                  PostgreSQL. Then verify the table exists.
+                </p>
+                <div class="mini-command-list">
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="pm makemigrations"
+                  >
+                    <code>pm makemigrations</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="pm migrate"
+                  >
+                    <code>pm migrate</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="\dt"
+                  >
+                    <code>\dt</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                </div>
+                <label for="milestone-migrate">
+                  <input
+                    id="milestone-migrate"
+                    type="checkbox"
+                    data-checklist-item
+                  />
+                  <span
+                    >I generated migrations and verified the tables in
+                    PostgreSQL.</span
+                  >
+                </label>
+              </article>
+
+              <article
+                id="admin-fixtures"
+                class="milestone-card"
+                data-milestone-card
+                data-observe
+                data-search-target
+              >
+                <div class="milestone-meta">
+                  <span class="milestone-step">13</span>
+                  <span class="feature-badge">Admin</span>
+                </div>
+                <h3>Use Admin, Shell, and Fixtures</h3>
+                <p>
+                  Create a superuser, test model behavior in the shell, and dump
+                  JSON fixture data after you add or update records.
+                </p>
+                <div class="mini-command-list">
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="pm createsuperuser"
+                  >
+                    <code>pm createsuperuser</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="pm shell"
+                  >
+                    <code>pm shell</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="pm dumpdata student_app.Student --indent 2 &gt; student_app/fixtures/student_data.json"
+                  >
+                    <code>pm dumpdata student_app.Student --indent 2 &gt; student_app/fixtures/student_data.json</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                </div>
+                <label for="milestone-admin">
+                  <input
+                    id="milestone-admin"
+                    type="checkbox"
+                    data-checklist-item
+                  />
+                  <span
+                    >I can create data through admin or shell and back it up to
+                    fixtures.</span
+                  >
+                </label>
+              </article>
+
+              <article
+                id="troubleshooting-card"
+                class="milestone-card"
+                data-milestone-card
+                data-observe
+                data-search-target
+              >
+                <div class="milestone-meta">
+                  <span class="milestone-step">14</span>
+                  <span class="feature-badge">Support</span>
+                </div>
+                <h3>Troubleshoot Before You Spiral</h3>
+                <p>
+                  Most class problems were one of these: wrong app registration,
+                  forgot migrations, wrong container, wrong host, or
+                  permissions.
+                </p>
+                <div class="mini-command-list">
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="docker ps"
+                  >
+                    <code>docker ps</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="docker network inspect school-network"
+                  >
+                    <code>docker network inspect school-network</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-text="ls -l student_app"
+                  >
+                    <code>ls -l student_app</code>
+                    <span class="command-copy-label" data-copy-label>Copy</span>
+                  </button>
+                </div>
+                <label for="milestone-troubleshoot">
+                  <input
+                    id="milestone-troubleshoot"
+                    type="checkbox"
+                    data-checklist-item
+                  />
+                  <span
+                    >I know the first places to look when Django breaks.</span
+                  >
+                </label>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="workflow-philosophy"
+          class="section"
+          data-observe
+          data-search-target
+        >
+          <div class="section-heading">
+            <p class="tag">Reference</p>
+            <h2>Workflow Philosophy</h2>
+            <p>
+              This page follows the class workflow, not generic Django docs.
+              Install what you know you need early, then freeze once the Python
+              environment is complete enough to reuse.
+            </p>
+          </div>
+
+          <div class="workflow-grid">
+            <article class="workflow-card">
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Why Django</p>
+                  <h3>Batteries Included</h3>
+                </div>
+                <span class="feature-badge">Framework</span>
+              </div>
+              <p>
+                Django is opinionated and batteries included. You get models,
+                admin, migrations, auth, routing, forms, and a lot of backend
+                structure without hunting for third-party packages first.
+              </p>
+              <div class="flow-steps">
+                <span>Models</span>
+                <strong>→</strong>
+                <span>Migrations</span>
+                <strong>→</strong>
+                <span>Admin</span>
+                <strong>→</strong>
+                <span>API Work</span>
+              </div>
+            </article>
+
+            <article class="workflow-card">
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Project Rule</p>
+                  <h3>Each Project Gets Its Own Virtual Environment</h3>
+                </div>
+                <span class="feature-badge">Venv</span>
+              </div>
+              <p>
+                Treat the virtual environment like
+                <code>node_modules</code>: it belongs to the project, it stays
+                out of Git, and it protects each app's Python version and
+                package list from the rest of your machine.
+              </p>
+              <aside class="note">
+                VS Code usually detects the venv. If not, use
+                <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> and choose
+                <code>Python: Select Interpreter</code>.
+              </aside>
+            </article>
+
+            <article class="workflow-card wide-card">
+              <div class="card-heading">
+                <div>
+                  <p class="card-label">Install Strategy</p>
+                  <h3>
+                    Front-Load Known Packages, Delay <code>pip freeze</code>
+                  </h3>
+                </div>
+                <span class="feature-badge">Smooth Workflow</span>
+              </div>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>python -m venv .venv
+source .venv/bin/activate
+alias pm="python manage.py"
+pip install django "psycopg[binary]" django-stubs
+django-admin startproject school_proj
+cd school_proj
+pm runserver
+pip freeze &gt; requirements.txt</code></pre>
+              </div>
+              <p>
+                Your notes make the better workflow explicit: collect the
+                packages you know you will need, install them early, and freeze
+                after the environment is ready to share or build in Docker.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section
+          id="project-layout"
+          class="section"
+          data-observe
+          data-search-target
+        >
+          <div class="section-heading">
+            <p class="tag">Structure</p>
+            <h2>Project Layout</h2>
+            <p>
+              This nested layout matches your setup notes and the class
+              workflow.
+            </p>
+          </div>
+
+          <div class="project-tree">
+            <div class="code-container">
+              <button class="copy-button" type="button">Copy</button>
+              <pre><code>.
+├── db
+│   ├── Dockerfile
+│   └── run_db.sh
+├── school_proj
+│   ├── Dockerfile
+│   ├── manage.py
+│   ├── school_proj
+│   │   ├── __init__.py
+│   │   ├── asgi.py
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   └── wsgi.py
+│   ├── requirements.txt
+│   └── run_server.sh
+└── README.md</code></pre>
+            </div>
+          </div>
+
+          <div class="snapshot-grid">
+            <article>
+              <h3>Project vs App</h3>
+              <p>
+                A Django project is the whole application. Inside it, each app
+                should own one area of responsibility.
+              </p>
+            </article>
+            <article>
+              <h3>App Examples</h3>
+              <p>
+                If your project has students, teachers, and courses, those are
+                good candidates for separate Django apps.
+              </p>
+            </article>
+            <article>
+              <h3>Register Everything</h3>
+              <p>
+                If Django does not know about the app or package in
+                <code>INSTALLED_APPS</code>, you will not get models,
+                migrations, admin entries, or tables.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section
+          id="settings-postgres"
+          class="section"
+          data-observe
+          data-search-target
+        >
+          <div class="section-heading">
+            <p class="tag">Configuration</p>
+            <h2>Settings and PostgreSQL</h2>
+            <p>
+              The database and Django server need to be on the same Docker
+              network, and Django needs PostgreSQL settings that match your
+              container names and credentials.
+            </p>
+          </div>
+
+          <div class="reference-grid">
+            <article>
+              <h3>DB Dockerfile</h3>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>FROM postgres:15
+
+ENV POSTGRES_USER=student
+ENV POSTGRES_PASSWORD=student
+ENV POSTGRES_DB=school_db
+
+EXPOSE 5432
+
+CMD ["postgres"]</code></pre>
+              </div>
+            </article>
+
+            <article>
+              <h3><code>run_db.sh</code></h3>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>#!/bin/bash
+
+docker build -t db-img .
+docker run -d --rm --name db-container --network school-network db-img</code></pre>
+              </div>
+            </article>
+
+            <article>
+              <h3>Django Dockerfile</h3>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>FROM python:latest
+
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+
+EXPOSE 8000
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]</code></pre>
+              </div>
+            </article>
+
+            <article>
+              <h3><code>run_server.sh</code></h3>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>#!/bin/bash
+
+docker build -t django-img .
+docker run --rm -it \
+  --name django-container \
+  --network school-network \
+  --user "$(id -u):$(id -g)" \
+  -p 8001:8000 \
+  -v "$(pwd):/app" \
+  django-img</code></pre>
+              </div>
+            </article>
+          </div>
+
+          <h3>Key <code>settings.py</code> Values</h3>
+          <div class="code-container">
+            <button class="copy-button" type="button">Copy</button>
+            <pre><code>ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "school_db",
+        "USER": "student",
+        "PASSWORD": "student",
+        "HOST": "db-container",
+        "PORT": "5432",
+    }
+}</code></pre>
+          </div>
+
+          <aside class="note">
+            Your notes also mention using <code>["*"]</code> for
+            <code>ALLOWED_HOSTS</code> during development. That is fine for
+            quick class setup, but be deliberate about it.
+          </aside>
+        </section>
+
+        <section
+          id="models-migrations"
+          class="section"
+          data-observe
+          data-search-target
+        >
+          <div class="section-heading">
+            <p class="tag">ORM</p>
+            <h2>Models and Migrations</h2>
+            <p>
+              Models describe the schema. <code>makemigrations</code> creates
+              the change files. <code>migrate</code> applies them to PostgreSQL.
+            </p>
+          </div>
+
+          <div class="reference-grid">
+            <article>
+              <h3>Create the App</h3>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>pm startapp student_app</code></pre>
+              </div>
+              <p>
+                Run this in the Django container. Then add
+                <code>"student_app"</code> to <code>INSTALLED_APPS</code>.
+              </p>
+            </article>
+
+            <article>
+              <h3>Example Model</h3>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>from django.db import models
+
+
+class Student(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    grade = models.IntegerField(default=9)
+    notes = models.TextField(default="No notes yet.")
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"&lt; Student: {self.first_name} {self.last_name} &gt;"
+
+    def next_grade(self):
+        self.grade += 1
+        self.save()</code></pre>
+              </div>
+            </article>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Django Field</th>
+                <th>SQL Equivalent</th>
+                <th>Typical Use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>CharField</code></td>
+                <td><code>VARCHAR</code></td>
+                <td>Names, short labels, types</td>
+              </tr>
+              <tr>
+                <td><code>TextField</code></td>
+                <td><code>TEXT</code></td>
+                <td>Longer notes and descriptions</td>
+              </tr>
+              <tr>
+                <td><code>IntegerField</code></td>
+                <td><code>INTEGER</code></td>
+                <td>Grades, counts, numeric state</td>
+              </tr>
+              <tr>
+                <td><code>BooleanField</code></td>
+                <td><code>BOOLEAN</code></td>
+                <td>Flags like <code>is_active</code></td>
+              </tr>
+              <tr>
+                <td><code>DateTimeField</code></td>
+                <td><code>TIMESTAMP</code></td>
+                <td>Timestamps</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="workflow-card wide-card">
+            <div class="card-heading">
+              <div>
+                <p class="card-label">Always In Order</p>
+                <h3>Migration Flow</h3>
+              </div>
+              <span class="feature-badge">Database</span>
+            </div>
+            <div class="flow-steps">
+              <span>Edit <code>models.py</code></span>
+              <strong>→</strong>
+              <span><code>pm makemigrations</code></span>
+              <strong>→</strong>
+              <span>Review migration file</span>
+              <strong>→</strong>
+              <span><code>pm migrate</code></span>
+              <strong>→</strong>
+              <span>Verify with <code>\dt</code> or <code>\d</code></span>
+            </div>
+            <aside class="warning">
+              If you changed the model but skipped <code>migrate</code>, the
+              database did not change yet.
+            </aside>
+          </div>
+        </section>
+
+        <section
+          id="crud-shell"
+          class="section"
+          data-observe
+          data-search-target
+        >
+          <div class="section-heading">
+            <p class="tag">Data</p>
+            <h2>CRUD and Django Shell</h2>
+            <p>
+              The shell is the fastest place to test your model logic before you
+              wire it into views or APIs.
+            </p>
+          </div>
+
+          <div class="diagram-grid">
+            <article>
+              <h3>Object Lifecycle</h3>
+              <div class="flow-steps">
+                <span>Create Python object</span>
+                <strong>→</strong>
+                <span>Modify attributes</span>
+                <strong>→</strong>
+                <span><code>save()</code></span>
+                <strong>→</strong>
+                <span>Database row</span>
+              </div>
+            </article>
+
+            <article>
+              <h3>Admin First, SQL Second</h3>
+              <p>
+                Create data through the shell or admin, then verify in
+                PostgreSQL if you need proof that the ORM actually wrote the
+                row.
+              </p>
+            </article>
+          </div>
+
+          <div class="reference-grid">
+            <article>
+              <h3>Create and Save</h3>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>pm shell
+
+from student_app.models import Student
+
+s = Student(
+    first_name="Ada",
+    last_name="Lovelace",
+    grade=11,
+)
+
+s.save()</code></pre>
+              </div>
+            </article>
+
+            <article>
+              <h3>Read and Update</h3>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>from student_app.models import Student
+
+s = Student.objects.get(id=1)
+s.next_grade()
+s.notes = "Met after class for extra help."
+s.save()</code></pre>
+              </div>
+            </article>
+
+            <article>
+              <h3>Basic CRUD Reference</h3>
+              <div class="command-table">
+                <div>
+                  <code>Create</code>
+                  <span
+                    >Instantiate the model and call <code>save()</code>.</span
+                  >
+                </div>
+                <div>
+                  <code>Read</code>
+                  <span
+                    >Use <code>objects.get()</code> or
+                    <code>objects.all()</code>.</span
+                  >
+                </div>
+                <div>
+                  <code>Update</code>
+                  <span>Change attributes, then call <code>save()</code>.</span>
+                </div>
+                <div>
+                  <code>Delete</code>
+                  <span
+                    >Call <code>instance.delete()</code> when you need to remove
+                    a row.</span
+                  >
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section
+          id="relationships"
+          class="section"
+          data-observe
+          data-search-target
+        >
+          <div class="section-heading">
+            <p class="tag">Schema</p>
+            <h2>Relationships</h2>
+            <p>
+              The lecture material mostly focused on verifying relationships
+              from PostgreSQL with <code>\d</code>, but this is the Django side
+              you will need when your project grows past a single table.
+            </p>
+          </div>
+
+          <div class="reference-grid">
+            <article>
+              <h3><code>ForeignKey</code></h3>
+              <p>
+                Use this when many students belong to one cohort or advisor.
+              </p>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>cohort = models.ForeignKey(
+    "cohort_app.Cohort",
+    on_delete=models.CASCADE,
+)</code></pre>
+              </div>
+            </article>
+
+            <article>
+              <h3><code>OneToOneField</code></h3>
+              <p>
+                Use this for one record that extends a single student, like a
+                profile or a locker assignment.
+              </p>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>profile = models.OneToOneField(
+    Student,
+    on_delete=models.CASCADE,
+)</code></pre>
+              </div>
+            </article>
+
+            <article>
+              <h3><code>ManyToManyField</code></h3>
+              <p>
+                Use this when students can enroll in many courses and courses
+                can have many students.
+              </p>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>courses = models.ManyToManyField("course_app.Course")</code></pre>
+              </div>
+            </article>
+
+            <article>
+              <h3>Verify in PostgreSQL</h3>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>docker exec -it db-container bash
+psql -d school_db -U student
+\d
+\dt</code></pre>
+              </div>
+              <p>
+                Use this to confirm tables and relationships were actually
+                created the way you expected.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section
+          id="fixtures-backups"
+          class="section"
+          data-observe
+          data-search-target
+        >
+          <div class="section-heading">
+            <p class="tag">Data Sharing</p>
+            <h2>Fixtures and Backups</h2>
+            <p>
+              Fixtures are useful for demo, seed, and test data. They are not a
+              full PostgreSQL backup.
+            </p>
+          </div>
+
+          <div class="reference-grid">
+            <article>
+              <h3>Dump Fixture Data</h3>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>mkdir -p student_app/fixtures
+pm dumpdata student_app.Student --indent 2 &gt; student_app/fixtures/student_data.json</code></pre>
+              </div>
+              <p>
+                If you were testing in the Python shell first, exit the shell
+                before running <code>dumpdata</code>.
+              </p>
+            </article>
+
+            <article>
+              <h3>Restore Fixture Data</h3>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>pm migrate
+pm loaddata ./student_app/fixtures/student_data.json</code></pre>
+              </div>
+              <p>
+                Run <code>migrate</code> first so the tables exist before you
+                try to load the JSON.
+              </p>
+            </article>
+
+            <article>
+              <h3>When You Need a Real Backup</h3>
+              <div class="code-container">
+                <button class="copy-button" type="button">Copy</button>
+                <pre><code>pg_dump school_db &gt; backup.sql</code></pre>
+              </div>
+              <p>
+                A SQL dump captures the actual database structure and rules in a
+                way fixtures do not.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section
+          id="daily-startup"
+          class="section"
+          data-observe
+          data-search-target
+        >
+          <div class="section-heading">
+            <p class="tag">Repeatable Routine</p>
+            <h2>Daily Startup</h2>
+            <p>This is the shortest path back into a project the next day.</p>
+          </div>
+
+          <div class="code-container">
+            <button class="copy-button" type="button">Copy</button>
+            <pre><code>cd db
+./run_db.sh
+
+docker exec -it db-container bash
+psql -U student -d school_db
+
+cd ../school_proj
+./run_server.sh
+
+docker exec -it django-container bash
+pm migrate</code></pre>
+          </div>
+
+          <aside class="note">
+            Your notes call out a class habit worth keeping: bring both
+            containers up first, verify the DB connection, then enter the Django
+            container and migrate before assuming your data is missing.
+          </aside>
+        </section>
+
+        <section id="commands" class="section" data-observe data-search-target>
+          <div class="section-heading">
+            <p class="tag">Quick Reference</p>
+            <h2>Useful Commands</h2>
+          </div>
+
+          <div class="command-table">
+            <div>
+              <code>docker ps</code>
+              <span>See which containers are actually running.</span>
+            </div>
+            <div>
+              <code>docker exec -it django-container bash</code>
+              <span>Enter the Django container.</span>
+            </div>
+            <div>
+              <code>docker exec -it db-container bash</code>
+              <span>Enter the PostgreSQL container.</span>
+            </div>
+            <div>
+              <code>docker network inspect school-network</code>
+              <span>Verify both containers joined the same network.</span>
+            </div>
+            <div>
+              <code>pm migrate</code>
+              <span>Apply migration files to PostgreSQL.</span>
+            </div>
+            <div>
+              <code>pm createsuperuser</code>
+              <span>Create the admin login.</span>
+            </div>
+            <div>
+              <code>http://localhost:8000/admin</code>
+              <span>Open Django Admin.</span>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="troubleshooting"
+          class="section"
+          data-observe
+          data-search-target
+        >
+          <div class="section-heading">
+            <p class="tag">When Something Breaks</p>
+            <h2>Troubleshooting</h2>
+            <p>
+              These are the class mistakes and environment problems that came up
+              repeatedly.
+            </p>
+          </div>
+
+          <div class="troubleshooting-grid">
+            <article>
+              <h3>Forgot <code>INSTALLED_APPS</code></h3>
+              <p>
+                Symptom: no models, no migrations, no admin entry, and no
+                database table. Fix the app registration first.
+              </p>
+            </article>
+
+            <article>
+              <h3>
+                Forgot <code>makemigrations</code> or <code>migrate</code>
+              </h3>
+              <p>
+                Symptom: your model file changed but PostgreSQL still looks the
+                same. Run both commands inside the Django container.
+              </p>
+            </article>
+
+            <article>
+              <h3><code>relation does not exist</code></h3>
+              <p>
+                Usually the migration was never applied, or you connected to the
+                wrong database after recreating containers.
+              </p>
+            </article>
+
+            <article>
+              <h3>Docker Networking</h3>
+              <p>
+                If Django cannot reach PostgreSQL, inspect the Docker network
+                and confirm the DB host in <code>settings.py</code> matches the
+                container name.
+              </p>
+            </article>
+
+            <article>
+              <h3>Permissions and <code>EACCES</code></h3>
+              <p>
+                If files were created as <code>root</code>, Linux users may need
+                a user-mapped Docker run or to fix ownership with
+                <code>sudo chown -R $USER:$USER ...</code>.
+              </p>
+            </article>
+
+            <article>
+              <h3>Wrong Database</h3>
+              <p>
+                Verify the DB name you chose in the Dockerfile matches the DB
+                name in <code>psql</code> and <code>settings.py</code>.
+              </p>
+            </article>
+
+            <article>
+              <h3>PostgreSQL Connection Errors</h3>
+              <p>
+                Check <code>docker ps</code>, confirm port <code>5432</code>,
+                verify credentials, and confirm the DB container started
+                successfully.
+              </p>
+            </article>
+
+            <article>
+              <h3>Fixture Confusion</h3>
+              <p>
+                Fixtures are JSON model data, not a full database backup. Run
+                migrations before <code>loaddata</code>.
+              </p>
+            </article>
+
+            <article>
+              <h3>Admin Looks Wrong</h3>
+              <p>
+                Add <code>__str__</code> to the model so the admin stops showing
+                object numbers without useful names.
+              </p>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        <a href="../">Return to all cheat sheets</a>
+      </p>
+    </footer>
+
+    <button
+      class="back-to-top"
+      id="back-to-top"
+      type="button"
+      aria-label="Back to top"
+      title="Back to top"
+    >
+      ↑ Top
+    </button>
+
+    <script src="../assets/js/navigation.js" defer></script>
+    <script src="../assets/js/site.js" defer></script>
+  </body>
+</html>
