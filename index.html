@@ -11,7 +11,7 @@
 
     <title>Developer Cheat Sheets</title>
 
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css?v=20260730" />
   </head>
 
   <body>
@@ -173,5 +173,47 @@
     <footer>
       <p>Built as a learning resource for the Code Platoon community.</p>
     </footer>
+
+    <script>
+      const ensureDjangoCard = () => {
+        const grid = document.querySelector(".grid");
+
+        if (!grid || grid.querySelector('a[href="./django/"]')) {
+          return;
+        }
+
+        const djangoCard = document.createElement("a");
+        djangoCard.className = "card";
+        djangoCard.href = "./django/";
+        djangoCard.innerHTML = `
+          <div class="card-icon">🟩</div>
+          <h3>Django</h3>
+          <p>
+            Workflow-first notes for setting up Django with PostgreSQL,
+            apps, models, migrations, fixtures, and the admin site.
+          </p>
+          <span class="topics">ORM • Migrations • Admin</span>
+          <span class="card-link">Open Cheat Sheet →</span>
+        `;
+
+        const dockerGroup = grid.querySelector("#docker-group-title")?.closest(".card-group");
+
+        if (dockerGroup?.nextElementSibling) {
+          dockerGroup.insertAdjacentElement("afterend", djangoCard);
+        } else {
+          grid.appendChild(djangoCard);
+        }
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", ensureDjangoCard, {
+          once: true,
+        });
+      } else {
+        ensureDjangoCard();
+      }
+
+      window.addEventListener("pageshow", ensureDjangoCard);
+    </script>
   </body>
 </html>

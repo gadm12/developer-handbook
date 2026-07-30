@@ -151,4 +151,16 @@ const renderSharedNavigation = () => {
   `;
 };
 
-renderSharedNavigation();
+const initSharedNavigation = () => {
+  renderSharedNavigation();
+};
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initSharedNavigation, {
+    once: true,
+  });
+} else {
+  initSharedNavigation();
+}
+
+window.addEventListener("pageshow", initSharedNavigation);
