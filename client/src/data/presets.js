@@ -18,7 +18,12 @@ export const presets = [
         file('.dockerignore'),
         file('Dockerfile'),
       ]),
-      dir('server', [file('.env'), file('.dockerignore'), file('Dockerfile')]),
+      dir('server', [
+        file('.env'),
+        file('.env.example'),
+        file('.dockerignore'),
+        file('Dockerfile'),
+      ]),
       dir('db', [file('.dockerignore'), file('Dockerfile')]),
       file('docker-compose.yml'),
       file('docker-compose.prod.yml'),
@@ -31,60 +36,35 @@ export const presets = [
     id: 'django-app',
     label: 'Django App',
     description:
-      'A Django project with one app already broken out. `startproject` and `startapp` generate most of this — use it to see the shape before you run them.',
-    tree: dir('server', [
+      'The files startapp does not give you, plus a tests folder. Rename name_app and test_001.py in place — one generate creates both folders at once.',
+    tree: dir('root', [
       dir('server', [
-        file('__init__.py'),
-        file('settings.py'),
-        file('urls.py'),
-        file('wsgi.py'),
-        file('asgi.py'),
+        dir('name_app', [
+          file('serializers.py'),
+          file('validators.py'),
+          file('urls.py'),
+        ]),
+        dir('tests', [file('test_001.py')]),
       ]),
-      dir('user_app', [
-        dir('migrations', [file('__init__.py')]),
-        dir('fixtures', [file('user_data.json')]),
-        file('__init__.py'),
-        file('admin.py'),
-        file('apps.py'),
-        file('models.py'),
-        file('serializers.py'),
-        file('urls.py'),
-        file('views.py'),
-        file('tests.py'),
-      ]),
-      file('manage.py'),
-      file('requirements.txt'),
-      file('.env'),
-      file('.env.example'),
-      file('.dockerignore'),
-      file('Dockerfile'),
     ]),
   },
   {
     id: 'react-client',
     label: 'React Client',
     description:
-      'A Vite React client with routing, Cypress, and the folders worth creating up front. `npm create vite@latest` gives you a thinner version of this.',
-    tree: dir('client', [
-      dir('public', [file('favicon.svg')]),
-      dir('src', [
-        dir('assets', []),
-        dir('components', [file('NavBar.jsx')]),
-        dir('pages', [file('Home.jsx')]),
-        file('main.jsx'),
-        file('App.jsx'),
-        file('router.jsx'),
-        file('utilities.js'),
-        file('index.css'),
+      'One component folder with colocated styles. Rename Navbar to whatever you are building and generate.',
+    tree: dir('root', [
+      dir('client', [
+        dir('src', [
+          dir('Components', [
+            dir('Navbar', [
+              file('Navbar.jsx'),
+              file('index.js'),
+              dir('styles', [file('styles.css'), file('tailwindStyles.js')]),
+            ]),
+          ]),
+        ]),
       ]),
-      dir('cypress', [dir('e2e', [file('smoke.cy.js')])]),
-      file('index.html'),
-      file('package.json'),
-      file('vite.config.js'),
-      file('eslint.config.js'),
-      file('.env'),
-      file('.dockerignore'),
-      file('Dockerfile'),
     ]),
   },
 ]
