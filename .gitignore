@@ -1,4 +1,10 @@
-prompt.md
+node_modules/
+dist/
+.DS_Store
+
+# Previous version of the site, kept locally as source material only.
+legacy-reference/
+
 prompt.md
 _test.py
 

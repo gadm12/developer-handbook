@@ -1,7 +1,7 @@
-import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
-// https://vite.dev/config/
+// Project site at https://gadm12.github.io/developer-handbook/ — without this
+// base every built asset URL resolves to the domain root and 404s.
 export default defineConfig({
-  plugins: [react()],
+  base: '/developer-handbook/',
 })
