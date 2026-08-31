@@ -2,6 +2,7 @@ import './style.css'
 
 import { guides } from './data/guides.js'
 import { createGuideView } from './features/guides/guide-view.js'
+import { createToc } from './features/guides/toc-view.js'
 import { createScaffoldView } from './features/scaffold/tree-view.js'
 import { startRouter } from './router.js'
 import { createSidebar } from './ui/sidebar.js'
@@ -19,22 +20,38 @@ function notFound(id) {
   return el
 }
 
-function viewFor(route) {
+function viewFor(route, guide) {
   if (route.name === 'guide') {
-    const guide = guides.find((g) => g.id === route.id)
     return guide ? createGuideView(guide) : notFound(route.id)
   }
   return createScaffoldView()
 }
 
+// The table of contents listens on window scroll, which outlives the DOM that
+// replaceChildren throws away, so each render tears down the one before it.
+let disposeToc = null
+
 function render(route) {
+  disposeToc?.()
+  disposeToc = null
+
+  const guide =
+    route.name === 'guide' ? guides.find((g) => g.id === route.id) : null
+
   const main = document.createElement('main')
   main.className = 'main'
-  main.append(viewFor(route))
+  main.append(viewFor(route, guide))
 
   const layout = document.createElement('div')
   layout.className = 'layout'
   layout.append(createSidebar(route), main)
+
+  const toc = guide ? createToc(guide) : null
+  if (toc) {
+    layout.classList.add('has-toc')
+    layout.append(toc.element)
+    disposeToc = toc.destroy
+  }
 
   app.replaceChildren(layout)
   window.scrollTo(0, 0)

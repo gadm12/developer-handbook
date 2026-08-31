@@ -1,4 +1,5 @@
 import { createCodeBlock } from '../../ui/code-block.js'
+import { headingsFor } from './headings.js'
 
 // Inline `code` spans are the only markup allowed in prose, so escape
 // everything first and then re-open just those.
@@ -54,9 +55,18 @@ export function createGuideView(guide) {
     root.append(lede)
   }
 
+  // Ids come from the same pure derivation the TOC uses, zipped by document
+  // order, so the two can never drift apart.
+  const headings = headingsFor(guide)
+  let heading = 0
+
   for (const block of guide.blocks) {
     const render = RENDERERS[block.type]
-    if (render) root.append(render(block))
+    if (!render) continue
+
+    const el = render(block)
+    if (block.type === 'h2' || block.type === 'h3') el.id = headings[heading++].id
+    root.append(el)
   }
 
   return root

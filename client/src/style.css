@@ -22,6 +22,8 @@
   --mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Consolas, monospace;
 
   --sidebar-w: 260px;
+  --toc-w: 220px;
+  --main-w: 980px;
   --radius: 6px;
 
   color-scheme: dark;
@@ -55,6 +57,15 @@ a {
   display: grid;
   grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
   min-height: 100vh;
+}
+
+/* Only guide routes get the right-hand rail; the scaffold route stays two-up
+   rather than leaving an empty column. The trailing 1fr soaks up leftover width
+   on wide screens, which keeps the rail beside the prose instead of stranded
+   against the far edge. */
+.layout.has-toc {
+  grid-template-columns:
+    var(--sidebar-w) minmax(0, var(--main-w)) var(--toc-w) minmax(0, 1fr);
 }
 
 .sidebar {
@@ -114,7 +125,7 @@ a {
 
 .main {
   padding: 2.5rem 3rem 5rem;
-  max-width: 980px;
+  max-width: var(--main-w);
   min-width: 0;
 }
 
@@ -146,6 +157,13 @@ a {
   font-size: 0.98rem;
   color: var(--text-strong);
   font-weight: 650;
+}
+
+/* Where scrollIntoView parks a jumped-to heading. Keep this below READING_LINE
+   in toc-view.js, or the spy lights the previous section after every jump. */
+.main h2,
+.main h3 {
+  scroll-margin-top: 1.5rem;
 }
 
 .main p {
@@ -434,10 +452,78 @@ a {
   cursor: pointer;
 }
 
+/* ---------- table of contents ---------- */
+
+/* A hairline rail rather than a boxed panel, so it stays quieter than the
+   left nav. */
+.toc {
+  position: sticky;
+  top: 0;
+  /* Grid items stretch to the row height by default, which would make `sticky`
+     a no-op. The left sidebar sidesteps this with an outright height: 100vh;
+     this one wants its natural height. */
+  align-self: start;
+  max-height: 100vh;
+  overflow-y: auto;
+  padding: 2.6rem 1.5rem 3rem 0;
+}
+
+.toc-label {
+  margin: 0 0 0.5rem;
+  padding-left: 0.75rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.toc-link {
+  display: block;
+  width: 100%;
+  font: inherit;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  text-align: left;
+  padding: 0.3rem 0.5rem 0.3rem 0.75rem;
+  background: none;
+  border: 0;
+  border-left: 1px solid var(--border-soft);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.toc-link:hover {
+  color: var(--text-strong);
+}
+
+.toc-link.is-active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+}
+
+.toc-link.level-3 {
+  padding-left: 1.6rem;
+  font-size: 0.74rem;
+}
+
 /* ---------- responsive (nice-to-have) ---------- */
 
+/* 260px of nav plus 220px of rail squeezes the prose too hard below this, so
+   the rail is the first thing to go. */
+@media (max-width: 1180px) {
+  .layout.has-toc {
+    grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  }
+
+  .toc {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
-  .layout {
+  .layout,
+  .layout.has-toc {
     grid-template-columns: 1fr;
   }
 
