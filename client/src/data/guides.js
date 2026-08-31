@@ -651,6 +651,7 @@ __pycache__/
 # Environment Variables
 .env
 .env.*
+!.env.example
 
 # Testing / Coverage
 .pytest_cache/
@@ -1127,6 +1128,281 @@ npm install`,
       lang: 'bash',
       code: `lsof -i :5173
 kill -9 <PID>`,
+    },
+  ],
+}
+
+const authConfig = {
+  id: 'auth-config',
+  label: 'Auth & Environment Config',
+  lede: 'The wiring between the client and the API — dev proxy, cookie-based JWT, and the environment variables that separate dev from production.',
+  blocks: [
+    { type: 'h2', text: 'The Vite dev proxy' },
+    {
+      type: 'code',
+      lang: 'javascript',
+      code: `import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+
+  server: {
+    host: "0.0.0.0", // <= lets Vite work correctly from Docker/LAN if needed
+    port: 5173,
+
+    proxy: {
+      "/api": {
+        target: "http://127.0.0.1:8000", // <= Django exposed on your Mac during dev
+        changeOrigin: true,
+      },
+    },
+  },
+});`,
+    },
+    {
+      type: 'p',
+      text: '`host: "0.0.0.0"` binds every interface instead of loopback. A dev server on `127.0.0.1` inside a container is unreachable from the host even with the port published, and unreachable from another device on the LAN — the same reason both dev servers in the Docker guide bind `0.0.0.0`.',
+    },
+    {
+      type: 'p',
+      text: 'The `proxy` entry is the more consequential half. With it the browser only ever talks to `localhost:5173`, and Vite forwards anything under `/api` to Django server-side. Because that is a single origin as far as the browser is concerned, there is no preflight and the auth cookie is first-party.',
+    },
+    {
+      type: 'warn',
+      text: 'That `target` is correct only when Django runs on the host. From inside Compose, `127.0.0.1:8000` is the client container talking to itself and the proxy returns a 502 — there the target has to be `http://backend:8000`, the service name. The Docker comment on the `host` line refers to `0.0.0.0`, not to the target.',
+    },
+
+    { type: 'h2', text: 'The API base URL' },
+    {
+      type: 'code',
+      lang: 'javascript',
+      code: `// client/src/services/api.js
+import axios from "axios";
+
+export const api = axios.create({
+  baseURL: "/api/v1/",
+  withCredentials: true,
+});`,
+    },
+    {
+      type: 'p',
+      text: 'The relative `baseURL` is what routes requests through the proxy above. An absolute `http://127.0.0.1:8000/api/v1/` bypasses it, which puts the browser back on two origins and reintroduces every cookie and CORS problem the proxy just solved.',
+    },
+    {
+      type: 'p',
+      text: '`withCredentials: true` is not optional here — without it axios sends no cookies, and since the token lives in a cookie every request arrives anonymous. Keep per-resource segments at the call site (`api.get("users/")`) rather than baking them into the shared instance.',
+    },
+
+    { type: 'h2', text: 'Base settings' },
+    {
+      type: 'code',
+      lang: 'python',
+      code: `from pathlib import Path
+import os
+from datetime import timedelta
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
+DEBUG = os.environ.get("DEBUG", "False") == "True"
+
+ALLOWED_HOSTS = os.environ.get(
+    "ALLOWED_HOSTS",
+    "backend,localhost,127.0.0.1",
+).split(",")`,
+    },
+    {
+      type: 'p',
+      text: 'Every value comes from the environment, and the defaults fail closed. `DEBUG` is true only when the variable is the exact string `"True"`, so a missing or misspelled value leaves it off rather than serving tracebacks in production.',
+    },
+    {
+      type: 'p',
+      text: '`ALLOWED_HOSTS` splits on commas because environment variables are only ever strings. `backend` is in the default list because that is the Compose service name nginx proxies to — a request arriving with `Host: backend` is rejected without it.',
+    },
+
+    { type: 'h2', text: 'MIDDLEWARE' },
+    {
+      type: 'code',
+      lang: 'python',
+      code: `MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+
+    "corsheaders.middleware.CorsMiddleware",  # <= before CommonMiddleware
+    "django.middleware.common.CommonMiddleware",
+
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]`,
+    },
+    {
+      type: 'warn',
+      text: 'The order is the whole point. `CorsMiddleware` has to run before `CommonMiddleware`, because Common can answer or redirect a request on its own — and when it does, the response leaves without the CORS headers attached. The server believes it replied; the browser blocks what came back and reports it as a CORS failure.',
+    },
+
+    { type: 'h2', text: 'DATABASES' },
+    {
+      type: 'code',
+      lang: 'python',
+      code: `DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("POSTGRES_DB"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": os.environ.get("POSTGRES_HOST", "db"),
+        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+    }
+}`,
+    },
+    {
+      type: 'p',
+      text: '`HOST` defaults to `db`, the Compose service name, so this works unchanged inside the stack. Running Django on the host against a published port is the case that needs `POSTGRES_HOST=localhost` set explicitly.',
+    },
+
+    { type: 'h2', text: 'REST_FRAMEWORK and AUTH_USER_MODEL' },
+    {
+      type: 'code',
+      lang: 'python',
+      code: `REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "user_app.authentication.JWTCookieAuthentication",
+    ],
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "10/min",
+        "user": "30/min",
+    },
+}
+
+AUTH_USER_MODEL = "user_app.User"`,
+    },
+    {
+      type: 'p',
+      text: '`JWTCookieAuthentication` is the only authentication class, so DRF reads the token from a cookie and never from an `Authorization` header. A client sending `Bearer <token>` instead gets a `401` — this is the setting that makes `withCredentials` mandatory on the axios instance.',
+    },
+    {
+      type: 'p',
+      text: '`AUTH_USER_MODEL` has to be set before the first migration. Pointing it at a new model after `migrate` has already created `auth_user` means unpicking the foreign keys by hand, or dropping the database and starting over.',
+    },
+
+    { type: 'h2', text: 'SIMPLE_JWT' },
+    {
+      type: 'code',
+      lang: 'python',
+      code: `SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}`,
+    },
+    {
+      type: 'p',
+      text: 'A short access lifetime against a long refresh lifetime keeps a leaked access token cheap. `ROTATE_REFRESH_TOKENS` issues a new refresh token on every use and `BLACKLIST_AFTER_ROTATION` invalidates the old one, so a stolen refresh token stops working the moment the real client refreshes.',
+    },
+    {
+      type: 'note',
+      text: 'Rotation is also what makes concurrent refreshes fail — the first request invalidates the token the others are still holding. The Token Refresh Bug guide covers that race and the single-flight fix.',
+    },
+
+    { type: 'h2', text: 'Cookies' },
+    {
+      type: 'code',
+      lang: 'python',
+      code: `# COOKIES
+
+SESSION_COOKIE_SECURE = (
+    os.environ.get("SESSION_COOKIE_SECURE", "False") == "True"
+)
+SESSION_COOKIE_HTTPONLY = (
+    os.environ.get("SESSION_COOKIE_HTTPONLY", "True") == "True"
+)
+CSRF_COOKIE_SECURE = (
+    os.environ.get("CSRF_COOKIE_SECURE", "False") == "True"
+)
+
+AUTH_COOKIE_SECURE = (
+    os.environ.get("AUTH_COOKIE_SECURE", "False") == "True"
+)
+
+AUTH_COOKIE_SAMESITE = os.environ.get(
+    "AUTH_COOKIE_SAMESITE", "Lax"
+)
+
+SECURE_PROXY_SSL_HEADER = (
+    "HTTP_X_FORWARDED_PROTO",
+    "https",
+)`,
+    },
+    {
+      type: 'p',
+      text: 'Each flag reads from the environment so one `settings.py` can run over plain HTTP locally and over HTTPS in production with no `if DEBUG` branch anywhere.',
+    },
+    { type: 'h3', text: 'Dev vs. prod .env' },
+    {
+      type: 'code',
+      lang: 'ini',
+      code: `# --- development (plain HTTP on localhost) ---
+SESSION_COOKIE_SECURE=False
+SESSION_COOKIE_HTTPONLY=True
+CSRF_COOKIE_SECURE=False
+AUTH_COOKIE_SECURE=False
+AUTH_COOKIE_SAMESITE=Lax
+
+# --- production (HTTPS behind nginx) ---
+SESSION_COOKIE_SECURE=True
+SESSION_COOKIE_HTTPONLY=True
+CSRF_COOKIE_SECURE=True
+AUTH_COOKIE_SECURE=True
+AUTH_COOKIE_SAMESITE=Lax`,
+    },
+    {
+      type: 'ul',
+      items: [
+        '`AUTH_COOKIE_SECURE` — `False` in dev, `True` in production. A `Secure` cookie is never sent over plain HTTP, so with it on locally the login response looks fine, the cookie is silently dropped, and every request after it is anonymous.',
+        '`SESSION_COOKIE_SECURE` and `CSRF_COOKIE_SECURE` — the same rule for the session and CSRF cookies. Left `True` in dev, they break the admin login before they break anything else.',
+        '`SESSION_COOKIE_HTTPONLY` — `True` in both. It keeps `document.cookie` from reading the value, which is the whole reason for putting a token in a cookie instead of `localStorage`.',
+        '`AUTH_COOKIE_SAMESITE` — `Lax` in both. The cookie still rides along on top-level navigation but not on a cross-site POST. `Strict` breaks the return trip from an external page; `None` requires `Secure` and gives up the CSRF protection.',
+        '`SECURE_PROXY_SSL_HEADER` — nginx terminates TLS, so Django sees a plain HTTP request from the proxy. Without this it believes the connection is insecure and refuses to set `Secure` cookies at all. Only set it behind a proxy you control, since a client can otherwise forge `X-Forwarded-Proto`.',
+      ],
+    },
+    {
+      type: 'warn',
+      text: 'The names in `.env` must match the strings inside `os.environ.get` exactly. `AUTH_COOKIES_SECURE` — plural — is never read: `os.environ.get` returns its default, so `AUTH_COOKIE_SECURE` stays `False` and production serves auth cookies over HTTPS with no `Secure` flag. Nothing errors and nothing logs. The only symptom is a missing flag in devtools.',
+    },
+
+    { type: 'h2', text: 'CORS' },
+    {
+      type: 'code',
+      lang: 'python',
+      code: `CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+CORS_ALLOW_CREDENTIALS = True`,
+    },
+    {
+      type: 'p',
+      text: 'Both spellings of the dev origin are listed because `localhost` and `127.0.0.1` are different origins to the browser, and whichever one the address bar shows is the one that has to be allowed.',
+    },
+    {
+      type: 'p',
+      text: '`CORS_ALLOW_CREDENTIALS` is the setting that matters for cookie auth. Without it the browser will not attach cookies to a cross-origin request and strips them from the response, so login returns `200` and leaves the user logged out. It also rules out the `*` wildcard — every origin has to be named.',
+    },
+    {
+      type: 'note',
+      text: 'This is the belt to the dev proxy\'s braces. Requests routed through the Vite proxy are same-origin and never reach the CORS layer at all; these settings are what let a client served from a different origin work.',
     },
   ],
 }
@@ -1828,4 +2104,4 @@ Promise.all([1, 2, 3, 4, 5].map(() => api.get("tasks/")));`,
   ],
 }
 
-export const guides = [docker, django, react, postgres, redis, actions, authRefresh]
+export const guides = [docker, django, react, authConfig, postgres, redis, actions, authRefresh]
