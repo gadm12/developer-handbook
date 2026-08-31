@@ -263,18 +263,18 @@ README.md`,
 server {
     listen 80;
     listen [::]:80;
-    server_name gains-squad.duckdns.org www.gains-squad.duckdns.org;
+    server_name example.com www.example.com;
 
-    return 301 https://gains-squad.duckdns.org$request_uri;
+    return 301 https://example.com$request_uri;
 }
 
 server {
     listen 443 ssl;
     listen [::]:443 ssl;
-    server_name gains-squad.duckdns.org www.gains-squad.duckdns.org;
+    server_name example.com www.example.com;
 
-    ssl_certificate /etc/letsencrypt/live/gains-squad.duckdns.org/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/gains-squad.duckdns.org/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
 
     ssl_session_timeout 1d;
     ssl_session_cache shared:SSL:10m;
@@ -315,7 +315,7 @@ server {
     },
     {
       type: 'warn',
-      text: 'This file is carried over verbatim from your notes, including the real `gains-squad.duckdns.org` hostname and certificate paths. Swap the domain in all five places when reusing it for another project.',
+      text: 'This is the only file not reproduced verbatim — the real hostname has been replaced with `example.com`. Substitute your own domain in all five places: both `server_name` lines, the `return 301` target, and the two certificate paths.',
     },
 
     { type: 'h2', text: 'db/Dockerfile' },
