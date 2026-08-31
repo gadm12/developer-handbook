@@ -8,6 +8,7 @@ import {
   generateScript,
   isDir,
   renameNode,
+  splitExtension,
 } from './tree-model.js'
 
 const samePath = (a, b) => a.length === b.length && a.every((v, i) => v === b[i])
@@ -50,28 +51,47 @@ export function createScaffoldView() {
       row.append(span)
     }
 
+    // Only the base name is editable — the extension is rendered beside it and
+    // put back on commit, so a rename cannot turn Navbar.jsx into Navbar.jsz.
+    // Directories and names with no recognised extension stay fully editable.
+    const { base, ext } = isDir(node)
+      ? { base: node.name, ext: '' }
+      : splitExtension(node.name)
+
+    const label = document.createElement('span')
+    label.className = 'tree-label'
+
     const name = document.createElement('span')
     name.className = 'tree-name'
     name.contentEditable = 'plaintext-only'
     name.spellcheck = false
-    name.textContent = node.name + (isDir(node) ? '/' : '')
+    name.textContent = isDir(node) ? `${base}/` : base
+    label.append(name)
+
+    if (ext) {
+      const suffix = document.createElement('span')
+      suffix.className = 'tree-ext'
+      suffix.textContent = ext
+      label.append(suffix)
+    }
 
     const revert = () => {
-      name.textContent = node.name + (isDir(node) ? '/' : '')
+      name.textContent = isDir(node) ? `${base}/` : base
     }
 
     const commit = () => {
-      const typed = name.textContent.replace(/\/+$/, '')
+      const typed = name.textContent.replace(/\/+$/, '').trim()
       // An empty or slash-bearing name would break the generated paths.
-      if (!typed.trim() || typed.includes('/')) {
+      if (!typed || typed.includes('/')) {
         revert()
         return
       }
-      if (typed.trim() === node.name) {
+      const next = typed + ext
+      if (next === node.name) {
         revert()
         return
       }
-      renameNode(tree, path, typed)
+      renameNode(tree, path, next)
       persist()
       render()
     }
@@ -87,7 +107,7 @@ export function createScaffoldView() {
       }
     })
     name.addEventListener('blur', commit)
-    row.append(name)
+    row.append(label)
 
     const actions = document.createElement('div')
     actions.className = 'tree-actions'

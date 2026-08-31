@@ -44,6 +44,55 @@ export function addNode(tree, path, type) {
   return [...path.slice(0, -1), index]
 }
 
+// Known file extensions, longest first so `001-place-holder.cy.js` splits on
+// `.cy.js` rather than `.js`.
+const EXTENSIONS = [
+  '.cy.js',
+  '.cy.jsx',
+  '.test.js',
+  '.test.jsx',
+  '.spec.js',
+  '.spec.jsx',
+  '.d.ts',
+  '.js',
+  '.jsx',
+  '.ts',
+  '.tsx',
+  '.css',
+  '.scss',
+  '.html',
+  '.json',
+  '.md',
+  '.py',
+  '.yml',
+  '.yaml',
+  '.sh',
+  '.sql',
+  '.conf',
+  '.toml',
+  '.ini',
+  '.cfg',
+  '.txt',
+]
+
+/**
+ * Split a file name into the editable base and its fixed extension.
+ *
+ * Anything whose suffix is not a known extension comes back with `ext: ''`, so
+ * the caller keeps the whole name editable rather than locking a guess —
+ * `Dockerfile`, `Makefile`, `.gitignore` and `.env.example` all land here. The
+ * base must be non-empty for a match, which is why `.gitignore` is not read as
+ * an empty name plus a `.gitignore` extension.
+ */
+export function splitExtension(name) {
+  for (const ext of EXTENSIONS) {
+    if (name.length > ext.length && name.endsWith(ext)) {
+      return { base: name.slice(0, -ext.length), ext }
+    }
+  }
+  return { base: name, ext: '' }
+}
+
 export function renameNode(tree, path, name) {
   const node = findNode(tree, path)
   const trimmed = name.trim()

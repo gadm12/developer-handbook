@@ -52,9 +52,10 @@ export const presets = [
     id: 'react-client',
     label: 'React Client',
     description:
-      'One component folder with colocated styles. Rename Navbar to whatever you are building and generate.',
+      'One component folder with colocated styles, plus the Cypress e2e folder. Rename Navbar to whatever you are building and generate.',
     tree: dir('root', [
       dir('client', [
+        dir('cypress', [dir('e2e', [file('001-place-holder.cy.js')])]),
         dir('src', [
           dir('Components', [
             dir('Navbar', [

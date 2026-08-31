@@ -926,7 +926,7 @@ const react = {
     },
     {
       type: 'p',
-      text: 'It prompts for a framework and a variant — pick **React**, then **JavaScript**. Then:',
+      text: 'It prompts for a framework and a variant — pick React, then JavaScript. Then:',
     },
     {
       type: 'code',
@@ -972,36 +972,54 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+
+  server: {
+    host: "0.0.0.0",
+
+    proxy: {
+      "/api": {
+        target: "http://backend:8000",
+        changeOrigin: true,
+      },
+    },
+  },
 });`,
     },
     {
       type: 'p',
-      text: 'With Tailwind v4 there is no config file and no directives — one import in `index.css` is the whole setup:',
+      text: '`server.host` set to `0.0.0.0` binds every interface rather than loopback. Vite listening on `127.0.0.1` inside a container is unreachable from the host even with the port published, so without this the dev server appears to start and then refuses every connection.',
     },
+    {
+      type: 'p',
+      text: 'The `proxy` block forwards anything under `/api` to Django, server-side. The browser only ever talks to the Vite origin, so requests are same-origin — no preflight, and the auth cookie is first-party. `target` is `http://backend:8000` because that is the Compose service name; running Django on the host instead makes it `http://127.0.0.1:8000`.',
+    },
+    {
+      type: 'p',
+      text: '`changeOrigin: true` rewrites the `Host` header to the target, which is what keeps Django from rejecting the request against `ALLOWED_HOSTS`.',
+    },
+    { type: 'h3', text: 'main.jsx' },
     {
       type: 'code',
-      lang: 'css',
-      code: `@import "tailwindcss";`,
-    },
-    { type: 'h3', text: 'package.json scripts' },
-    {
-      type: 'code',
-      lang: 'json',
-      code: `{
-  "scripts": {
-    "dev": "vite --host",
-    "build": "vite build",
-    "watcher": "vite build --watch",
-    "preview": "vite preview",
-    "lint": "eslint .",
-    "format": "prettier . --write",
-    "cy:open": "cypress open"
-  }
-}`,
+      lang: 'javascript',
+      code: `import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import router from "./router";
+import { RouterProvider } from "react-router-dom";
+
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <RouterProvider router={router} />
+  </StrictMode>,
+);`,
     },
     {
-      type: 'note',
-      text: '`--host` matters the moment this runs in Docker: without it Vite listens only on the container loopback and the published port goes nowhere.',
+      type: 'p',
+      text: 'The entry point does three things: mounts React onto the `#root` div from `index.html`, pulls in `index.css` once for the whole app, and hands routing to `RouterProvider`. Nothing renders a page directly here — every screen comes from the router.',
+    },
+    {
+      type: 'p',
+      text: '`StrictMode` is development-only and ships as a no-op in the build. It deliberately double-invokes effects and renders to surface impure code, so a `useEffect` that fires twice locally is usually this working as intended rather than a bug.',
     },
     { type: 'h3', text: 'eslint.config.js' },
     {
@@ -1028,6 +1046,7 @@ export default defineConfig([
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
     rules: {
+      // remove unused var error
       "no-unused-vars": "warn",
     },
   },
@@ -1037,22 +1056,262 @@ export default defineConfig([
   },
 ]);`,
     },
+    {
+      type: 'p',
+      text: 'The last block is the one worth understanding. Flat config applies entries in order, and a later entry only touches the files its `files` glob matches — so `cypress/**/*.{js,jsx}` layers the Cypress rules on top of the app config for test files only.',
+    },
+    {
+      type: 'p',
+      text: 'Cypress specs need it because they run in a different environment from the app. `cy`, `Cypress`, `describe` and `it` are injected globals that exist nowhere in `globals.browser`, so under the app config every one of them is an undefined variable and `npm run lint` fails on a test file that is perfectly correct.',
+    },
+    {
+      type: 'note',
+      text: 'Scoping it to `cypress/**` rather than adding the globals everywhere is deliberate. Declared app-wide, a stray `cy.get()` left in a component would lint clean and only fail at runtime.',
+    },
+    { type: 'h3', text: 'package.json scripts' },
+    {
+      type: 'code',
+      lang: 'json',
+      code: `{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  }
+}`,
+    },
+    {
+      type: 'p',
+      text: 'These are terminal shortcuts — `npm run <name>` runs the command on the right, using the locally installed binaries so nothing has to be on your `PATH`:',
+    },
+    {
+      type: 'ul',
+      items: [
+        '`npm run dev` — starts the Vite dev server with hot reload, on port 5173.',
+        '`npm run build` — compiles the production bundle into `dist/`.',
+        '`npm run lint` — runs ESLint across the project using the flat config above.',
+        '`npm run preview` — serves the built `dist/` locally, so you can check the production bundle before deploying.',
+        '`npm run cy:open` — opens the Cypress GUI to step through specs interactively.',
+        '`npm run cy:run` — runs every Cypress spec headlessly, which is the form CI wants.',
+      ],
+    },
+    {
+      type: 'note',
+      text: 'There is no `--host` flag on `dev` because `vite.config.js` already sets `server.host` to `0.0.0.0`. Setting it in one place beats remembering the flag.',
+    },
+
+    { type: 'h2', text: 'The API service' },
+    {
+      type: 'p',
+      text: 'One axios instance for the accounts endpoints, plus the loaders the router uses to guard pages. `withCredentials: true` is what sends the auth cookie — without it every call arrives anonymous.',
+    },
+    {
+      type: 'code',
+      lang: 'javascript',
+      code: `import axios from "axios";
+import { redirect } from "react-router-dom";
+
+export const account = axios.create({
+  baseURL: "/api/v1/users/",
+  withCredentials: true,
+});
+
+const errorMessage = (error) => {
+  const data = error.response?.data;
+  if (!data) {
+    return "Could not reach the server";
+  }
+  return typeof data === "string"
+    ? data
+    : JSON.stringify(data);
+};
+
+export const signUp = async (email, password) => {
+  try {
+    const response = await account.post("signup/", {
+      email,
+      password,
+    });
+
+    const { user } = response.data;
+
+    return {
+      user,
+      error: null,
+    };
+  } catch (error) {
+    console.error(errorMessage(error));
+
+    return {
+      user: null,
+      error: errorMessage(error),
+    };
+  }
+};
+// console.log("FULL ERROR:", error);
+// console.log("MESSAGE:", error.message);
+// console.log("RESPONSE:", error.response);
+// console.log("REQUEST:", error.request);
+
+export const logIn = async (email, password) => {
+  try {
+    const response = await account.post("login/", {
+      email,
+      password,
+    });
+
+    return {
+      user: response.data.user,
+      error: null,
+    };
+  } catch (error) {
+    console.error(errorMessage(error));
+    return {
+      user: null,
+      error: errorMessage(error),
+    };
+  }
+};
+
+export const userConfirmation = async () => {
+  try {
+    const response = await account.get("info/");
+    return response.data.email;
+  } catch (error) {
+    console.error(errorMessage(error));
+
+    return null;
+  }
+};
+
+export const userLogOut = async () => {
+  try {
+    await account.post("logout/");
+  } catch (error) {
+    console.error(
+      "logout request failed",
+      errorMessage(error),
+    );
+  }
+
+  return null;
+};
+
+export const requireLogin = async () => {
+  const email = await userConfirmation();
+  if (!email) {
+    throw redirect("/");
+  }
+  return null;
+};
+
+export const redirectIfLoggedIn = async () => {
+  const email = await userConfirmation();
+  return email ? redirect("/home") : null;
+};`,
+    },
+    {
+      type: 'p',
+      text: 'Every call funnels errors through one `errorMessage` helper and returns a `{ user, error }` shape rather than throwing, so components branch on the result instead of wrapping each call in a `try`. The two exceptions are `requireLogin` and `redirectIfLoggedIn`, which throw or return a `redirect` because that is what a router loader is expected to do.',
+    },
 
     { type: 'h2', text: 'Routing' },
     {
       type: 'code',
       lang: 'javascript',
-      code: `import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { RouterProvider } from "react-router-dom";
-import "./index.css";
-import router from "./router";
+      code: `import { createBrowserRouter } from "react-router-dom";
+import App from "./App";
+import HomePage from "./Pages/HomePage";
+import NotFoundPage from "./Pages/NotFoundPage";
+import AboutPage from "./Pages/AboutPage";
+import ErrorPage from "./Pages/ErrorPage";
+import LoginPage from "./Pages/LoginPage";
+import SignupPage from "./Pages/SignupPage";
+import {
+  redirectIfLoggedIn,
+  requireLogin,
+  userConfirmation,
+} from "./services/accounts";
+import ExercisePage from "./Pages/ExercisePage";
+import ExerciseListPage from "./Pages/ExerciseListPage";
+import SessionHistory from "./Pages/SessionHistory";
+import SingleSessionPage from "./Pages/SingleSessionPage";
+import CreateSessionPage from "./Pages/CreateSessionPage";
+import CaloriesCalculatorPage from "./Pages/CaloriesCalculatorPage";
 
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>
-);`,
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    loader: userConfirmation,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <LoginPage />,
+        loader: redirectIfLoggedIn,
+      },
+      {
+        path: "signup",
+        element: <SignupPage />,
+      },
+      {
+        path: "home",
+        element: <HomePage />,
+        loader: requireLogin,
+      },
+      {
+        path: "about",
+        element: <AboutPage />,
+      },
+      {
+        path: "exercise/:id",
+        element: <ExercisePage />,
+      },
+      {
+        path: "create",
+        element: <CreateSessionPage />,
+      },
+      {
+        path: "list",
+        element: <ExerciseListPage />,
+      },
+      {
+        path: "history",
+        element: <SessionHistory />,
+      },
+      {
+        path: "calculator",
+        element: <CaloriesCalculatorPage />,
+      },
+      {
+        path: "history/:id",
+        element: <SingleSessionPage />,
+      },
+      // {
+      //   path: "error",
+      //   element: <ErrorPage />,
+      // },
+      {
+        path: "*",
+        element: <NotFoundPage />,
+      },
+    ],
+  },
+]);
+
+export default router;`,
+    },
+    {
+      type: 'p',
+      text: 'One root route renders `App` and every page hangs off it as a child, so `App` is the persistent shell — nav, layout — and the child route fills its `Outlet`. The root `loader` runs `userConfirmation` before anything paints, and `errorElement` catches anything a child throws.',
+    },
+    {
+      type: 'p',
+      text: 'The `loader` on individual routes is where the guards land: `requireLogin` on `home` throws a redirect before the component mounts, and `redirectIfLoggedIn` on the index route bounces an already-authenticated user to `/home`. Doing it in the loader rather than in a `useEffect` means the protected page never renders at all.',
     },
     {
       type: 'warn',
