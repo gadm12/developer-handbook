@@ -8,33 +8,41 @@
 const docker = {
   id: 'docker',
   label: 'Docker & Compose',
-  lede: 'One compose stack for Django, React, Postgres and Redis — plus the prod variant and the mistakes that cost the most time.',
+  lede: 'Every file in the stack — dev and prod compose, three Dockerfiles, the nginx vhost, the Makefile — plus the commands that drive them.',
   blocks: [
-    {
-      type: 'h2',
-      text: 'What compose replaces',
-    },
-    {
-      type: 'p',
-      text: 'Before compose you built each image and wired the containers together by hand on a shared network:',
-    },
+    { type: 'h2', text: 'Project layout' },
     {
       type: 'code',
       lang: 'bash',
-      code: `docker network create app-network
-docker build -t db-img ./db
-docker run -d --rm --name db-container --network app-network db-img`,
+      code: `root/
+├── client/
+│   ├── nginx/
+│   │   └── default.conf
+│   ├── .dockerignore
+│   └── Dockerfile
+├── server/
+│   ├── .env
+│   ├── .dockerignore
+│   └── Dockerfile
+├── db/
+│   ├── .dockerignore
+│   └── Dockerfile
+├── docker-compose.yml
+├── docker-compose.prod.yml
+├── Makefile
+├── .gitignore
+└── README.md`,
     },
     {
       type: 'p',
-      text: 'That works, but every service name is a container name you have to keep in sync by hand — Django had to point at `"HOST": "db-container"`. Compose gives each service DNS under its own service name, so the same setting becomes `"HOST": "db"` and the network is created for you.',
+      text: 'Four services — Postgres, Redis, Django, React — each with its own build context. Compose is the only entry point; there are no per-service shell scripts and the Dockerfiles are never built by hand.',
+    },
+    {
+      type: 'note',
+      text: 'The Scaffold Generator has this exact tree as its "Full Stack Root" preset, so you can generate the folders and empty files in one command.',
     },
 
-    { type: 'h2', text: 'The dev stack' },
-    {
-      type: 'p',
-      text: 'Four services: Postgres, Redis, Django, and Vite. Save this as `docker-compose.yml` at the project root.',
-    },
+    { type: 'h2', text: 'docker-compose.yml' },
     {
       type: 'code',
       lang: 'yaml',
@@ -83,39 +91,49 @@ volumes:
   postgres_data:`,
     },
     {
-      type: 'h3',
-      text: 'The three details worth understanding',
+      type: 'p',
+      text: 'The development stack. Both app services override their image `CMD` with a dev server: Django runs `runserver` instead of gunicorn, and the client runs Vite instead of being built and handed to nginx. `target: build` stops the multi-stage client image at its builder stage, which is why the Vite binary is still there to run.',
     },
     {
       type: 'ul',
       items: [
-        '`postgres_data` is a **named volume** — it survives `docker compose down` so your database is not wiped every time you stop the stack. `./server:/app` is a **bind mount**, which maps your source into the container so edits reload live.',
-        '`- /app/node_modules` is an **anonymous volume** layered on top of the `./client:/app` bind mount. Without it your host `node_modules` (or its absence) shadows the one installed inside the image, and the container starts with no dependencies.',
-        '`target: build` stops the multi-stage client build at the builder stage, so dev gets the Vite dev server rather than the nginx image.',
+        '`./server:/app` and `./client:/app` are bind mounts — your source is mapped in, so edits reload without a rebuild.',
+        '`- /app/node_modules` is an anonymous volume layered over the client bind mount. Without it your host `node_modules` shadows the one `npm ci` installed in the image, and the container starts with nothing.',
+        '`postgres_data` is a named volume, so the database survives `docker compose down`.',
+        'Both dev servers bind `0.0.0.0`. A process on `127.0.0.1` inside a container is unreachable from the host even with the port published.',
       ],
-    },
-    {
-      type: 'warn',
-      text: 'Both dev servers bind to `0.0.0.0`, not localhost. A process listening on `127.0.0.1` inside a container is unreachable from your machine even with the port published — this is the single most common "why is nothing loading" cause.',
     },
 
-    { type: 'h2', text: 'The prod stack' },
-    {
-      type: 'p',
-      text: '`docker-compose.prod.yml` is the same four services with the dev conveniences removed. The diff is the interesting part:',
-    },
-    {
-      type: 'ul',
-      items: [
-        'Every service gains `restart: unless-stopped`.',
-        '`backend` drops its published port and its source bind mount — it runs the baked image under gunicorn, reached only through nginx.',
-        '`frontend` builds the full multi-stage image (no `target:`), publishes `80:80` and `443:443`, and mounts certificates read-only.',
-      ],
-    },
+    { type: 'h2', text: 'docker-compose.prod.yml' },
     {
       type: 'code',
       lang: 'yaml',
-      code: `  frontend:
+      code: `services:
+  db:
+    build: ./db
+    container_name: db-container
+    restart: unless-stopped
+    env_file:
+      - ./server/.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: redis-container
+    restart: unless-stopped
+
+  backend:
+    build: ./server
+    container_name: django-container
+    restart: unless-stopped
+    env_file:
+      - ./server/.env
+    depends_on:
+      - db
+      - redis
+
+  frontend:
     build: ./client
     container_name: react-container
     restart: unless-stopped
@@ -125,45 +143,26 @@ volumes:
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
-      - backend`,
-    },
+      - backend
 
-    { type: 'h2', text: 'Makefile' },
+volumes:
+  postgres_data:`,
+    },
     {
       type: 'p',
-      text: 'Worth having purely so you stop mistyping the `-f docker-compose.prod.yml` flag.',
+      text: 'A separate file rather than an override, run with `-f docker-compose.prod.yml`. Every dev convenience is gone and the differences are the whole point:',
     },
     {
-      type: 'code',
-      lang: 'makefile',
-      code: `dev:
-	docker compose up --build
-
-dev-down:
-	docker compose down
-
-prod:
-	docker compose -f docker-compose.prod.yml up -d --build
-
-prod-down:
-	docker compose -f docker-compose.prod.yml down
-
-logs:
-	docker compose logs -f
-
-backend:
-	docker compose exec backend bash
-
-frontend:
-	docker compose exec frontend sh`,
-    },
-    {
-      type: 'note',
-      text: 'Note `bash` for the backend and `sh` for the frontend — the Python image has bash, the alpine-based Node image does not.',
+      type: 'ul',
+      items: [
+        'Every service gains `restart: unless-stopped` so the stack comes back after a reboot or a crash.',
+        '`backend` loses its `command`, its published port, and its bind mount — it runs the baked image under gunicorn and is reachable only through nginx on the internal network.',
+        '`frontend` drops `target: build`, so the full multi-stage image is used and nginx serves the compiled `dist/`. It publishes `80` and `443` and mounts the Let\'s Encrypt certificates read-only.',
+        'No source is mounted anywhere — what runs is exactly what was built.',
+      ],
     },
 
-    { type: 'h2', text: 'Dockerfiles' },
-    { type: 'h3', text: 'server/Dockerfile' },
+    { type: 'h2', text: 'server/Dockerfile' },
     {
       type: 'code',
       lang: 'dockerfile',
@@ -187,9 +186,31 @@ CMD ["gunicorn", "server.wsgi:application", "--bind", "0.0.0.0:8000"]`,
     },
     {
       type: 'p',
-      text: 'Copying `requirements.txt` **before** the source is the whole point: Docker caches each instruction, so as long as your dependencies have not changed it reuses the install layer and a code edit rebuilds in seconds instead of minutes.',
+      text: 'Copying `requirements.txt` on its own before `COPY . .` is deliberate: Docker caches per instruction, so as long as dependencies are unchanged the install layer is reused and a code edit rebuilds in seconds. The `pm` alias is baked into the image so it exists whenever you shell in. `CMD` is gunicorn — production behaviour by default, with the dev compose file overriding it with `runserver`.',
     },
-    { type: 'h3', text: 'client/Dockerfile (multi-stage)' },
+
+    { type: 'h2', text: 'server/.dockerignore' },
+    {
+      type: 'code',
+      lang: 'bash',
+      code: `__pycache__
+*.py[cod]
+.pytest_cache
+.mypy_cache
+.venv
+venv
+.env
+.env.*
+.git
+.gitignore
+*.sqlite3`,
+    },
+    {
+      type: 'p',
+      text: 'Keeps the build context small and keeps secrets out of the image. `.venv` matters most — copying a host virtualenv into a Linux image gives you binaries built for the wrong platform on top of a much slower build. `.env` and `.env.*` are excluded because the values arrive at runtime through `env_file`, never baked into a layer.',
+    },
+
+    { type: 'h2', text: 'client/Dockerfile' },
     {
       type: 'code',
       lang: 'dockerfile',
@@ -213,9 +234,91 @@ COPY nginx/default.conf /etc/nginx/conf.d/default.conf`,
     },
     {
       type: 'p',
-      text: 'The build stage needs Node and the whole dependency tree; the thing you ship needs neither. `COPY --from=build` takes only the compiled `dist/` into an nginx image. Same manifest-before-source ordering, and `npm ci` rather than `npm install` so the lockfile is honoured exactly.',
+      text: 'Two stages. The `build` stage needs Node and the full dependency tree; the image you ship needs neither, so `COPY --from=build` lifts only the compiled `dist/` into an nginx image and everything else is discarded. Same manifest-before-source ordering as the server, and `npm ci` rather than `npm install` so the lockfile is honoured exactly. Dev stops at `target: build`; prod runs the whole thing.',
     },
-    { type: 'h3', text: 'db/Dockerfile' },
+
+    { type: 'h2', text: 'client/.dockerignore' },
+    {
+      type: 'code',
+      lang: 'bash',
+      code: `node_modules
+dist
+.git
+.gitignore
+.env
+.env.*
+npm-debug.log*
+README.md`,
+    },
+    {
+      type: 'p',
+      text: '`node_modules` is the important line — the image installs its own with `npm ci`, and copying the host copy in would both bloat the context and risk platform-mismatched native modules. `dist` is excluded for the same reason: it is built inside the image, not carried in.',
+    },
+
+    { type: 'h2', text: 'client/nginx/default.conf' },
+    {
+      type: 'code',
+      lang: 'nginx',
+      code: `# port 80 to redirect everything to HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+    server_name gains-squad.duckdns.org www.gains-squad.duckdns.org;
+
+    return 301 https://gains-squad.duckdns.org$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name gains-squad.duckdns.org www.gains-squad.duckdns.org;
+
+    ssl_certificate /etc/letsencrypt/live/gains-squad.duckdns.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/gains-squad.duckdns.org/privkey.pem;
+
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_tickets off;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /api/ {
+        proxy_pass http://backend:8000;
+
+        proxy_http_version 1.1;
+
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}`,
+    },
+    {
+      type: 'p',
+      text: 'Copied into the client image at build time, so it ships with the container rather than living on the host. The first block does nothing but redirect `:80` to HTTPS; the second terminates TLS with the mounted Let\'s Encrypt certificates and serves the app.',
+    },
+    {
+      type: 'ul',
+      items: [
+        '`try_files $uri $uri/ /index.html` is the SPA fallback. Without it a refresh on a client-side route returns 404, because no such file exists on disk.',
+        '`proxy_pass http://backend:8000` is compose service-name DNS — no IP, no container name, no link. It works because nginx and Django share the compose network.',
+        'The `X-Forwarded-*` headers are what let Django see the original scheme and client IP; pair them with `SECURE_PROXY_SSL_HEADER` in settings or it will think every request arrived over plain HTTP.',
+        'Certificates are read from `/etc/letsencrypt`, which the prod compose file mounts read-only from the host — so renewing on the host is enough, no rebuild needed.',
+      ],
+    },
+    {
+      type: 'warn',
+      text: 'This file is carried over verbatim from your notes, including the real `gains-squad.duckdns.org` hostname and certificate paths. Swap the domain in all five places when reusing it for another project.',
+    },
+
+    { type: 'h2', text: 'db/Dockerfile' },
     {
       type: 'code',
       lang: 'dockerfile',
@@ -226,120 +329,247 @@ EXPOSE 5432
 CMD [ "postgres" ]`,
     },
     {
+      type: 'p',
+      text: 'Deliberately almost empty — the official image already does the work. There is a Dockerfile at all so the database is a first-class build context you can extend later (an init SQL script, an extension) without restructuring compose. Credentials are not baked in: they arrive from `env_file`, so the image carries no secrets and can be rebuilt freely.',
+    },
+
+    { type: 'h2', text: 'db/.dockerignore' },
+    {
+      type: 'p',
+      text: 'Present but empty. The build context is one four-line Dockerfile, so there is nothing to exclude — the file exists to keep the three services structurally identical and to give you somewhere obvious to add exclusions if the folder ever grows.',
+    },
+
+    { type: 'h2', text: 'Makefile' },
+    {
+      type: 'code',
+      lang: 'makefile',
+      code: `dev:
+\tdocker compose up --build
+
+dev-down:
+\tdocker compose down
+
+prod:
+\tdocker compose -f docker-compose.prod.yml up -d --build
+
+prod-down:
+\tdocker compose -f docker-compose.prod.yml down
+
+logs:
+\tdocker compose logs -f
+
+backend:
+\tdocker compose exec backend bash
+
+frontend:
+\tdocker compose exec frontend sh`,
+    },
+    {
+      type: 'p',
+      text: 'Mostly here so the `-f docker-compose.prod.yml` flag is never mistyped — the difference between `make dev` and `make prod` is one word rather than a long command you might get wrong on a server. Note `bash` for the backend and `sh` for the frontend: the Python image has bash, the alpine-based Node image does not.',
+    },
+    { type: 'h3', text: 'Optional additions' },
+    {
       type: 'note',
-      text: 'Credentials come from `env_file`, not baked-in `ENV` lines. An image with `ENV POSTGRES_PASSWORD=...` carries that password to anyone who pulls it.',
-    },
-
-    { type: 'h2', text: 'nginx: serving the SPA and proxying the API' },
-    {
-      type: 'code',
-      lang: 'nginx',
-      code: `location / {
-    try_files $uri $uri/ /index.html;
-}
-
-location /api/ {
-    proxy_pass http://backend:8000;
-    proxy_http_version 1.1;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-}`,
-    },
-    {
-      type: 'p',
-      text: '`try_files ... /index.html` is the SPA fallback — without it a refresh on `/dashboard` returns 404 because no such file exists. `proxy_pass http://backend:8000` is compose service-name DNS doing the work: no IP, no container name, just the service.',
-    },
-
-    { type: 'h2', text: '.dockerignore' },
-    {
-      type: 'p',
-      text: 'Without these, `COPY . .` ships your local `node_modules`, `.venv` and `.git` into the image — slow builds, bloated images, and secrets where they should not be.',
+      text: 'Everything below is my suggestion, not from your notes. `.PHONY` is the one I would actually add — without it, `make backend` would silently do nothing if a directory named `backend` ever appeared next to the Makefile.',
     },
     {
       type: 'code',
-      lang: 'bash',
-      code: `# client/.dockerignore
-node_modules
-dist
-.git
-.gitignore
-Dockerfile
-npm-debug.log`,
-    },
-    {
-      type: 'code',
-      lang: 'bash',
-      code: `# server/.dockerignore
-__pycache__
-*.pyc
-.venv
-venv
-.git
-.pytest_cache
-.env`,
-    },
+      lang: 'makefile',
+      code: `.PHONY: dev dev-down prod prod-down logs backend frontend \\
+        up down ps build migrate makemigrations shell superuser psql clean
 
-    { type: 'h2', text: 'Daily commands' },
-    {
-      type: 'code',
-      lang: 'bash',
-      code: `docker compose up -d                  # start detached
-docker compose up --build -d         # rebuild images, then start
-docker compose ps                    # what is running
-docker compose logs -f backend       # follow one service
-docker compose restart backend       # restart without rebuilding
-docker compose down                  # stop and remove containers
-docker compose exec backend bash     # shell into a running service`,
+up: dev
+down: dev-down
+
+ps:
+\tdocker compose ps
+
+build:
+\tdocker compose build --no-cache
+
+migrate:
+\tdocker compose exec backend python manage.py migrate
+
+makemigrations:
+\tdocker compose exec backend python manage.py makemigrations
+
+shell:
+\tdocker compose exec backend python manage.py shell
+
+superuser:
+\tdocker compose exec backend python manage.py createsuperuser
+
+psql:
+\tdocker compose exec db psql -U $$POSTGRES_USER -d $$POSTGRES_DB
+
+clean:
+\tdocker compose down -v
+\tdocker system prune -f`,
     },
     {
       type: 'warn',
-      items: [
-        '`docker compose down -v` also deletes volumes — that wipes your database. Use plain `down` unless you mean it.',
-        'After editing `.env` you need `docker compose up -d --force-recreate backend`. A rebuild alone will not pick up new environment values.',
-      ],
+      text: '`make clean` runs `down -v`, which deletes the `postgres_data` volume and wipes the database. Keep it named something you will not type by accident.',
     },
-    { type: 'h3', text: 'Cleanup' },
+
+    { type: 'h2', text: 'Commands' },
+    {
+      type: 'p',
+      text: 'Everything below comes from your notes unless the line is marked *(added)* — those are standard commands that were not in the original list but come up constantly.',
+    },
+
+    { type: 'h3', text: 'Starting and stopping' },
     {
       type: 'code',
       lang: 'bash',
-      code: `docker system df           # what is using disk
-docker container prune     # remove stopped containers
-docker image prune         # remove dangling images
-docker builder prune -a    # remove the build cache
-docker system prune -a     # remove everything unused`,
+      code: `docker compose up
+docker compose up -d
+docker compose up -d db
+docker compose down
+docker compose down -v
+docker compose stop
+docker compose start`,
+    },
+    {
+      type: 'ul',
+      items: [
+        '`up` — start the whole stack in the foreground, logs streaming. Best when you are actively debugging startup.',
+        '`up -d` — detached, runs quietly in the background. The normal way to start.',
+        '`up -d db` — start a single service and its dependencies. Useful when you only need Postgres up while running Django on the host.',
+        '`down` — stop and remove the containers. Volumes survive, so your data is intact. Run it from the directory holding `docker-compose.yml`.',
+        '`down -v` — **also deletes the volumes, which wipes the database.** Only when you want a genuinely clean slate.',
+        '`stop` / `start` — *(added)* pause and resume without removing containers. Faster than `down` + `up` when you just need the ports back.',
+      ],
+    },
+
+    { type: 'h3', text: 'Rebuilding' },
+    {
+      type: 'code',
+      lang: 'bash',
+      code: `docker compose up --build
+docker compose up --build -d
+docker compose up -d --build frontend
+docker compose up -d --build backend
+docker compose up -d --force-recreate backend
+docker compose restart backend
+docker compose build --no-cache backend
+docker compose pull`,
+    },
+    {
+      type: 'ul',
+      items: [
+        '`up --build` — rebuild images, then start. Needed after changing a Dockerfile or adding a dependency.',
+        '`up -d --build frontend` — rebuild one service only. Much faster than rebuilding all four when you touched a single manifest.',
+        '`up -d --force-recreate backend` — **the one after editing `.env`.** A rebuild alone will not pick up new environment values; the container has to be recreated.',
+        '`restart backend` — restart without rebuilding. Enough for a stuck process, useless for code or dependency changes.',
+        '`build --no-cache backend` — *(added)* rebuild ignoring the layer cache. The escape hatch when a build is reusing a stale layer it should not be.',
+        '`pull` — *(added)* fetch newer base images (`redis:7`, `postgres:15`, `nginx:alpine`) without touching your own builds.',
+      ],
+    },
+
+    { type: 'h3', text: 'Inspecting' },
+    {
+      type: 'code',
+      lang: 'bash',
+      code: `docker compose ps
+docker compose logs -f
+docker compose logs -f backend
+docker exec -it django-container bash
+docker compose exec backend bash
+docker compose exec frontend sh
+docker exec django-container env | grep POSTGRES
+docker compose config`,
+    },
+    {
+      type: 'ul',
+      items: [
+        '`ps` — what is actually running, and which ports are published. First thing to check when something will not connect.',
+        '`logs -f backend` — follow one service. Without the service name you get all four interleaved, which is rarely what you want.',
+        '`exec backend bash` — shell into the running backend. Where you run migrations, the Django shell, and anything else that needs the app environment. Use `sh` for the alpine-based frontend.',
+        '`docker exec django-container env | grep POSTGRES` — read the database name and password the container actually received. The fastest way to confirm `.env` was picked up.',
+        '`config` — *(added)* print the fully resolved compose file with variables substituted. Best way to see what compose thinks you wrote before blaming the stack.',
+      ],
+    },
+
+    { type: 'h3', text: 'Django management' },
+    {
+      type: 'code',
+      lang: 'bash',
+      code: `docker compose exec backend python manage.py migrate
+
+docker compose exec backend python manage.py loaddata subject_data.json student_data.json grade_data.json
+
+docker compose exec backend bash
+python manage.py loaddata subject_data.json student_data.json grade_data.json`,
+    },
+    {
+      type: 'ul',
+      items: [
+        'Run these **inside the container**, either as a one-off `exec` or from a shell you have already opened — both forms are equivalent. Running them on the host points at a different database, which is the usual cause of `relation does not exist`.',
+        'Once inside, the `pm` alias baked into the image shortens `python manage.py` to `pm`.',
+        'Fixture order matters: load parents before children or the foreign keys will not resolve.',
+      ],
+    },
+
+    { type: 'h3', text: 'Cleanup (added)' },
+    {
+      type: 'note',
+      text: 'None of this section was in your notes, but disk usage from old images and build cache is the most common reason Docker suddenly stops working.',
+    },
+    {
+      type: 'code',
+      lang: 'bash',
+      code: `docker system df
+docker image prune
+docker container prune
+docker builder prune -a
+docker system prune -a`,
+    },
+    {
+      type: 'ul',
+      items: [
+        '`system df` — where the disk went, broken down by images, containers, volumes and build cache. Always start here.',
+        '`image prune` — remove dangling images left behind by rebuilds. Safe, and usually reclaims the most.',
+        '`container prune` — remove stopped containers.',
+        '`builder prune -a` — clear the build cache. Reclaims a lot; your next build will be slow.',
+        '`system prune -a` — everything unused at once, including images no container references. Note it does **not** touch named volumes, so `postgres_data` is safe unless you add `--volumes`.',
+      ],
     },
 
     { type: 'h2', text: 'Common problems' },
+    { type: 'h3', text: 'Changes to .env are ignored' },
+    {
+      type: 'p',
+      text: 'Rebuilding does not help — environment values are read when the container is created. Use `docker compose up -d --force-recreate backend`.',
+    },
     { type: 'h3', text: 'A package you installed is missing inside the container' },
     {
       type: 'p',
-      text: 'Installing on the host does not change the image. Rebuild after adding a dependency: `docker compose up -d --build`. Or install inside the running container and then update the manifest.',
+      text: 'Installing on the host does not change the image. Rebuild the one service: `docker compose up -d --build backend`.',
     },
     { type: 'h3', text: 'Vite will not open in the browser' },
     {
       type: 'p',
-      text: 'You need both the published port and the host flag — `-p 5173:5173` plus `--host 0.0.0.0`. Without the flag Vite only listens on the container loopback.',
-    },
-    { type: 'h3', text: 'Port is already in use' },
-    {
-      type: 'p',
-      text: 'Remap the host side and leave the container side alone: `-p 5174:5173`, then open `http://localhost:5174`. To find the culprit: `lsof -i :5173`.',
+      text: 'You need the published port and the host flag together — `ports: "5173:5173"` plus `--host 0.0.0.0` in the compose `command`. Without the flag Vite listens only on the container loopback.',
     },
     { type: 'h3', text: 'Code changes do not appear' },
     {
       type: 'ul',
       items: [
-        'The image was not rebuilt, and you are running old baked code.',
-        'The folder is not bind-mounted, or is mounted at the wrong path.',
-        'An old container is still running — check `docker compose ps`.',
+        'The service has no bind mount, or it is mounted at the wrong path — check `volumes:` for that service.',
+        'You are running the prod compose file, which deliberately mounts no source.',
+        'An old container is still up; confirm with `docker compose ps`.',
       ],
     },
-    { type: 'h3', text: 'Dependency installed into the wrong folder' },
+    { type: 'h3', text: 'relation does not exist' },
     {
       type: 'p',
-      text: 'The build context is the directory you point at. If the app lives in `client/`, build with `docker build -t react-img ./client` — otherwise `COPY . .` copies the repo root and `npm install` finds no `package.json`.',
+      text: 'Migrations were never applied to this database, or you ran them on the host against a different one. Run `docker compose exec backend python manage.py migrate`.',
+    },
+    { type: 'h3', text: '502 Bad Gateway from nginx in production' },
+    {
+      type: 'p',
+      text: 'nginx is up but cannot reach `backend:8000`. Check `docker compose -f docker-compose.prod.yml logs -f backend` — usually gunicorn failed to boot, so the proxy target never came up.',
     },
   ],
 }
