@@ -280,6 +280,53 @@ a {
   border-color: var(--green);
 }
 
+/* ---------- venv quick setup ---------- */
+
+.venv-setup {
+  margin-bottom: 2.25rem;
+}
+
+.venv-row {
+  display: grid;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+/* Sized off the track, not the viewport: .main is the viewport minus the
+   sidebar, so a max-width query would collapse these at the wrong moment.
+   17rem is what the longest one-liner needs before it starts scrolling
+   inside its own <pre>, so the row goes 3 -> 2 -> 1 exactly when it must. */
+.venv-row.is-auto {
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+}
+
+/* minmax(0, …) rather than plain fr — the <pre> inside scrolls, and an auto
+   minimum would let it push the track past the column. */
+.venv-row.is-split {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+}
+.venv-row.is-full {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* The grid owns the spacing, and boxes in a row match heights. */
+.venv-box .code-block {
+  margin: 0;
+  height: 100%;
+}
+.venv-box .code-block pre {
+  height: 100%;
+}
+
+/* A BASH label on each one-liner is noise; the copy button still needs its
+   gutter, so keep a shorter top pad rather than none. */
+.venv-setup .code-lang {
+  display: none;
+}
+.venv-setup .code-block pre {
+  padding: 2.1rem 1rem 0.9rem;
+}
+
 /* ---------- scaffold generator ---------- */
 
 .preset-tabs {
@@ -525,6 +572,10 @@ a {
   .layout,
   .layout.has-toc {
     grid-template-columns: 1fr;
+  }
+
+  .venv-row.is-split {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .sidebar {

@@ -1,6 +1,7 @@
 import { presets } from '../../data/presets.js'
 import { createCodeBlock } from '../../ui/code-block.js'
 import { clearTree, loadTree, saveTree } from './storage.js'
+import { createVenvSetup } from './venv-setup.js'
 import {
   addNode,
   cloneTree,
@@ -22,6 +23,10 @@ export function createScaffoldView() {
   let showOutput = false
   // Set after adding a node so the new name is focused and selected on render.
   let focusPath = null
+
+  // Static, and render() clears root on every edit — so build it once and let
+  // each render move it back in. Its copy buttons survive the move.
+  const venvSection = createVenvSetup()
 
   const preset = () => presets.find((p) => p.id === presetId)
   const persist = () => saveTree(presetId, tree)
@@ -181,8 +186,19 @@ export function createScaffoldView() {
     const lede = document.createElement('p')
     lede.className = 'page-lede'
     lede.textContent =
-      'Edit the tree, then generate the shell commands that build it. Click any name to rename it. Edits are saved per preset.'
+      'Start a project in order: stand up the environment, then lay out the folder tree.'
     root.append(lede)
+
+    root.append(venvSection)
+
+    const treeHeading = document.createElement('h2')
+    treeHeading.textContent = 'Folder Tree'
+    root.append(treeHeading)
+
+    const treeLede = document.createElement('p')
+    treeLede.textContent =
+      'Edit the tree, then generate the shell commands that build it. Click any name to rename it. Edits are saved per preset.'
+    root.append(treeLede)
 
     const tabs = document.createElement('div')
     tabs.className = 'preset-tabs'
