@@ -280,6 +280,167 @@ a {
   border-color: var(--green);
 }
 
+/* The toggle sits flush under the block, so the two read as one unit. */
+.code-block.has-toggle pre {
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* 2.6rem is the same top pad that clears the lang label; the rest is
+   --preview-lines lines at the .code-block code metrics (0.83rem x 1.55). */
+.code-block.is-collapsed pre {
+  max-height: calc(2.6rem + var(--preview-lines) * 0.83rem * 1.55);
+  overflow-y: hidden;
+}
+
+.code-toggle {
+  position: relative;
+  display: block;
+  width: 100%;
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-top: 0;
+  border-radius: 0 0 var(--radius) var(--radius);
+  padding: 0.4rem;
+  cursor: pointer;
+}
+
+.code-toggle:hover {
+  color: var(--text-strong);
+  border-color: var(--accent);
+}
+
+/* Fades the last visible line so it reads as cut off rather than finished.
+   Hung off the toggle because <pre> is unpositioned — an ::after there would
+   anchor to .code-block, whose bottom is the toggle, not the code. */
+.code-block.is-collapsed .code-toggle::before {
+  content: "";
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  bottom: 100%;
+  /* Short on purpose: the preview is only a few lines tall, and a taller fade
+     would swallow most of what it is meant to be previewing. */
+  height: 2rem;
+  background: linear-gradient(to top, var(--bg-code), transparent);
+  pointer-events: none;
+}
+
+/* ---------- command rows ---------- */
+
+.venv-setup {
+  margin-bottom: 2.25rem;
+}
+
+.cmd-row {
+  display: grid;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+/* Sized off the track, not the viewport: .main is the viewport minus the
+   sidebar, so a max-width query would collapse these at the wrong moment.
+   17rem is what the longest one-liner needs before it starts scrolling
+   inside its own <pre>, so the row goes 3 -> 2 -> 1 exactly when it must. */
+.cmd-row.is-auto {
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+}
+
+/* minmax(0, …) rather than plain fr — the <pre> inside scrolls, and an auto
+   minimum would let it push the track past the column. */
+.cmd-row.is-split {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+}
+.cmd-row.is-full {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Boxes stretch to the row's height; the code block takes whatever is left
+   under the caption, so captioned and uncaptioned boxes still end level. */
+.cmd-box {
+  display: flex;
+  flex-direction: column;
+}
+
+/* The grid owns the spacing, and boxes in a row match heights. */
+.cmd-box .code-block {
+  margin: 0;
+  flex: 1 0 auto;
+}
+.cmd-box .code-block pre {
+  height: 100%;
+}
+
+.cmd-caption {
+  margin: 0 0 0.45rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+/* A BASH label on each one-liner is noise; the copy button still needs its
+   gutter, so keep a shorter top pad rather than none. */
+.cmd-rows .code-lang {
+  display: none;
+}
+.cmd-rows .code-block pre {
+  padding: 2.1rem 1rem 0.9rem;
+}
+
+/* ---------- guide figures ---------- */
+
+.guide-figure {
+  margin: 1.5rem 0 1.75rem;
+}
+
+.guide-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.guide-figure figcaption {
+  margin-top: 0.6rem;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+/* ---------- link lists ---------- */
+
+.link-list {
+  margin: 1rem 0;
+  padding: 0;
+  list-style: none;
+  max-width: 74ch;
+}
+
+.link-list li {
+  margin: 0.7rem 0;
+}
+
+.link-list a {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.link-list a:hover {
+  text-decoration: underline;
+}
+
+.link-note {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
 /* ---------- scaffold generator ---------- */
 
 .preset-tabs {
@@ -525,6 +686,10 @@ a {
   .layout,
   .layout.has-toc {
     grid-template-columns: 1fr;
+  }
+
+  .cmd-row.is-split {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .sidebar {

@@ -1,0 +1,197 @@
+# -------------------------
+# Starship performance
+# -------------------------
+
+scan_timeout = 500
+command_timeout = 3000
+
+format = """\
+${custom.venv_dot}\
+${custom.venv_default}\
+${custom.venv_other}\
+${custom.venv_inactive}\
+$directory\
+${custom.branch_main_badge}\
+${custom.branch_dev_badge}\
+${custom.branch_other_badge}\
+$git_branch\
+$git_status\
+$git_metrics\
+[](fg:#FCF392 bg:#FFD43B)\
+$python\
+$nodejs\
+${custom.docker}\
+$cmd_duration\
+$line_break\
+$character\
+"""
+
+# -------------------------
+# Virtual environment
+# -------------------------
+
+# Active environment named .venv
+[custom.venv_dot]
+command = 'printf ".venv"'
+when = '''
+test -n "$VIRTUAL_ENV" &&
+test "$(basename "$VIRTUAL_ENV")" = ".venv"
+'''
+shell = ["bash", "--noprofile", "--norc"]
+format = "[](fg:#F28C28)[ $output](fg:black bg:#F28C28)[](fg:#F28C28 bg:#3B76F0)"
+description = ".venv virtual environment"
+
+# Active environment named .default
+[custom.venv_default]
+command = 'printf ".default"'
+when = '''
+test -n "$VIRTUAL_ENV" &&
+test "$(basename "$VIRTUAL_ENV")" = ".default"
+'''
+shell = ["bash", "--noprofile", "--norc"]
+format = "[](fg:#FFE4C2)[ $output](fg:black bg:#FFE4C2)[](fg:#FFE4C2 bg:#3B76F0)"
+description = "Default virtual environment"
+
+# Any other active virtual environment
+[custom.venv_other]
+command = 'basename "$VIRTUAL_ENV"'
+when = '''
+test -n "$VIRTUAL_ENV" &&
+test "$(basename "$VIRTUAL_ENV")" != ".venv" &&
+test "$(basename "$VIRTUAL_ENV")" != ".default"
+'''
+shell = ["bash", "--noprofile", "--norc"]
+format = "[](fg:#F28C28)[ $output](fg:black bg:#F28C28)[](fg:#F28C28 bg:#3B76F0)"
+description = "Other active virtual environment"
+
+# No active virtual environment
+[custom.venv_inactive]
+command = 'printf "No venv"'
+when = 'test -z "$VIRTUAL_ENV"'
+shell = ["bash", "--noprofile", "--norc"]
+format = "[](fg:white)[[✗](fg:red bg:white) $output](fg:black bg:white)[](fg:white bg:#3B76F0)"
+description = "No active virtual environment"
+
+# -------------------------
+# Directory
+# -------------------------
+
+[directory]
+format = "[[](fg:white bg:#3B76F0) $path]($style)"
+style = "bold fg:white bg:#3B76F0"
+truncation_length = 1
+truncate_to_repo = false
+truncation_symbol = ""
+
+# -------------------------
+# Branch badges
+# M = main
+# D = dev
+# B = any other branch
+# -------------------------
+
+[custom.branch_main_badge]
+command = 'printf "M"'
+when = '''
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 &&
+test "$(git branch --show-current)" = "main"
+'''
+shell = ["bash", "--noprofile", "--norc"]
+format = "[](fg:#3B76F0 bg:#FF3B30)[$output](bold fg:white bg:#FF3B30)[](fg:#FF3B30 bg:#FCF392)"
+description = "Main branch badge"
+
+[custom.branch_dev_badge]
+command = 'printf "D"'
+when = '''
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 &&
+test "$(git branch --show-current)" = "dev"
+'''
+shell = ["bash", "--noprofile", "--norc"]
+format = "[](fg:#3B76F0 bg:#FFB6C1)[$output](bold fg:#1C3A5E bg:#FFB6C1)[](fg:#FFB6C1 bg:#FCF392)"
+description = "Dev branch badge"
+
+[custom.branch_other_badge]
+command = 'printf "B"'
+when = '''
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 &&
+test -n "$(git branch --show-current)" &&
+test "$(git branch --show-current)" != "main" &&
+test "$(git branch --show-current)" != "dev"
+'''
+shell = ["bash", "--noprofile", "--norc"]
+format = "[](fg:#3B76F0 bg:#32CD32)[$output](bold fg:black bg:#32CD32)[](fg:#32CD32 bg:#FCF392)"
+description = "Other branch badge"
+
+# -------------------------
+# Git
+# -------------------------
+
+[git_branch]
+format = "[$symbol$branch(:$remote_branch)]($style)"
+symbol = "  "
+style = "fg:#1C3A5E bg:#FCF392"
+
+[git_status]
+format = "[$all_status]($style)"
+style = "fg:#1C3A5E bg:#FCF392"
+
+[git_metrics]
+format = "([+$added]($added_style))"
+added_style = "fg:#1C3A5E bg:#FCF392"
+deleted_style = "fg:bright-red bg:#FCF392"
+disabled = false
+
+# -------------------------
+# Python segment
+# -------------------------
+
+[python]
+symbol = " "
+version_format = "v${raw}"
+format = "[$symbol$version](fg:#1E1E1E bg:#FFD43B)[](fg:#FFD43B bg:#68A063)"
+
+# -------------------------
+# Node segment
+# -------------------------
+
+[nodejs]
+symbol = " "
+version_format = "v${raw}"
+format = "[$symbol$version](fg:black bg:#68A063)[](fg:#68A063 bg:#2B2B2B)"
+
+# -------------------------
+# Docker segment
+# Appears when Docker project files exist
+# -------------------------
+
+[custom.docker]
+when = '''
+test -f Dockerfile ||
+test -f docker-compose.yml ||
+test -f docker-compose.yaml ||
+test -f compose.yml ||
+test -f compose.yaml
+'''
+command = 'printf "Docker"'
+shell = ["bash", "--noprofile", "--norc"]
+format = "[[🐳](fg:#2496ED bg:#2B2B2B) $output](fg:white bg:#2B2B2B)[](fg:#2B2B2B)"
+description = "Docker project"
+
+# -------------------------
+# Other modules
+# -------------------------
+
+[hg_branch]
+format = "[$symbol$branch]($style)"
+symbol = " "
+
+[cmd_duration]
+min_time = 2000
+format = "[ $duration](bright-white)"
+
+[line_break]
+disabled = false
+
+[character]
+success_symbol = "[➜](bold green) "
+error_symbol = "[ ✗](bold red) "

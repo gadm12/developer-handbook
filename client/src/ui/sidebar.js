@@ -28,8 +28,16 @@ export function createSidebar(route) {
   nav.append(group('Tools'))
   nav.append(link('#/scaffold', 'Scaffold Generator', route.name === 'scaffold'))
 
-  nav.append(group('Guides'))
+  // Group labels come from the data: a new one is emitted whenever `section`
+  // changes, so group order is array order — no sort, no separate config.
+  let section = null
   for (const guide of guides) {
+    const label = guide.section ?? 'Guides'
+    if (label !== section) {
+      nav.append(group(label))
+      section = label
+    }
+
     nav.append(
       link(
         `#/guide/${guide.id}`,
