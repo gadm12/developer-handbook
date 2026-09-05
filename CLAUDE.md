@@ -35,23 +35,44 @@ never touching a view.
 ```
 client/src/
 ├── data/guides.js         all guide content (~1500 lines) — the bulk of the repo
+├── data/starship.js       the one guide needing imports (png + starship.toml?raw)
 ├── data/presets.js        scaffold starter trees, built with dir()/file() helpers
 ├── features/scaffold/
 │   ├── tree-model.js      pure tree CRUD + generateScript(); no DOM
 │   ├── tree-view.js       renders the tree, inline rename, add/delete
+│   ├── venv-setup.js      the venv Quick Setup rows
 │   └── storage.js         localStorage, per preset id
 ├── features/guides/guide-view.js   maps a guide's blocks[] to DOM
 ├── ui/code-block.js       <pre> + per-block copy button + hljs
+├── ui/command-rows.js     grid of individually copyable command boxes
 ├── ui/sidebar.js, ui/copy.js
 ├── router.js              hash routing (#/scaffold, #/guide/:id)
 └── main.js                re-renders the whole layout per route
 ```
 
-Guide blocks are `h2 | h3 | p | ul | code | note | warn`. Backticks in prose
-become inline `<code>`; prose is HTML-escaped first, so only backticks are
-markup. `code` blocks take a `lang` that must be registered in
-`ui/code-block.js` — only the languages actually used are imported, since the
-full hljs bundle is ~1MB.
+Guide blocks are
+`h2 | h3 | p | ul | code | note | warn | image | commands | links`.
+Prose is HTML-escaped first, then exactly two things are re-opened: backticks
+become inline `<code>`, and `[label](href)` becomes a link. `code` blocks
+take a `lang` that must be registered in `ui/code-block.js` — only the languages actually used are imported, since the
+full hljs bundle is ~1MB. A `code` block may also carry `collapse: N`, which
+clips it to its first N lines behind a toggle; the whole block stays in the DOM,
+so Copy still yields all of it.
+
+A `commands` block renders through `ui/command-rows.js`, shared with the
+scaffold page's venv Quick Setup: rows of small boxes that each copy on their
+own, with an optional plain-text `caption` above a box that Copy never yields.
+
+Anchors come from two places: the `links` block, and `[label](href)` in prose.
+Both accept only an internal route (`#/scaffold`, `#/guide/:id`) or an
+`https://` URL — anything else is left as literal text, and external links get
+`target="_blank"`. A bare in-page `#…` fragment is deliberately not supported:
+it would be read as a route and land the reader on the scaffold page, which is
+the same reason `toc-view.js` uses buttons rather than anchors.
+
+The sidebar's groups come from the data — a guide with a `section` starts a new
+group at that point in the `guides` array, and one without falls under
+"Guides" — so group order is array order.
 
 Two things worth preserving:
 

@@ -581,10 +581,55 @@ docker system prune -a`,
     },
   ],
 }
+// Rows are a layout choice only. Every box copies on its own; nothing here is
+// merged, because none of these pairs is reliably run in one go. See
+// ui/command-rows.js for what `layout` means.
+const GIT_INIT = [
+  { layout: 'auto', steps: ['git init', 'touch .gitignore'] },
+]
+
+const PROJECT_INIT = [
+  {
+    layout: 'auto',
+    steps: [
+      { code: 'alias pm="python manage.py"', caption: 'Shell-local, so re-run it in each new terminal.' },
+      { code: 'django-admin startproject server', caption: 'Creates the project package.' },
+    ],
+  },
+  {
+    layout: 'auto',
+    steps: [
+      { code: 'cd server', caption: 'manage.py lives here.' },
+      { code: 'pm runserver', caption: 'Confirms it boots before you add anything.' },
+    ],
+  },
+]
+
+// Captioned rather than commented, because a `# write it` inside the box would
+// be copied along with the command.
+const REQUIREMENTS = [
+  {
+    layout: 'auto',
+    steps: [
+      {
+        code: 'pip freeze > requirements.txt',
+        caption: 'Write it — record what this environment currently has installed.',
+      },
+      {
+        code: 'pip install -r requirements.txt',
+        caption: 'Restore it — install exactly that list on a fresh clone or a new machine.',
+      },
+    ],
+  },
+]
+
+const CREATE_APP = [
+  { layout: 'auto', steps: ['cd server', 'pm startapp user_app'] },
+]
 
 const django = {
   id: 'django',
-  label: 'venv + Django Init',
+  label: 'Django Init',
   lede: 'From an empty folder to a running Django project, in the order that avoids rework.',
   blocks: [
     { type: 'h2', text: 'The short version' },
@@ -595,8 +640,7 @@ const django = {
     {
       type: 'code',
       lang: 'bash',
-      code: `python3 -m venv .venv
-source .venv/bin/activate
+      code: `git init
 alias pm="python manage.py"
 pip install django "psycopg[binary]"
 django-admin startproject server
@@ -609,48 +653,23 @@ pip freeze > requirements.txt`,
       text: 'Set the `pm` alias early — every Django command below uses it. Add it to the image too (`RUN echo \'alias pm="python manage.py"\' >> /root/.bashrc`) so it works inside the container as well.',
     },
 
-    { type: 'h2', text: '1. Virtual environment' },
-    {
-      type: 'code',
-      lang: 'bash',
-      code: `deactivate           # leave any environment you are already in
-python3 -m venv .venv
-source .venv/bin/activate`,
-    },
+    { type: 'h2', text: '1. Git, before the first commit' },
     {
       type: 'p',
-      text: 'With `direnv` installed you can skip the activation step entirely — the environment turns on when you `cd` into the project and off when you leave:',
+      text: 'Set up a virtual environment first if you have not already — the sequence is on the Scaffold Generator page under [venv Quick Setup](#/scaffold). Everything below assumes it is active.',
     },
-    {
-      type: 'code',
-      lang: 'bash',
-      code: `touch .envrc
-
-echo 'export VIRTUAL_ENV="$PWD/.venv"
-PATH_add "$VIRTUAL_ENV/bin"' > .envrc
-
-direnv allow`,
-    },
+    { type: 'commands', rows: GIT_INIT },
     {
       type: 'p',
-      text: 'And point VS Code at the same interpreter so its linting matches your shell:',
+      text: 'Then paste the boilerplate in. The order matters more than the contents: an ignore rule written after the first commit does not untrack anything it was supposed to catch.',
     },
-    {
-      type: 'code',
-      lang: 'json',
-      code: `{
-  "python.defaultInterpreterPath": "\${workspaceFolder}/.venv/bin/python",
-  "python.terminal.activateEnvironment": false
-}`,
-    },
-
-    { type: 'h2', text: '2. .gitignore, before the first commit' },
     {
       type: 'code',
       lang: 'bash',
-      code: `cat >> .gitignore << 'EOF'
-
-# Python
+      // The preview is meant to reach `.env`, which is line 8. The fade covers
+      // the last ~1.5 lines, so it takes 10 to leave `.env` fully legible.
+      collapse: 10,
+      code: `# Python
 .venv/
 __pycache__/
 *.py[cod]
@@ -685,21 +704,14 @@ build/
 
 # Operating System Files
 .DS_Store
-*Zone.Identifier*
-EOF`,
+*Zone.Identifier*`,
     },
+
+    { type: 'h2', text: '2. Start the project' },
+    { type: 'commands', rows: PROJECT_INIT },
     {
       type: 'p',
-      text: 'To check nothing sensitive is already tracked:',
-    },
-    {
-      type: 'code',
-      lang: 'bash',
-      code: `git ls-files | grep -E '(^|/)\\.env($|\\.)'`,
-    },
-    {
-      type: 'note',
-      text: 'A global ignore file catches editor and OS junk across every repo: `git config --global core.excludesfile ~/.gitignore_global`.',
+      text: '`startproject server` creates the `server/` folder holding `manage.py` and the settings package, so every command after this one runs from inside it.',
     },
 
     { type: 'h2', text: '3. Dependencies' },
@@ -715,20 +727,13 @@ EOF`,
   django-redis rich pillow djangorestframework-simplejwt`,
     },
     {
-      type: 'code',
-      lang: 'bash',
-      code: `pip freeze > requirements.txt   # write it
-pip install -r requirements.txt # restore it elsewhere`,
+      type: 'p',
+      text: 'Those two halves of the `requirements.txt` cycle are easy to confuse, so they are separate boxes — one writes the file, the other reads it:',
     },
+    { type: 'commands', rows: REQUIREMENTS },
 
-    { type: 'h2', text: '4. Create the project and an app' },
-    {
-      type: 'code',
-      lang: 'bash',
-      code: `django-admin startproject server
-cd server
-pm startapp user_app`,
-    },
+    { type: 'h2', text: '4. Create an app' },
+    { type: 'commands', rows: CREATE_APP },
     {
       type: 'warn',
       text: 'An app that is not in `INSTALLED_APPS` is invisible: no models, no migrations, no admin entry, no table. This is the most common reason `makemigrations` reports "No changes detected".',
@@ -840,51 +845,6 @@ pm loaddata user_app/fixtures/user_data.json`,
       text: 'Fixtures are model data, not a database backup. Migrate before you load, and load parents before children or the foreign keys will not resolve.',
     },
 
-    { type: 'h2', text: '8. Rate limiting your API' },
-    {
-      type: 'p',
-      text: 'DRF has throttling built in, so you do not need `django-ratelimit`. Counters are stored in your cache — with Redis configured they land there automatically.',
-    },
-    {
-      type: 'code',
-      lang: 'python',
-      code: `REST_FRAMEWORK = {
-    "DEFAULT_THROTTLE_CLASSES": [
-        "rest_framework.throttling.AnonRateThrottle",
-        "rest_framework.throttling.UserRateThrottle",
-    ],
-    "DEFAULT_THROTTLE_RATES": {
-        "anon": "10/min",
-        "user": "100/hour",
-    },
-}`,
-    },
-    {
-      type: 'p',
-      text: 'Or per view:',
-    },
-    {
-      type: 'code',
-      lang: 'python',
-      code: `from rest_framework.throttling import UserRateThrottle
-
-
-class BookView(APIView):
-    throttle_classes = [UserRateThrottle]`,
-    },
-    {
-      type: 'p',
-      text: 'Verify it — the eleventh request should come back `429`:',
-    },
-    {
-      type: 'code',
-      lang: 'bash',
-      code: `for i in $(seq 1 12); do
-    curl -s -o /dev/null -w "%{http_code}\\n" \\
-    http://localhost:8000/api/v1/book/
-done`,
-    },
-
     { type: 'h2', text: 'Optional: better tracebacks' },
     {
       type: 'p',
@@ -907,6 +867,218 @@ except ImportError:
     pass`,
     },
 
+    { type: 'h2', text: 'The whole settings.py' },
+    {
+      type: 'p',
+      text: 'Every piece above, assembled — Django\'s own scaffolded comments stripped out and a line of explanation over each group instead. The app names under `INSTALLED_APPS` and the `user_app.authentication` path are this project\'s; swap them for yours.',
+    },
+    {
+      type: 'code',
+      lang: 'python',
+      collapse: 7,
+      code: `from pathlib import Path
+import os
+from datetime import timedelta
+
+# Every other path in this file is built from BASE_DIR, so it stays correct
+# no matter which directory the process was started from.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# The three settings that must differ between your laptop and production, so
+# all three are read from the environment and none is a literal here.
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
+DEBUG = os.environ.get("DEBUG", "False") == "True"
+
+ALLOWED_HOSTS = os.environ.get(
+    "ALLOWED_HOSTS",
+    "backend,localhost,127.0.0.1",
+).split(",")
+
+# Everything Django is allowed to see. Django's own contrib apps, then the
+# third-party ones, then your apps last. An app missing from this list has no
+# models, no migrations and no admin entry.
+INSTALLED_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "rest_framework",
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
+    "corsheaders",
+    # Your own apps — swap these for whatever you actually created.
+    "user_app",
+    "workout_app",
+    "calories_app",
+]
+
+# The request/response pipeline, in order. Order is load-bearing:
+# CorsMiddleware has to run before CommonMiddleware or the CORS headers are
+# attached too late to matter.
+MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+# Where URL resolution starts, and the WSGI entry point gunicorn imports.
+ROOT_URLCONF = "server.urls"
+
+# Server-rendered templates. A JSON API barely touches this, but the admin
+# needs it, so it stays.
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
+    },
+]
+
+WSGI_APPLICATION = "server.wsgi.application"
+
+# JWT lifetimes and rotation. Short access token, long refresh token; rotating
+# on every refresh and blacklisting the old one means a stolen refresh token is
+# only good until the legitimate client next refreshes.
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
+# Postgres, entirely from the environment. HOST defaults to "db" because that
+# is the service name inside compose; override it to localhost off Docker.
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("POSTGRES_DB"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": os.environ.get("POSTGRES_HOST", "db"),
+        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+    }
+}
+
+# Cookie flags. The Secure ones default to False so plain-HTTP local
+# development works, and are switched on by the environment in production.
+SESSION_COOKIE_SECURE = (
+    os.environ.get("SESSION_COOKIE_SECURE", "False") == "True"
+)
+SESSION_COOKIE_HTTPONLY = (
+    os.environ.get("SESSION_COOKIE_HTTPONLY", "True") == "True"
+)
+CSRF_COOKIE_SECURE = (
+    os.environ.get("CSRF_COOKIE_SECURE", "False") == "True"
+)
+
+AUTH_COOKIE_SECURE = (
+    os.environ.get("AUTH_COOKIE_SECURE", "False") == "True"
+)
+
+AUTH_COOKIE_SAMESITE = os.environ.get(
+    "AUTH_COOKIE_SAMESITE", "Lax"
+)
+
+# Behind a reverse proxy Django only sees plain HTTP; this is how it learns the
+# original request was HTTPS, which the Secure cookie flags depend on.
+SECURE_PROXY_SSL_HEADER = (
+    "HTTP_X_FORWARDED_PROTO",
+    "https",
+)
+
+# Redis, shared by the cache, DRF's throttle counters and anything else that
+# needs a fast shared store.
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.environ.get(
+            "REDIS_URL",
+            "redis://redis:6379/0",
+        ),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
+# DRF's defaults, applied to every view that does not override them: read the
+# JWT from a cookie rather than an Authorization header, and cap request rates
+# per anonymous IP and per authenticated user.
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "user_app.authentication.JWTCookieAuthentication",
+    ],
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "10/min",
+        "user": "30/min",
+    },
+}
+
+# Point auth at your own user model. This has to be set before the first
+# migration — changing it afterwards is genuinely painful.
+AUTH_USER_MODEL = "user_app.User"
+
+# The rules new passwords are checked against on signup and password change.
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
+]
+
+# Language and time. USE_TZ keeps everything stored as UTC in the database and
+# converted on the way out, which is what you want for an API.
+LANGUAGE_CODE = "en-us"
+
+TIME_ZONE = "UTC"
+
+USE_I18N = True
+
+USE_TZ = True
+
+# The URL prefix static files are served under.
+STATIC_URL = "/static/"
+
+# In development mail is printed to the console instead of being sent. Swap the
+# backend for a real one in production.
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# Which origins the browser may call this API from. The React dev server's
+# port belongs here too once it is talking to Django.
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost",
+    "http://127.0.0.1",
+]`,
+    },
+
     { type: 'h2', text: 'Troubleshooting' },
     {
       type: 'ul',
@@ -920,6 +1092,7 @@ except ImportError:
     },
   ],
 }
+
 
 const react = {
   id: 'react',

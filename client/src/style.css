@@ -280,6 +280,55 @@ a {
   border-color: var(--green);
 }
 
+/* The toggle sits flush under the block, so the two read as one unit. */
+.code-block.has-toggle pre {
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* 2.6rem is the same top pad that clears the lang label; the rest is
+   --preview-lines lines at the .code-block code metrics (0.83rem x 1.55). */
+.code-block.is-collapsed pre {
+  max-height: calc(2.6rem + var(--preview-lines) * 0.83rem * 1.55);
+  overflow-y: hidden;
+}
+
+.code-toggle {
+  position: relative;
+  display: block;
+  width: 100%;
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-top: 0;
+  border-radius: 0 0 var(--radius) var(--radius);
+  padding: 0.4rem;
+  cursor: pointer;
+}
+
+.code-toggle:hover {
+  color: var(--text-strong);
+  border-color: var(--accent);
+}
+
+/* Fades the last visible line so it reads as cut off rather than finished.
+   Hung off the toggle because <pre> is unpositioned — an ::after there would
+   anchor to .code-block, whose bottom is the toggle, not the code. */
+.code-block.is-collapsed .code-toggle::before {
+  content: "";
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  bottom: 100%;
+  /* Short on purpose: the preview is only a few lines tall, and a taller fade
+     would swallow most of what it is meant to be previewing. */
+  height: 2rem;
+  background: linear-gradient(to top, var(--bg-code), transparent);
+  pointer-events: none;
+}
+
 /* ---------- command rows ---------- */
 
 .venv-setup {
@@ -359,6 +408,36 @@ a {
   margin-top: 0.6rem;
   font-size: 0.82rem;
   line-height: 1.55;
+  color: var(--text-muted);
+}
+
+/* ---------- link lists ---------- */
+
+.link-list {
+  margin: 1rem 0;
+  padding: 0;
+  list-style: none;
+  max-width: 74ch;
+}
+
+.link-list li {
+  margin: 0.7rem 0;
+}
+
+.link-list a {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.link-list a:hover {
+  text-decoration: underline;
+}
+
+.link-note {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
   color: var(--text-muted);
 }
 

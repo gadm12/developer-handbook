@@ -49,8 +49,12 @@ const ALIASES = {
  *
  * The button closes over `code` directly, so a block's Copy always yields that
  * block's text regardless of where it sits in the DOM.
+ *
+ * `collapse: N` clips the block to its first N lines behind a toggle — for the
+ * blocks long enough to bury whatever follows them. Copy is unaffected: it
+ * still yields the whole thing, collapsed or not.
  */
-export function createCodeBlock(code, lang = 'bash') {
+export function createCodeBlock(code, lang = 'bash', { collapse } = {}) {
   const resolved = ALIASES[lang] ?? lang
 
   const wrap = document.createElement('div')
@@ -76,5 +80,35 @@ export function createCodeBlock(code, lang = 'bash') {
 
   pre.append(el)
   wrap.append(label, button, pre)
+
+  if (collapse) {
+    // Only `pre` is clipped — the label and copy button are positioned against
+    // the wrapper, and clipping that would cut both off.
+    wrap.classList.add('has-toggle', 'is-collapsed')
+    wrap.style.setProperty('--preview-lines', collapse)
+
+    // Trailing newline trimmed first — a file ending in one is not 198 lines.
+    const lines = code.replace(/\n$/, '').split('\n').length
+    const toggle = document.createElement('button')
+    toggle.type = 'button'
+    toggle.className = 'code-toggle'
+
+    // Closes over its own `wrap`, like the copy button closes over its own
+    // `code` — never over a DOM sibling.
+    const sync = () => {
+      const collapsed = wrap.classList.contains('is-collapsed')
+      toggle.textContent = collapsed ? `Show all ${lines} lines` : 'Collapse'
+      toggle.setAttribute('aria-expanded', String(!collapsed))
+    }
+
+    toggle.addEventListener('click', () => {
+      wrap.classList.toggle('is-collapsed')
+      sync()
+    })
+
+    sync()
+    wrap.append(toggle)
+  }
+
   return wrap
 }
