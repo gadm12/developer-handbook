@@ -280,13 +280,13 @@ a {
   border-color: var(--green);
 }
 
-/* ---------- venv quick setup ---------- */
+/* ---------- command rows ---------- */
 
 .venv-setup {
   margin-bottom: 2.25rem;
 }
 
-.venv-row {
+.cmd-row {
   display: grid;
   gap: 1rem;
   margin: 1rem 0;
@@ -296,35 +296,70 @@ a {
    sidebar, so a max-width query would collapse these at the wrong moment.
    17rem is what the longest one-liner needs before it starts scrolling
    inside its own <pre>, so the row goes 3 -> 2 -> 1 exactly when it must. */
-.venv-row.is-auto {
+.cmd-row.is-auto {
   grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
 }
 
 /* minmax(0, …) rather than plain fr — the <pre> inside scrolls, and an auto
    minimum would let it push the track past the column. */
-.venv-row.is-split {
+.cmd-row.is-split {
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
 }
-.venv-row.is-full {
+.cmd-row.is-full {
   grid-template-columns: minmax(0, 1fr);
 }
 
+/* Boxes stretch to the row's height; the code block takes whatever is left
+   under the caption, so captioned and uncaptioned boxes still end level. */
+.cmd-box {
+  display: flex;
+  flex-direction: column;
+}
+
 /* The grid owns the spacing, and boxes in a row match heights. */
-.venv-box .code-block {
+.cmd-box .code-block {
   margin: 0;
+  flex: 1 0 auto;
+}
+.cmd-box .code-block pre {
   height: 100%;
 }
-.venv-box .code-block pre {
-  height: 100%;
+
+.cmd-caption {
+  margin: 0 0 0.45rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--text-muted);
 }
 
 /* A BASH label on each one-liner is noise; the copy button still needs its
    gutter, so keep a shorter top pad rather than none. */
-.venv-setup .code-lang {
+.cmd-rows .code-lang {
   display: none;
 }
-.venv-setup .code-block pre {
+.cmd-rows .code-block pre {
   padding: 2.1rem 1rem 0.9rem;
+}
+
+/* ---------- guide figures ---------- */
+
+.guide-figure {
+  margin: 1.5rem 0 1.75rem;
+}
+
+.guide-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.guide-figure figcaption {
+  margin-top: 0.6rem;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--text-muted);
 }
 
 /* ---------- scaffold generator ---------- */
@@ -574,7 +609,7 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .venv-row.is-split {
+  .cmd-row.is-split {
     grid-template-columns: minmax(0, 1fr);
   }
 

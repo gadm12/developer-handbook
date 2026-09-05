@@ -1,4 +1,5 @@
 import { createCodeBlock } from '../../ui/code-block.js'
+import { createCommandRows } from '../../ui/command-rows.js'
 import { headingsFor } from './headings.js'
 
 // Inline `code` spans are the only markup allowed in prose, so escape
@@ -30,6 +31,21 @@ function callout(className, blocks) {
   return aside
 }
 
+function figure(block) {
+  const fig = document.createElement('figure')
+  fig.className = 'guide-figure'
+
+  const img = document.createElement('img')
+  // An imported asset URL — Vite has already hashed it and prefixed the base.
+  img.src = block.src
+  img.alt = block.alt
+  img.loading = 'lazy'
+  fig.append(img)
+
+  if (block.caption) fig.append(element('figcaption', block.caption))
+  return fig
+}
+
 const RENDERERS = {
   h2: (block) => element('h2', block.text),
   h3: (block) => element('h3', block.text),
@@ -38,6 +54,8 @@ const RENDERERS = {
   code: (block) => createCodeBlock(block.code, block.lang),
   note: (block) => callout('note', block.items ?? [block.text]),
   warn: (block) => callout('warn', block.items ?? [block.text]),
+  image: figure,
+  commands: (block) => createCommandRows(block.rows),
 }
 
 export function createGuideView(guide) {

@@ -1,4 +1,4 @@
-import { createCodeBlock } from '../../ui/code-block.js'
+import { createCommandRows } from '../../ui/command-rows.js'
 
 // Straight from legacy-reference/notes/setup_proj_folder/setup.md, in that
 // order. One correction to the note: its last line redirects into
@@ -6,12 +6,7 @@ import { createCodeBlock } from '../../ui/code-block.js'
 //
 // Rows are a layout choice only — nothing here is merged except `mkdir
 // .vscode` + `touch .vscode/settings.json`, which are always run together.
-// Every box copies on its own.
-//
-// `layout` is how the row's tracks are sized, not a grouping of meaning:
-//   auto  — equal tracks that drop 3 -> 2 -> 1 as the column narrows
-//   split — one narrow track beside a double-width one
-//   full  — a single box across the row
+// Every box copies on its own. See ui/command-rows.js for what `layout` means.
 const ROWS = [
   {
     layout: 'auto',
@@ -58,19 +53,7 @@ export function createVenvSetup() {
     'An isolated Python environment, switched on by direnv the moment you cd in and off when you leave, with VS Code pointed at the same interpreter your shell uses. Copy the boxes one at a time — these are rarely all run in one go.'
   section.append(intro)
 
-  for (const row of ROWS) {
-    const rowEl = document.createElement('div')
-    rowEl.className = `venv-row is-${row.layout}`
-
-    for (const code of row.steps) {
-      const box = document.createElement('div')
-      box.className = 'venv-box'
-      box.append(createCodeBlock(code, 'bash'))
-      rowEl.append(box)
-    }
-
-    section.append(rowEl)
-  }
+  section.append(createCommandRows(ROWS))
 
   return section
 }

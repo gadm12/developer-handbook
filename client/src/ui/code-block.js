@@ -33,7 +33,16 @@ for (const [name, lang] of Object.entries({
   hljs.registerLanguage(name, lang)
 }
 
-const ALIASES = { sh: 'bash', shell: 'bash', jsx: 'javascript', js: 'javascript', yml: 'yaml' }
+// hljs ships no TOML grammar; ini highlights it correctly, and routing through
+// an alias keeps the block's visible label reading `toml`.
+const ALIASES = {
+  sh: 'bash',
+  shell: 'bash',
+  jsx: 'javascript',
+  js: 'javascript',
+  yml: 'yaml',
+  toml: 'ini',
+}
 
 /**
  * Build a code block with its own copy button.
