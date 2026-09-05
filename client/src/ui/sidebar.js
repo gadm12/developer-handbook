@@ -1,3 +1,4 @@
+import logo from '../assets/logo.png'
 import { guides } from '../data/guides.js'
 
 function link(href, label, active) {
@@ -22,7 +23,19 @@ export function createSidebar(route) {
   const brand = document.createElement('a')
   brand.className = 'sidebar-brand'
   brand.href = '#/scaffold'
-  brand.innerHTML = 'Developer <span>Handbook</span>'
+
+  // Decorative: the wordmark beside it already names the site, so the mark
+  // itself carries no alt text for a screen reader to repeat.
+  const mark = document.createElement('img')
+  mark.className = 'sidebar-mark'
+  mark.src = logo
+  mark.alt = ''
+
+  const wordmark = document.createElement('span')
+  wordmark.className = 'sidebar-wordmark'
+  wordmark.innerHTML = 'Developer <span>Handbook</span>'
+
+  brand.append(mark, wordmark)
   nav.append(brand)
 
   nav.append(group('Tools'))

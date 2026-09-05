@@ -79,7 +79,9 @@ a {
 }
 
 .sidebar-brand {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   padding: 0 1.25rem 1.25rem;
   font-size: 1rem;
   font-weight: 700;
@@ -88,7 +90,18 @@ a {
   letter-spacing: -0.01em;
 }
 
-.sidebar-brand span {
+/* The mark is a black tile; the radius keeps its corners from reading as a
+   square patch against the panel. */
+.sidebar-mark {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  border-radius: 7px;
+}
+
+/* Scoped to the wordmark, not the whole brand — the wordmark is itself a span,
+   so `.sidebar-brand span` would paint both halves accent instead of one. */
+.sidebar-wordmark span {
   color: var(--accent);
 }
 
