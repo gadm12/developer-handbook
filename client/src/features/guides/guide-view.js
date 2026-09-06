@@ -1,6 +1,7 @@
 import { createCodeBlock } from '../../ui/code-block.js'
 import { createCommandRows } from '../../ui/command-rows.js'
 import { headingsFor } from './headings.js'
+import { createSolutionList } from './solution-list.js'
 
 // Inline `code` spans and [label](href) links are the only markup allowed in
 // prose, so escape everything first and then re-open just those two.
@@ -108,6 +109,7 @@ const RENDERERS = {
   image: figure,
   commands: (block) => createCommandRows(block.rows),
   links: linkList,
+  solutions: createSolutionList,
 }
 
 export function createGuideView(guide) {

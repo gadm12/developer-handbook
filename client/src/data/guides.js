@@ -1,16 +1,17 @@
 // Guide content, extracted from the old static site (see legacy-reference/).
 //
 // Block types: h2, h3, p, ul{items}, code{lang,code}, note{text|items},
-// warn{text|items}, image{src,alt,caption}, commands{rows}. Backticks in prose
-// render as inline code.
+// warn{text|items}, image{src,alt,caption}, commands{rows}, solutions{items}.
+// Backticks in prose render as inline code.
 //
 // Add a guide by appending to this array — the sidebar and router pick it up.
 // A guide with a `section` starts a new sidebar group at that point; without
 // one it falls under "Guides".
 //
 // Pages needing imports rather than literals live in their own data module and
-// are imported here (starship.js).
+// are imported here (starship.js). codewars.js is generated — see CLAUDE.md.
 
+import { codewars } from './codewars.js'
 import { starship } from './starship.js'
 
 const docker = {
@@ -2554,4 +2555,5 @@ export const guides = [
   actions,
   authRefresh,
   starship,
+  codewars,
 ]

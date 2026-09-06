@@ -681,6 +681,92 @@ a {
   font-size: 0.74rem;
 }
 
+/* ---------- solution list ---------- */
+
+.sol-status {
+  margin: 0 0 0.75rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.sol-rows {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.sol-row + .sol-row {
+  border-top: 1px solid var(--border-soft);
+}
+
+/* Five columns because ::before is itself a grid item: caret, title, filename,
+   category, line count. */
+.sol-toggle {
+  display: grid;
+  grid-template-columns: 0.9rem auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  font: inherit;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  background: none;
+  border: 0;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.sol-toggle::before {
+  content: "▸";
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+.sol-row.is-open .sol-toggle::before {
+  content: "▾";
+}
+
+.sol-toggle:hover {
+  background: var(--bg-raised);
+}
+
+.sol-row.is-open .sol-toggle {
+  background: var(--bg-panel);
+}
+
+.sol-name {
+  font-size: 0.85rem;
+  color: var(--text-strong);
+}
+
+.sol-file {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.sol-tag {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.sol-lines {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* The block already carries its own border and radius, so the row only adds
+   the surrounding padding. */
+.sol-body {
+  padding: 0 0.75rem 0.75rem;
+  background: var(--bg-panel);
+}
+
 /* ---------- responsive (nice-to-have) ---------- */
 
 /* 260px of nav plus 220px of rail squeezes the prose too hard below this, so
@@ -714,5 +800,14 @@ a {
 
   .main {
     padding: 1.75rem 1.25rem 4rem;
+  }
+
+  .sol-toggle {
+    grid-template-columns: 0.9rem minmax(0, 1fr) auto;
+  }
+
+  .sol-file,
+  .sol-lines {
+    display: none;
   }
 }
