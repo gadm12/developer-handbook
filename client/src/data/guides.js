@@ -68,7 +68,7 @@ const docker = {
     image: redis:7
     container_name: redis-container
 
-  backend:
+  server:
     build: ./server
     container_name: django-container
     command: python manage.py runserver 0.0.0.0:8000
@@ -82,7 +82,7 @@ const docker = {
       - db
       - redis
 
-  frontend:
+  client:
     build:
       context: ./client
       target: build
@@ -94,7 +94,7 @@ const docker = {
       - ./client:/app
       - /app/node_modules
     depends_on:
-      - backend
+      - server
 
 volumes:
   postgres_data:`,
@@ -132,7 +132,7 @@ volumes:
     container_name: redis-container
     restart: unless-stopped
 
-  backend:
+  server:
     build: ./server
     container_name: django-container
     restart: unless-stopped
@@ -142,7 +142,7 @@ volumes:
       - db
       - redis
 
-  frontend:
+  client:
     build: ./client
     container_name: react-container
     restart: unless-stopped
@@ -152,7 +152,7 @@ volumes:
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
-      - backend
+      - server
 
 volumes:
   postgres_data:`,
@@ -165,8 +165,8 @@ volumes:
       type: 'ul',
       items: [
         'Every service gains `restart: unless-stopped` so the stack comes back after a reboot or a crash.',
-        '`backend` loses its `command`, its published port, and its bind mount — it runs the baked image under gunicorn and is reachable only through nginx on the internal network.',
-        '`frontend` drops `target: build`, so the full multi-stage image is used and nginx serves the compiled `dist/`. It publishes `80` and `443` and mounts the Let\'s Encrypt certificates read-only.',
+        '`server` loses its `command`, its published port, and its bind mount — it runs the baked image under gunicorn and is reachable only through nginx on the internal network.',
+        '`client` drops `target: build`, so the full multi-stage image is used and nginx serves the compiled `dist/`. It publishes `80` and `443` and mounts the Let\'s Encrypt certificates read-only.',
         'No source is mounted anywhere — what runs is exactly what was built.',
       ],
     },
@@ -297,7 +297,7 @@ server {
     }
 
     location /api/ {
-        proxy_pass http://backend:8000;
+        proxy_pass http://server:8000;
 
         proxy_http_version 1.1;
 
@@ -317,7 +317,7 @@ server {
       type: 'ul',
       items: [
         '`try_files $uri $uri/ /index.html` is the SPA fallback. Without it a refresh on a client-side route returns 404, because no such file exists on disk.',
-        '`proxy_pass http://backend:8000` is compose service-name DNS — no IP, no container name, no link. It works because nginx and Django share the compose network.',
+        '`proxy_pass http://server:8000` is compose service-name DNS — no IP, no container name, no link. It works because nginx and Django share the compose network.',
         'The `X-Forwarded-*` headers are what let Django see the original scheme and client IP; pair them with `SECURE_PROXY_SSL_HEADER` in settings or it will think every request arrived over plain HTTP.',
         'Certificates are read from `/etc/letsencrypt`, which the prod compose file mounts read-only from the host — so renewing on the host is enough, no rebuild needed.',
       ],
@@ -367,25 +367,25 @@ prod-down:
 logs:
 \tdocker compose logs -f
 
-backend:
-\tdocker compose exec backend bash
+server:
+\tdocker compose exec server bash
 
-frontend:
-\tdocker compose exec frontend sh`,
+client:
+\tdocker compose exec client sh`,
     },
     {
       type: 'p',
-      text: 'Mostly here so the `-f docker-compose.prod.yml` flag is never mistyped — the difference between `make dev` and `make prod` is one word rather than a long command you might get wrong on a server. Note `bash` for the backend and `sh` for the frontend: the Python image has bash, the alpine-based Node image does not.',
+      text: 'Mostly here so the `-f docker-compose.prod.yml` flag is never mistyped — the difference between `make dev` and `make prod` is one word rather than a long command you might get wrong on a deploy box. Note `bash` for the server and `sh` for the client: the Python image has bash, the alpine-based Node image does not.',
     },
     { type: 'h3', text: 'Optional additions' },
     {
       type: 'note',
-      text: 'Everything below is my suggestion, not from your notes. `.PHONY` is the one I would actually add — without it, `make backend` would silently do nothing if a directory named `backend` ever appeared next to the Makefile.',
+      text: 'Everything below is my suggestion, not from your notes. `.PHONY` is the one I would actually add — and in this layout it is not optional. `server/` and `client/` sit right next to the Makefile, so without it `make server` sees an up-to-date directory of that name and silently does nothing.',
     },
     {
       type: 'code',
       lang: 'makefile',
-      code: `.PHONY: dev dev-down prod prod-down logs backend frontend \\
+      code: `.PHONY: dev dev-down prod prod-down logs server client \\
         up down ps build migrate makemigrations shell superuser psql clean
 
 up: dev
@@ -398,16 +398,16 @@ build:
 \tdocker compose build --no-cache
 
 migrate:
-\tdocker compose exec backend python manage.py migrate
+\tdocker compose exec server python manage.py migrate
 
 makemigrations:
-\tdocker compose exec backend python manage.py makemigrations
+\tdocker compose exec server python manage.py makemigrations
 
 shell:
-\tdocker compose exec backend python manage.py shell
+\tdocker compose exec server python manage.py shell
 
 superuser:
-\tdocker compose exec backend python manage.py createsuperuser
+\tdocker compose exec server python manage.py createsuperuser
 
 psql:
 \tdocker compose exec db psql -U $$POSTGRES_USER -d $$POSTGRES_DB
@@ -457,21 +457,21 @@ docker compose start`,
       lang: 'bash',
       code: `docker compose up --build
 docker compose up --build -d
-docker compose up -d --build frontend
-docker compose up -d --build backend
-docker compose up -d --force-recreate backend
-docker compose restart backend
-docker compose build --no-cache backend
+docker compose up -d --build client
+docker compose up -d --build server
+docker compose up -d --force-recreate server
+docker compose restart server
+docker compose build --no-cache server
 docker compose pull`,
     },
     {
       type: 'ul',
       items: [
         '`up --build` — rebuild images, then start. Needed after changing a Dockerfile or adding a dependency.',
-        '`up -d --build frontend` — rebuild one service only. Much faster than rebuilding all four when you touched a single manifest.',
-        '`up -d --force-recreate backend` — **the one after editing `.env`.** A rebuild alone will not pick up new environment values; the container has to be recreated.',
-        '`restart backend` — restart without rebuilding. Enough for a stuck process, useless for code or dependency changes.',
-        '`build --no-cache backend` — *(added)* rebuild ignoring the layer cache. The escape hatch when a build is reusing a stale layer it should not be.',
+        '`up -d --build client` — rebuild one service only. Much faster than rebuilding all four when you touched a single manifest.',
+        '`up -d --force-recreate server` — **the one after editing `.env`.** A rebuild alone will not pick up new environment values; the container has to be recreated.',
+        '`restart server` — restart without rebuilding. Enough for a stuck process, useless for code or dependency changes.',
+        '`build --no-cache server` — *(added)* rebuild ignoring the layer cache. The escape hatch when a build is reusing a stale layer it should not be.',
         '`pull` — *(added)* fetch newer base images (`redis:7`, `postgres:15`, `nginx:alpine`) without touching your own builds.',
       ],
     },
@@ -482,10 +482,10 @@ docker compose pull`,
       lang: 'bash',
       code: `docker compose ps
 docker compose logs -f
-docker compose logs -f backend
+docker compose logs -f server
 docker exec -it django-container bash
-docker compose exec backend bash
-docker compose exec frontend sh
+docker compose exec server bash
+docker compose exec client sh
 docker exec django-container env | grep POSTGRES
 docker compose config`,
     },
@@ -493,8 +493,8 @@ docker compose config`,
       type: 'ul',
       items: [
         '`ps` — what is actually running, and which ports are published. First thing to check when something will not connect.',
-        '`logs -f backend` — follow one service. Without the service name you get all four interleaved, which is rarely what you want.',
-        '`exec backend bash` — shell into the running backend. Where you run migrations, the Django shell, and anything else that needs the app environment. Use `sh` for the alpine-based frontend.',
+        '`logs -f server` — follow one service. Without the service name you get all four interleaved, which is rarely what you want.',
+        '`exec server bash` — shell into the running server. Where you run migrations, the Django shell, and anything else that needs the app environment. Use `sh` for the alpine-based client.',
         '`docker exec django-container env | grep POSTGRES` — read the database name and password the container actually received. The fastest way to confirm `.env` was picked up.',
         '`config` — *(added)* print the fully resolved compose file with variables substituted. Best way to see what compose thinks you wrote before blaming the stack.',
       ],
@@ -504,11 +504,11 @@ docker compose config`,
     {
       type: 'code',
       lang: 'bash',
-      code: `docker compose exec backend python manage.py migrate
+      code: `docker compose exec server python manage.py migrate
 
-docker compose exec backend python manage.py loaddata subject_data.json student_data.json grade_data.json
+docker compose exec server python manage.py loaddata subject_data.json student_data.json grade_data.json
 
-docker compose exec backend bash
+docker compose exec server bash
 python manage.py loaddata subject_data.json student_data.json grade_data.json`,
     },
     {
@@ -549,12 +549,12 @@ docker system prune -a`,
     { type: 'h3', text: 'Changes to .env are ignored' },
     {
       type: 'p',
-      text: 'Rebuilding does not help — environment values are read when the container is created. Use `docker compose up -d --force-recreate backend`.',
+      text: 'Rebuilding does not help — environment values are read when the container is created. Use `docker compose up -d --force-recreate server`.',
     },
     { type: 'h3', text: 'A package you installed is missing inside the container' },
     {
       type: 'p',
-      text: 'Installing on the host does not change the image. Rebuild the one service: `docker compose up -d --build backend`.',
+      text: 'Installing on the host does not change the image. Rebuild the one service: `docker compose up -d --build server`.',
     },
     { type: 'h3', text: 'Vite will not open in the browser' },
     {
@@ -573,12 +573,12 @@ docker system prune -a`,
     { type: 'h3', text: 'relation does not exist' },
     {
       type: 'p',
-      text: 'Migrations were never applied to this database, or you ran them on the host against a different one. Run `docker compose exec backend python manage.py migrate`.',
+      text: 'Migrations were never applied to this database, or you ran them on the host against a different one. Run `docker compose exec server python manage.py migrate`.',
     },
     { type: 'h3', text: '502 Bad Gateway from nginx in production' },
     {
       type: 'p',
-      text: 'nginx is up but cannot reach `backend:8000`. Check `docker compose -f docker-compose.prod.yml logs -f backend` — usually gunicorn failed to boot, so the proxy target never came up.',
+      text: 'nginx is up but cannot reach `server:8000`. Check `docker compose -f docker-compose.prod.yml logs -f server` — usually gunicorn failed to boot, so the proxy target never came up.',
     },
   ],
 }
@@ -770,7 +770,7 @@ build/
 SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 ALLOWED_HOSTS = os.environ.get(
-    "ALLOWED_HOSTS", "backend,localhost,127.0.0.1"
+    "ALLOWED_HOSTS", "server,localhost,127.0.0.1"
 ).split(",")`,
     },
     {
@@ -780,7 +780,7 @@ ALLOWED_HOSTS = os.environ.get(
     {
       type: 'code',
       lang: 'bash',
-      code: `docker compose run --rm backend python -c \\
+      code: `docker compose run --rm server python -c \\
   "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"`,
     },
     {
@@ -831,7 +831,7 @@ pm createsuperuser`,
     },
     {
       type: 'note',
-      text: 'Run these **inside the backend container** — `docker compose exec backend bash` first. Running them on the host points at a different database, which is what `relation does not exist` usually means.',
+      text: 'Run these **inside the server container** — `docker compose exec server bash` first. Running them on the host points at a different database, which is what `relation does not exist` usually means.',
     },
     { type: 'h3', text: 'Fixtures' },
     {
@@ -893,7 +893,7 @@ DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = os.environ.get(
     "ALLOWED_HOSTS",
-    "backend,localhost,127.0.0.1",
+    "server,localhost,127.0.0.1",
 ).split(",")
 
 # Everything Django is allowed to see. Django's own contrib apps, then the
@@ -1160,7 +1160,7 @@ export default defineConfig({
 
     proxy: {
       "/api": {
-        target: "http://backend:8000",
+        target: "http://server:8000",
         changeOrigin: true,
       },
     },
@@ -1173,7 +1173,7 @@ export default defineConfig({
     },
     {
       type: 'p',
-      text: 'The `proxy` block forwards anything under `/api` to Django, server-side. The browser only ever talks to the Vite origin, so requests are same-origin — no preflight, and the auth cookie is first-party. `target` is `http://backend:8000` because that is the Compose service name; running Django on the host instead makes it `http://127.0.0.1:8000`.',
+      text: 'The `proxy` block forwards anything under `/api` to Django, server-side. The browser only ever talks to the Vite origin, so requests are same-origin — no preflight, and the auth cookie is first-party. `target` is `http://server:8000` because that is the Compose service name; running Django on the host instead makes it `http://127.0.0.1:8000`.',
     },
     {
       type: 'p',
@@ -1612,7 +1612,7 @@ export default defineConfig({
     },
     {
       type: 'warn',
-      text: 'That `target` is correct only when Django runs on the host. From inside Compose, `127.0.0.1:8000` is the client container talking to itself and the proxy returns a 502 — there the target has to be `http://backend:8000`, the service name. The Docker comment on the `host` line refers to `0.0.0.0`, not to the target.',
+      text: 'That `target` is correct only when Django runs on the host. From inside Compose, `127.0.0.1:8000` is the client container talking to itself and the proxy returns a 502 — there the target has to be `http://server:8000`, the service name. The Docker comment on the `host` line refers to `0.0.0.0`, not to the target.',
     },
 
     { type: 'h2', text: 'The API base URL' },
@@ -1652,7 +1652,7 @@ DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = os.environ.get(
     "ALLOWED_HOSTS",
-    "backend,localhost,127.0.0.1",
+    "server,localhost,127.0.0.1",
 ).split(",")`,
     },
     {
@@ -1661,7 +1661,7 @@ ALLOWED_HOSTS = os.environ.get(
     },
     {
       type: 'p',
-      text: '`ALLOWED_HOSTS` splits on commas because environment variables are only ever strings. `backend` is in the default list because that is the Compose service name nginx proxies to — a request arriving with `Host: backend` is rejected without it.',
+      text: '`ALLOWED_HOSTS` splits on commas because environment variables are only ever strings. `server` is in the default list because that is the Compose service name nginx proxies to — a request arriving with `Host: server` is rejected without it.',
     },
 
     { type: 'h2', text: 'MIDDLEWARE' },
@@ -2149,7 +2149,7 @@ CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", "redis://redis:6
     },
     {
       type: 'p',
-      text: 'A worker is another compose service running the same image as the backend, with a different command:',
+      text: 'A worker is another compose service running the same image as the server, with a different command:',
     },
     {
       type: 'code',
